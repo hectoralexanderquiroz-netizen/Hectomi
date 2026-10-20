@@ -166,37 +166,38 @@
         </div>
     </div>
 
-    <script>
-        const fechaAniversario = new Date(2026, 8, 11, 0, 0, 0);
+ <script>
+    const fechaAniversario = new Date(2026, 8, 11, 0, 0, 0);
 
-        function actualizarReloj() {
-            const ahora = new Date();
-            const tiempoPasado = payroll = ahora - fechaAniversario;
+    function actualizarReloj() {
+        const ahora = new Date();
+        const tiempoPasado = ahora - fechaAniversario;
 
-            const dias = Math.floor(tiempoPasado / (1000 * 60 * 60 * 24));
-            const horas = Math.floor((tiempoPasado % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((tiempoPasado % (1000 * 60 * 60)) / (1000 * 60));
-            const segundos = Math.floor((tiempoPasado % (1000 * 60)) / 1000);
+        const dias = Math.floor(tiempoPasado / (1000 * 60 * 60 * 24));
+        const horas = Math.floor((tiempoPasado % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutos = Math.floor((tiempoPasado % (1000 * 60 * 60)) / (1000 * 60));
+        const segundos = Math.floor((tiempoPasado % (1000 * 60)) / 1000);
 
-            document.getElementById('contador').innerHTML = 
-                `${dias} días, ${horas}h : ${minutes}m : ${segundos}s juntos`;
+        document.getElementById('contador').innerHTML =
+            `${dias} días, ${horas}h : ${minutos}m : ${segundos}s juntos`;
+    }
+
+    setInterval(actualizarReloj, 1000);
+    actualizarReloj();
+
+    function crearLluvia() {
+        for (let i = 0; i < 35; i++) {
+            setTimeout(() => {
+                const h = document.createElement('div');
+                h.classList.add('heart');
+                h.innerText = '❤️';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(h);
+                setTimeout(() => h.remove(), 3000);
+            }, i * 80);
         }
-        setInterval(actualizarReloj, 1000);
-        actualizarReloj();
-
-        function crearLluvia() {
-            for (let i = 0; i < 35; i++) {
-                setTimeout(() => {
-                    const h = document.createElement('div');
-                    h.classList.add('heart');
-                    h.innerText = '❤️';
-                    h.style.left = Math.random() * 100 + 'vw';
-                    h.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                    document.body.appendChild(h);
-                    setTimeout(() => h.remove(), 3000);
-                }, i * 80);
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
