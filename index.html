@@ -3,709 +3,778 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#08051a">
-<title>El Universo de Nohemi ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Mi Preciosa ❤️</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <style>
-:root {
-  --pink: #ff9bdd;
-  --purple: #b89cff;
-  --glass: rgba(12, 10, 35, .88);
-}
-* { box-sizing: border-box; }
-body {
-  margin: 0; overflow: hidden; background: #050411; color: white;
-  font-family: Arial, sans-serif; touch-action: none;
-}
-button {
-  color: white; cursor: pointer; border: 1px solid #e6a6ff;
-  border-radius: 22px; padding: 10px 15px;
-  background: linear-gradient(135deg, #9b3c91, #4435a0);
-  box-shadow: 0 0 16px #9c55e633;
-}
-button:active { transform: scale(.97); }
-#game { position: fixed; inset: 0; }
-#game canvas { display: block; width: 100%; height: 100%; }
-#hud { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
-#hud button, #hud .interactive { pointer-events: auto; }
-.topbar {
-  position: absolute; top: 12px; left: 12px; right: 12px;
-  display: flex; justify-content: space-between; align-items: center; gap: 8px;
-}
-.brand {
-  font-family: Georgia, serif; font-size: clamp(14px, 3vw, 22px);
-  color: #ffd8f5; text-shadow: 0 0 14px #ed77ff;
-}
-.counter {
-  position: absolute; top: 62px; left: 50%; transform: translateX(-50%);
-  width: max-content; max-width: 95%; text-align: center;
-  background: #09071dbb; border: 1px solid #d6a3ff66;
-  border-radius: 16px; padding: 8px 12px; font-size: 11px;
-  backdrop-filter: blur(8px);
-}
-#time { display: block; color: #ffe3f8; margin-top: 4px; }
-#status {
-  position: absolute; top: 125px; left: 50%; transform: translateX(-50%);
-  text-align: center; width: 90%; font-size: 13px; color: #fff0ff;
-  text-shadow: 0 1px 8px #000; line-height: 1.5;
-}
-#interact {
-  position: absolute; left: 50%; bottom: 105px; transform: translateX(-50%);
-  display: none; font-weight: bold; font-size: 15px;
-}
-#help {
-  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-  text-align: center; width: 96%; font-size: 11px; color: #e2d6ff;
-  text-shadow: 0 1px 5px #000;
-}
-#mobileControls {
-  display: none; position: absolute; bottom: 45px; left: 12px;
-  grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(2, 46px);
-  gap: 5px;
-}
-#mobileControls button {
-  padding: 0; border-radius: 14px; font-size: 20px;
-  background: #25144dcc; border-color: #d6a3ff99;
-  touch-action: none;
-}
-#jumpButton {
-  display: none; position: absolute; bottom: 56px; right: 16px;
-  width: 62px; height: 62px; border-radius: 50%; font-size: 12px;
-}
-.overlay {
-  position: fixed; z-index: 5; inset: 0; padding: 16px;
-  display: flex; align-items: center; justify-content: center;
-  background: radial-gradient(ellipse at center, #28164de8, #03030cf5);
-  overflow-y: auto;
-}
-.hidden { display: none !important; }
-.card {
-  width: min(600px, 100%); max-height: 90vh; overflow-y: auto;
-  padding: clamp(20px, 5vw, 38px); text-align: center;
-  border-radius: 25px; border: 1px solid #e5a6ff88;
-  background: linear-gradient(145deg, #20133eeF, #09081bf2);
-  box-shadow: 0 0 70px #a850ff30;
-}
-.card h1, .card h2 { color: #ffd2f2; font-family: Georgia, serif; }
-.card h1 { font-size: clamp(29px, 7vw, 45px); margin: 10px 0; }
-.card p { line-height: 1.7; color: #e9e1ff; }
-.bigheart { font-size: 45px; animation: beat 1.3s infinite; }
-@keyframes beat { 50% { transform: scale(1.15); } }
-.panel {
-  width: min(760px, 100%); max-height: 88vh; overflow-y: auto;
-  background: var(--glass); padding: 20px; border-radius: 22px;
-  border: 1px solid #dfadff88; box-shadow: 0 0 55px #b65aff30;
-}
-.panel h2 { text-align: center; color: #ffd0f3; font-family: Georgia, serif; }
-.panel p { line-height: 1.8; white-space: pre-line; }
-.close { display: block; margin-left: auto; }
-.gallery { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
-.gallery figure { margin: 0; padding: 7px; background: #ffffff0d; border-radius: 12px; }
-.gallery img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 8px; display: block; }
-.gallery figcaption { text-align: center; font-size: 12px; padding: 8px 2px; color: #ffdbf4; }
-.letter { white-space: pre-line; line-height: 1.9; padding: 15px; border-left: 3px solid #ff9bdd; background: #ffffff08; }
-#toast {
-  position: fixed; z-index: 10; top: 45%; left: 50%; transform: translate(-50%,-50%);
-  background: #100b2bea; border: 1px solid #e9a6ff; border-radius: 15px;
-  padding: 14px 18px; text-align: center; max-width: 88%; opacity: 0;
-  pointer-events: none; transition: opacity .25s;
-}
-#toast.show { opacity: 1; }
-@media (pointer: coarse), (max-width: 700px) {
-  #mobileControls { display: grid; }
-  #jumpButton { display: block; }
-  #help { bottom: 8px; font-size: 10px; }
-  #interact { bottom: 120px; }
-  .topbar button { padding: 9px 10px; font-size: 11px; }
+*{box-sizing:border-box}
+body{margin:0;background:#090714;color:white;font-family:Arial,sans-serif;overflow:hidden}
+button{font:inherit;cursor:pointer;border:1px solid #ffffff40;border-radius:14px;padding:11px 15px;background:#e83e78;color:white;font-weight:bold}
+button:hover{filter:brightness(1.15)}
+#game{position:fixed;inset:0}
+#hud{position:fixed;inset:0;pointer-events:none}
+.panel{background:#170f2bd9;border:1px solid #ff9ecb66;border-radius:16px;padding:12px 15px;backdrop-filter:blur(8px)}
+#top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+#top .panel{max-width:75%}
+#help{position:absolute;left:12px;bottom:12px;max-width:330px;font-size:13px;line-height:1.6}
+#message{position:absolute;left:50%;top:25%;transform:translateX(-50%);max-width:85%;text-align:center;display:none}
+#actions{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:8px;pointer-events:auto}
+#actions button{min-width:125px}
+#intro{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;background:radial-gradient(ellipse at center,#48204dce,#090714f5)}
+#intro .content{max-width:560px}
+h1{font-size:clamp(34px,7vw,64px);margin:0 0 12px;color:#ffb7d7;text-shadow:0 0 25px #ff4b9a}
+h2{color:#ffc2df}
+p{line-height:1.6}
+#modal{position:fixed;z-index:8;inset:0;background:#05030bd9;display:none;align-items:center;justify-content:center;padding:18px;overflow:auto}
+#modalContent{width:min(650px,100%);max-height:90vh;overflow:auto;background:#1b1230;border:1px solid #ff8ec5;border-radius:20px;padding:22px;text-align:center}
+#modalContent img{width:min(100%,340px);max-height:300px;object-fit:cover;border-radius:16px;margin:8px}
+#touch{position:absolute;left:12px;bottom:135px;display:none;gap:7px;pointer-events:auto}
+#touch button{width:48px;height:48px;padding:0;background:#28163dcc}
+#touchRight{position:absolute;right:150px;bottom:20px;display:none;pointer-events:auto}
+#touchRight button{padding:16px}
+#counter{color:#ffd1e6;font-size:13px}
+#warning{display:none;position:fixed;z-index:10;inset:0;background:#100a1b;color:white;padding:30px;line-height:1.6}
+@media(max-width:600px){
+ #help{font-size:11px;max-width:230px;bottom:10px}
+ #top{font-size:12px}
+ #top .panel{padding:9px}
+ #touch{display:flex}
+ #touchRight{display:block}
+ #actions{bottom:12px;right:10px}
+ #actions button{min-width:95px;padding:9px;font-size:12px}
 }
 </style>
 </head>
 <body>
+
 <div id="game"></div>
 
 <div id="hud">
-  <div class="topbar">
-    <div class="brand">✦ El Universo de Nohemi ✦</div>
-    <button id="musicButton">🎵 Tutu</button>
+  <div id="top">
+    <div class="panel">
+      <strong>❤️ Nuestro pequeño universo</strong>
+      <div id="counter">Cargando nuestro mundo...</div>
+    </div>
+    <div class="panel">💗 Corazones: <strong id="score">0</strong>/5</div>
   </div>
-  <div class="counter">
-    Nuestro día especial ❤️
-    <span id="time">Cargando contador...</span>
-  </div>
-  <div id="status">Explora el planeta y descubre sus secretos ✨</div>
-  <button id="interact">E · Descubrir</button>
 
-  <div id="mobileControls" class="interactive">
-    <span></span><button data-move="forward">▲</button><span></span>
-    <button data-move="left">◀</button><button data-move="back">▼</button><button data-move="right">▶</button>
+  <div id="help" class="panel">
+    <strong>🎮 Cómo jugar</strong><br>
+    Moverte: <b>W A S D</b> o flechas<br>
+    Saltar: <b>Espacio</b><br>
+    Interactuar: <b>E</b><br>
+    Mover cámara: arrastra con el ratón<br>
+    Acércate a los objetos para descubrir sorpresas.
   </div>
-  <button id="jumpButton">SALTAR</button>
-  <div id="help">WASD: caminar · Ratón: girar cámara · E: interactuar · Espacio: saltar</div>
+
+  <div id="message" class="panel"></div>
+
+  <div id="actions">
+    <button id="interact">💌 Interactuar</button>
+    <button id="letter">💖 Nuestra carta</button>
+    <button id="photos">📸 Nuestros recuerdos</button>
+    <button id="music">🎵 Escuchar Tutu</button>
+  </div>
+
+  <div id="touch">
+    <button data-key="w">▲</button>
+    <button data-key="a">◀</button>
+    <button data-key="s">▼</button>
+    <button data-key="d">▶</button>
+  </div>
+  <div id="touchRight"><button id="jump">⬆ Saltar</button></div>
 </div>
 
-<section class="overlay" id="intro">
-  <div class="card">
-    <div class="bigheart">💗</div>
+<div id="intro">
+  <div class="content">
+    <div style="font-size:58px">💖🌹✨</div>
     <h1>Para Mi Preciosa</h1>
-    <p>He creado un pequeño planeta para ti, lleno de flores luminosas, estrellas, recuerdos y secretos.</p>
-    <p>Camina por este universo, encuentra los portales y descubre todo lo que preparé para ti.</p>
-    <button id="startButton">❤️ Entrar a nuestro planeta</button>
-    <p style="font-size:12px">Un mundo hecho con amor para Nohemi.</p>
+    <p>Un pequeño universo creado para ti, donde cada flor, cada luz y cada corazón guardan un pedacito de mi amor.</p>
+    <p><strong>Nohemi, este mundo es nuestro.</strong><br>Explora, encuentra los corazones y descubre nuestras sorpresas.</p>
+    <button id="start" style="font-size:18px;padding:15px 24px">🌎 Entrar a nuestro mundo</button>
+    <p style="font-size:12px;opacity:.75">Mejor experiencia en computador. Requiere conexión a internet.</p>
   </div>
-</section>
+</div>
 
-<section class="overlay hidden" id="panelScreen">
-  <article class="panel">
-    <button class="close" id="closePanel">✕ Cerrar</button>
-    <div id="panelContent"></div>
-  </article>
-</section>
-<div id="toast" role="status"></div>
+<div id="modal">
+  <div id="modalContent">
+    <div id="modalBody"></div>
+    <button id="closeModal">Cerrar ❤️</button>
+  </div>
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<div id="warning">
+  <h2>No se pudo cargar el mundo 3D</h2>
+  <p>Comprueba tu conexión a internet y vuelve a cargar la página. Si el problema continúa, abre la consola del navegador con F12 y revisa el primer error rojo.</p>
+  <button onclick="location.reload()">Volver a intentar</button>
+</div>
+
 <script>
 (() => {
 "use strict";
 
-const fotos = [
-  {src:"foto1.jpeg", caption:"Un recuerdo de nosotros ❤️"},
-  {src:"foto2.jpeg", caption:"Un momento que guardo en mi corazón ✨"},
-  {src:"foto3.jpeg", caption:"Tú haces más bonito mi mundo 🌷"},
-  {src:"foto4.jpeg", caption:"Quiero seguir creando recuerdos contigo 💗"}
-];
+const $ = id => document.getElementById(id);
+const game = $("game");
 
-const carta = `Mi preciosa Nohemi:
+let scene, camera, renderer, player, clock;
+let running = false;
+let score = 0;
+let verticalSpeed = 0;
+let grounded = true;
+let cameraAngle = 0;
+let cameraHeight = 3.5;
+let mouseDown = false;
+let lastMouseX = 0;
+let nearby = null;
+let objects = [];
+let hearts = [];
+let keys = {};
+let playerParts = {};
+let worldTime = 0;
 
-Si pudiera regalarte una estrella por cada vez que pienso en ti,
-el cielo ya no tendría oscuridad.
+const anniversary = new Date(2026, 8, 11, 0, 0, 0);
 
-Quiero que sepas que eres una persona muy especial para mí.
-Me encanta tener recuerdos contigo, imaginar nuevos momentos
-y pensar en todas las aventuras que todavía nos esperan.
-
-Así como este universo parece infinito, quiero que sepas que
-mi cariño por ti tiene muchísimas formas de crecer.
-Gracias por existir, por ser tú y por formar parte de mi vida.
-
-Si algún día miras el cielo y ves una estrella brillando,
-imagina que ahí te estoy mandando un beso y un abrazo.
-
-Te quiero muchísimo, mi preciosa. ❤️`;
-
-const secretos = {
-  recuerdos: "recuerdos",
-  carta: "carta",
-  jardin: "jardin",
-  sorpresa: "sorpresa"
-};
-
-const startDate = new Date(2026, 8, 11, 0, 0, 0);
 function updateCounter() {
   const now = new Date();
-  const d = Math.abs(now - startDate);
-  const days = Math.floor(d / 86400000);
-  const hours = Math.floor(d / 3600000) % 24;
-  const minutes = Math.floor(d / 60000) % 60;
-  const seconds = Math.floor(d / 1000) % 60;
-  document.getElementById("time").textContent =
-    `${now >= startDate ? "Juntos desde" : "Faltan"} ${days} días, ${hours} h, ${minutes} min, ${seconds} s`;
+  const diff = Math.max(0, now - anniversary);
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor(diff / 3600000) % 24;
+  const minutes = Math.floor(diff / 60000) % 60;
+  const seconds = Math.floor(diff / 1000) % 60;
+
+  $("counter").textContent =
+    "Juntos desde hace " + days + " días, " +
+    hours + " h " + minutes + " min " + seconds + " s ❤️";
 }
-updateCounter();
 setInterval(updateCounter, 1000);
+updateCounter();
 
-const toast = document.getElementById("toast");
-function notify(message) {
-  toast.textContent = message;
-  toast.classList.add("show");
-  clearTimeout(notify.timer);
-  notify.timer = setTimeout(() => toast.classList.remove("show"), 2600);
+function showMessage(text) {
+  $("message").innerHTML = text;
+  $("message").style.display = "block";
+  clearTimeout(showMessage.timer);
+  showMessage.timer = setTimeout(() => {
+    $("message").style.display = "none";
+  }, 3200);
 }
 
-document.getElementById("musicButton").addEventListener("click", () => {
-  window.open(
-    "https://www.youtube.com/results?search_query=Tutu+Camilo+Pedro+Capo+video+oficial",
-    "_blank", "noopener,noreferrer"
-  );
-  notify("Busca Tutu de Camilo y Pedro Capó y reproduce la canción 🎵");
+function openModal(html) {
+  $("modalBody").innerHTML = html;
+  $("modal").style.display = "flex";
+}
+function closeModal() {
+  $("modal").style.display = "none";
+}
+$("closeModal").addEventListener("click", closeModal);
+$("modal").addEventListener("click", e => {
+  if (e.target === $("modal")) closeModal();
 });
 
-const panelScreen = document.getElementById("panelScreen");
-const panelContent = document.getElementById("panelContent");
+function makeMaterial(color, extra={}) {
+  return new THREE.MeshStandardMaterial({
+    color,
+    roughness: 0.75,
+    ...extra
+  });
+}
 
-function openPanel(type) {
-  if (type === "recuerdos") {
-    panelContent.innerHTML = `
-      <h2>📸 Nuestra constelación de recuerdos</h2>
-      <p style="text-align:center">Cada foto es una estrella de nuestra historia.</p>
-      <div class="gallery">${fotos.map((f,i)=>`
-        <figure><img src="${f.src}" alt="Recuerdo ${i+1}">
-        <figcaption>${f.caption}</figcaption></figure>`).join("")}</div>`;
-  } else if (type === "carta") {
-    panelContent.innerHTML = `<h2>💌 Una carta para ti</h2><div class="letter" id="letter"></div>
-      <p style="text-align:center"><button id="showFullLetter">Leer carta completa</button></p>`;
-  } else if (type === "jardin") {
-    panelContent.innerHTML = `
-      <h2>🌷 El jardín de nuestro amor</h2>
-      <p>Has encontrado un rincón mágico. Cada flor representa una sonrisa tuya; cada luz, un recuerdo bonito.</p>
-      <p style="text-align:center;font-size:26px">🌸 🌷 🌹 ✨ 💗 ✨ 🌹 🌷 🌸</p>
-      <p>Mi deseo es que siempre tengamos razones para reír, abrazarnos y construir recuerdos juntos.</p>`;
-  } else {
-    panelContent.innerHTML = `
-      <h2>💫 Tu secreto especial</h2>
-      <p style="text-align:center;font-size:19px">Entre todas las estrellas y todos los planetas, mi lugar favorito siempre será a tu lado. Te elegiría en cada universo, mi preciosa. ❤️</p>
-      <p style="text-align:center;font-size:30px">🌌 💖 🌌</p>
-      <p style="text-align:center"><button id="heartRain">💗 Lluvia de corazones</button></p>`;
+function addMesh(geometry, material, x, y, z, parent=scene) {
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(x,y,z);
+  parent.add(mesh);
+  return mesh;
+}
+
+function createWorld() {
+  if (!window.THREE) {
+    $("warning").style.display = "block";
+    return;
   }
-  panelScreen.classList.remove("hidden");
 
-  const letter = document.getElementById("letter");
-  if (letter) {
-    let i = 0;
-    const timer = setInterval(() => {
-      if (!document.body.contains(letter)) { clearInterval(timer); return; }
-      letter.textContent = carta.slice(0, i);
-      i += 5;
-      if (i >= carta.length) { letter.textContent = carta; clearInterval(timer); }
-    }, 16);
-    document.getElementById("showFullLetter").addEventListener("click", () => {
-      letter.textContent = carta;
-    });
-  }
-  const rainButton = document.getElementById("heartRain");
-  if (rainButton) rainButton.addEventListener("click", heartRain);
-}
+  try {
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x100a2b);
+    scene.fog = new THREE.Fog(0x100a2b, 28, 90);
 
-document.getElementById("closePanel").addEventListener("click", () => panelScreen.classList.add("hidden"));
-panelScreen.addEventListener("click", e => {
-  if (e.target === panelScreen) panelScreen.classList.add("hidden");
-});
-document.getElementById("startButton").addEventListener("click", () => {
-  document.getElementById("intro").classList.add("hidden");
-  notify("¡Bienvenida a nuestro planeta, Nohemi! 💖");
-});
-
-function heartRain() {
-  for (let i = 0; i < 35; i++) {
-    const h = document.createElement("div");
-    h.textContent = ["💗","💖","💕","❤️","✨"][Math.floor(Math.random()*5)];
-    Object.assign(h.style, {
-      position:"fixed", zIndex:20, left:Math.random()*100+"vw", top:"-35px",
-      fontSize:(18+Math.random()*22)+"px", pointerEvents:"none",
-      transition:"transform 3s linear, opacity 3s linear"
-    });
-    document.body.appendChild(h);
-    requestAnimationFrame(() => {
-      h.style.transform = `translate(${Math.random()*80-40}px, ${innerHeight+80}px) rotate(${Math.random()*500}deg)`;
-      h.style.opacity = "0";
-    });
-    setTimeout(() => h.remove(), 3200);
-  }
-}
-
-if (!window.THREE) {
-  notify("No se cargó Three.js. Revisa tu conexión a internet.");
-  return;
-}
-const THREE = window.THREE;
-const root = document.getElementById("game");
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x050411);
-scene.fog = new THREE.Fog(0x090720, 35, 100);
-
-const camera = new THREE.PerspectiveCamera(65, innerWidth/innerHeight, 0.1, 300);
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
-renderer.setSize(innerWidth, innerHeight);
-renderer.outputEncoding = THREE.sRGBEncoding;
-root.appendChild(renderer.domElement);
-
-scene.add(new THREE.HemisphereLight(0xbab5ff, 0x241337, 1.6));
-const sun = new THREE.DirectionalLight(0xffd5ed, 2.2);
-sun.position.set(-10, 18, 10);
-scene.add(sun);
-const pinkLight = new THREE.PointLight(0xff63cf, 2.4, 45);
-pinkLight.position.set(5, 7, -4);
-scene.add(pinkLight);
-const blueLight = new THREE.PointLight(0x5478ff, 2, 45);
-blueLight.position.set(-12, 6, 5);
-scene.add(blueLight);
-
-// Cielo estrellado.
-const starPositions = [];
-for (let i=0; i<2600; i++) {
-  const r = 65 + Math.random()*80;
-  const a = Math.random()*Math.PI*2;
-  const y = (Math.random()-.5)*100;
-  starPositions.push(Math.cos(a)*r, y, Math.sin(a)*r);
-}
-const starGeo = new THREE.BufferGeometry();
-starGeo.setAttribute("position", new THREE.Float32BufferAttribute(starPositions,3));
-const starField = new THREE.Points(starGeo, new THREE.PointsMaterial({
-  color:0xffffff, size:.22, transparent:true, opacity:.92
-}));
-scene.add(starField);
-
-// Planeta lejano decorativo.
-const distantPlanet = new THREE.Mesh(
-  new THREE.SphereGeometry(7, 40, 40),
-  new THREE.MeshStandardMaterial({color:0x372c87, roughness:1, metalness:.1})
-);
-distantPlanet.position.set(25, 20, -75);
-scene.add(distantPlanet);
-const distantRing = new THREE.Mesh(
-  new THREE.RingGeometry(8.5, 11, 80),
-  new THREE.MeshBasicMaterial({color:0xb18bff, side:THREE.DoubleSide, transparent:true, opacity:.45})
-);
-distantRing.position.copy(distantPlanet.position);
-distantRing.rotation.set(1.2,.2,.2);
-scene.add(distantRing);
-
-// Isla-jardín flotante.
-const island = new THREE.Mesh(
-  new THREE.CylinderGeometry(27, 23, 3.4, 96),
-  new THREE.MeshStandardMaterial({color:0x302c58, roughness:.95})
-);
-island.position.y = -1.9;
-scene.add(island);
-const ground = new THREE.Mesh(
-  new THREE.CircleGeometry(26.8, 96),
-  new THREE.MeshStandardMaterial({color:0x315b56, roughness:.96})
-);
-ground.rotation.x = -Math.PI/2;
-ground.position.y = -.18;
-scene.add(ground);
-
-// Senderos curvos.
-function path(points, color, radius) {
-  const curve = new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(p[0],p[1],p[2])));
-  const mesh = new THREE.Mesh(
-    new THREE.TubeGeometry(curve, 100, radius, 8, false),
-    new THREE.MeshStandardMaterial({color, emissive:color, emissiveIntensity:.42, roughness:.6})
-  );
-  scene.add(mesh);
-}
-path([[-14,.01,5],[-8,.01,1],[-2,.01,0],[3,.01,3],[8,.01,1],[14,.01,-5]],0x6acdc4,.12);
-path([[-2,.02,0],[0,.02,-6],[5,.02,-11],[12,.02,-12]],0xe18bdc,.08);
-
-// Rocas y cristales.
-for (let i=0; i<95; i++) {
-  const a=Math.random()*Math.PI*2, r=7+Math.random()*18;
-  const x=Math.cos(a)*r, z=Math.sin(a)*r;
-  const size=.15+Math.random()*.65;
-  const rock=new THREE.Mesh(
-    new THREE.DodecahedronGeometry(size,0),
-    new THREE.MeshStandardMaterial({
-      color:[0x665b9b,0x3c9e91,0x74508e][i%3],
-      roughness:.8, metalness:.15
-    })
-  );
-  rock.position.set(x, size*.45, z);
-  rock.rotation.set(Math.random(),Math.random(),Math.random());
-  scene.add(rock);
-}
-
-// Flores con tallos y pétalos luminosos.
-const flowers=[];
-function makeFlower(x,z,s=1) {
-  const group=new THREE.Group();
-  group.position.set(x,0,z);
-  const stem=new THREE.Mesh(
-    new THREE.CylinderGeometry(.035,.06,.65,7),
-    new THREE.MeshStandardMaterial({color:0x4bc88a})
-  );
-  stem.position.y=.3; group.add(stem);
-  const colors=[0xff8fd3,0xd2a0ff,0xffd78e,0x8beaff];
-  for(let j=0;j<7;j++){
-    const angle=j*Math.PI*2/7;
-    const petal=new THREE.Mesh(
-      new THREE.SphereGeometry(.18,10,8),
-      new THREE.MeshStandardMaterial({
-        color:colors[Math.floor(Math.random()*colors.length)],
-        emissive:0x531c62, emissiveIntensity:.7, roughness:.4
-      })
+    camera = new THREE.PerspectiveCamera(
+      65, window.innerWidth/window.innerHeight, 0.1, 150
     );
-    petal.position.set(Math.cos(angle)*.18,.73,Math.sin(angle)*.18);
-    petal.scale.set(1,.55,1.35); group.add(petal);
+
+    renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    game.appendChild(renderer.domElement);
+
+    clock = new THREE.Clock();
+
+    scene.add(new THREE.HemisphereLight(0xffc9ed, 0x25204e, 1.8));
+
+    const moonLight = new THREE.DirectionalLight(0xffd5ed, 2.2);
+    moonLight.position.set(-8,15,7);
+    moonLight.castShadow = true;
+    scene.add(moonLight);
+
+    const glow = new THREE.PointLight(0xff4d9c, 2.3, 35);
+    glow.position.set(0,6,0);
+    scene.add(glow);
+
+    // Isla flotante
+    const island = addMesh(
+      new THREE.CylinderGeometry(18,15,2.5,64),
+      makeMaterial(0x302c58), 0,-1.4,0
+    );
+    island.receiveShadow = true;
+
+    addMesh(
+      new THREE.CylinderGeometry(18.2,17.5,.45,64),
+      makeMaterial(0x315d54), 0,-.05,0
+    );
+
+    // Camino de piedra
+    for (let i=0;i<13;i++) {
+      const z = 8 - i*1.35;
+      const stone = addMesh(
+        new THREE.CylinderGeometry(.65,.75,.13,8),
+        makeMaterial(i%2 ? 0xb9a6c8 : 0x84789f),
+        0,.22,z
+      );
+      stone.rotation.y = i*.25;
+    }
+
+    // Montañas suaves en el borde
+    for (let i=0;i<22;i++) {
+      const a = i/22*Math.PI*2;
+      const r = 15.5;
+      const h = 1.5 + Math.random()*3.4;
+      const rock = addMesh(
+        new THREE.ConeGeometry(1.6,h,6),
+        makeMaterial(i%2 ? 0x41335f : 0x51406c),
+        Math.cos(a)*r, .5+h/2, Math.sin(a)*r
+      );
+      rock.rotation.z = (Math.random()-.5)*.15;
+    }
+
+    // Estrellas
+    const starGeo = new THREE.BufferGeometry();
+    const starPositions = [];
+    for (let i=0;i<550;i++) {
+      starPositions.push(
+        (Math.random()-.5)*120,
+        8+Math.random()*45,
+        (Math.random()-.5)*120
+      );
+    }
+    starGeo.setAttribute(
+      "position", new THREE.Float32BufferAttribute(starPositions,3)
+    );
+    scene.add(new THREE.Points(
+      starGeo,
+      new THREE.PointsMaterial({color:0xffd7ee,size:.14})
+    ));
+
+    // Luna
+    const moon = addMesh(
+      new THREE.SphereGeometry(2,32,32),
+      new THREE.MeshBasicMaterial({color:0xffd7ed}),
+      -18,18,-28
+    );
+
+    // Flores decorativas
+    for (let i=0;i<85;i++) {
+      const a = Math.random()*Math.PI*2;
+      const r = 3 + Math.random()*12.5;
+      const x = Math.cos(a)*r;
+      const z = Math.sin(a)*r;
+      const colors = [0xff8ac0,0xffd46e,0xc6a0ff,0xffffff,0xff5c96];
+      createFlower(x,.22,z,colors[i%colors.length]);
+    }
+
+    // Árboles
+    for (let i=0;i<12;i++) {
+      const a = i/12*Math.PI*2;
+      const r = 12.5;
+      const x = Math.cos(a)*r;
+      const z = Math.sin(a)*r;
+      addMesh(
+        new THREE.CylinderGeometry(.16,.25,2,8),
+        makeMaterial(0x754c58),x,1,z
+      );
+      addMesh(
+        new THREE.SphereGeometry(1.15,12,12),
+        makeMaterial(0x326b68),x,2.35,z
+      );
+      addMesh(
+        new THREE.SphereGeometry(.75,12,12),
+        makeMaterial(0x457d70),x+.35,2.7,z+.15
+      );
+    }
+
+    createPlayer();
+    createHeart(5,.9,3);
+    createHeart(-5,.9,-3);
+    createHeart(8,.9,-5);
+    createHeart(-8,.9,5);
+    createHeart(0,1,-11);
+
+    createPortal(0,1,-14);
+    createMemoryStone(-5,.8,2);
+    createMemoryStone(5,.8,-7);
+    createBench(3,.3,7);
+
+    window.addEventListener("resize", onResize);
+    setupControls();
+
+    $("start").addEventListener("click", () => {
+      $("intro").style.display = "none";
+      running = true;
+      showMessage("Bienvenida a nuestro universo, mi preciosa ❤️");
+    });
+
+    animate();
+  } catch (error) {
+    console.error(error);
+    $("warning").style.display = "block";
   }
-  const center=new THREE.Mesh(
-    new THREE.SphereGeometry(.12,12,10),
-    new THREE.MeshStandardMaterial({color:0xfff0a1,emissive:0xffc34a,emissiveIntensity:1.2})
-  );
-  center.position.y=.74; group.add(center);
-  group.scale.setScalar(s);
-  scene.add(group); flowers.push(group);
-}
-for(let i=0;i<190;i++){
-  const a=Math.random()*Math.PI*2, r=4+Math.random()*21;
-  const x=Math.cos(a)*r, z=Math.sin(a)*r;
-  if(Math.hypot(x,z)>4.2 && Math.random()>.07) makeFlower(x,z,.55+Math.random()*.8);
 }
 
-// Pequeñas luces flotantes.
-const motes=[];
-for(let i=0;i<90;i++){
-  const mote=new THREE.Mesh(
-    new THREE.SphereGeometry(.045+Math.random()*.055,8,8),
-    new THREE.MeshBasicMaterial({color:[0xffb4e8,0x9ddfff,0xffeaa1][i%3]})
-  );
-  mote.position.set((Math.random()-.5)*46,.5+Math.random()*5,(Math.random()-.5)*46);
-  mote.userData.phase=Math.random()*6;
-  scene.add(mote); motes.push(mote);
-}
-
-// Personaje construido con geometría 3D, sin descargar modelos.
-const player=new THREE.Group();
-scene.add(player);
-const skin=new THREE.MeshStandardMaterial({color:0xf2c5b4,roughness:.8});
-const hair=new THREE.MeshStandardMaterial({color:0x33203d,roughness:.9});
-const clothes=new THREE.MeshStandardMaterial({color:0xe9b1e8,roughness:.65});
-const darkClothes=new THREE.MeshStandardMaterial({color:0x4e428c,roughness:.7});
-const shoeMat=new THREE.MeshStandardMaterial({color:0x251c3e});
-const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.32,.65,5,10),clothes);
-torso.position.y=1.15; player.add(torso);
-const head=new THREE.Mesh(new THREE.SphereGeometry(.28,18,16),skin);
-head.position.y=1.85; player.add(head);
-const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.29,18,14,0,Math.PI*2,0,Math.PI*.58),hair);
-hairCap.position.set(0,1.94,-.035); player.add(hairCap);
-const hairBack=new THREE.Mesh(new THREE.SphereGeometry(.27,14,12),hair);
-hairBack.scale.set(.9,1.15,.65); hairBack.position.set(0,1.77,-.16); player.add(hairBack);
-const armGeo=new THREE.CapsuleGeometry(.105,.42,4,8);
-const leftArm=new THREE.Mesh(armGeo,clothes);
-leftArm.position.set(-.4,1.2,0); leftArm.rotation.z=-.18; player.add(leftArm);
-const rightArm=new THREE.Mesh(armGeo,clothes);
-rightArm.position.set(.4,1.2,0); rightArm.rotation.z=.18; player.add(rightArm);
-const legs=[];
-for(const side of [-1,1]){
-  const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.42,4,8),darkClothes);
-  leg.position.set(side*.17,.48,0); player.add(leg); legs.push(leg);
-  const shoe=new THREE.Mesh(new THREE.BoxGeometry(.22,.13,.34),shoeMat);
-  shoe.position.set(side*.17,.12,.06); player.add(shoe);
-}
-const playerGlow=new THREE.PointLight(0xff8edc,.6,3);
-playerGlow.position.y=1.3; player.add(playerGlow);
-player.position.set(0,0,9);
-
-// Portales de interacción.
-const portals=[];
-function makePortal(name,type,x,z,color) {
-  const group=new THREE.Group();
-  group.position.set(x,0,z);
-  const base=new THREE.Mesh(
-    new THREE.CylinderGeometry(1.15,1.3,.2,32),
-    new THREE.MeshStandardMaterial({color:0x38305b,metalness:.3,roughness:.5})
-  );
-  base.position.y=.05; group.add(base);
-  const torus=new THREE.Mesh(
-    new THREE.TorusGeometry(.88,.12,14,48),
-    new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:1.3,metalness:.25,roughness:.25})
-  );
-  torus.position.y=1.65; group.add(torus);
-  const inner=new THREE.Mesh(
-    new THREE.CircleGeometry(.77,48),
-    new THREE.MeshBasicMaterial({color,transparent:true,opacity:.24,side:THREE.DoubleSide})
-  );
-  inner.position.y=1.65; inner.rotation.y=.12; group.add(inner);
-  const light=new THREE.PointLight(color,1.8,8);
-  light.position.y=1.6; group.add(light);
-  const crystal=new THREE.Mesh(
-    new THREE.OctahedronGeometry(.35,1),
-    new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.9,metalness:.3,roughness:.25})
-  );
-  crystal.position.y=1.65; group.add(crystal);
+function createFlower(x,y,z,color) {
+  const group = new THREE.Group();
+  group.position.set(x,y,z);
   scene.add(group);
-  portals.push({name,type,x,z,group,torus,crystal});
-}
-makePortal("Portal de los recuerdos","recuerdos",-10,-3,0xff83d7);
-makePortal("Portal de mi carta","carta",8,-8,0xb59bff);
-makePortal("Jardín secreto","jardin",-11,10,0x6bf1c8);
-makePortal("La sorpresa final","sorpresa",12,8,0xffd27c);
 
-// Corazones que se pueden recoger.
-const hearts=[];
-function heartShape() {
-  const s=new THREE.Shape();
-  s.moveTo(0,.15);
-  s.bezierCurveTo(0,.15,-.45,.65,-.65,.25);
-  s.bezierCurveTo(-.9,-.1,-.3,-.45,0,-.68);
-  s.bezierCurveTo(.3,-.45,.9,-.1,.65,.25);
-  s.bezierCurveTo(.45,.65,0,.15,0,.15);
-  return s;
-}
-const heartGeo=new THREE.ExtrudeGeometry(heartShape(),{depth:.12,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:.035,bevelThickness:.035});
-heartGeo.center();
-const heartMat=new THREE.MeshStandardMaterial({color:0xff5dbf,emissive:0xff238d,emissiveIntensity:1});
-for(let i=0;i<12;i++){
-  const a=i/12*Math.PI*2, r=5+Math.random()*15;
-  const mesh=new THREE.Mesh(heartGeo,heartMat);
-  mesh.position.set(Math.cos(a)*r,.9+Math.random()*1.2,Math.sin(a)*r);
-  mesh.scale.setScalar(.35); scene.add(mesh);
-  hearts.push({mesh,baseY:mesh.position.y,phase:Math.random()*6,collected:false});
-}
-let collected=0;
-let nearPortal=null;
-
-// Controles.
-const keys={};
-let yaw=0, pitch=.22, isLocked=false, dragging=false;
-let previousX=0, previousY=0, mouseMoved=0;
-let velocityY=0, jumping=false, walking=false;
-const moveButtons={forward:false,back:false,left:false,right:false};
-
-window.addEventListener("keydown",e=>{
-  keys[e.code]=true;
-  if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code)) e.preventDefault();
-  if(e.code==="KeyE" || e.code==="Enter") interact();
-  if(e.code==="Space" && !jumping){velocityY=7.4;jumping=true;}
-});
-window.addEventListener("keyup",e=>keys[e.code]=false);
-
-// Ratón: arrastrar para girar la cámara.
-renderer.domElement.addEventListener("pointerdown",e=>{
-  dragging=true; previousX=e.clientX; previousY=e.clientY; mouseMoved=0;
-  renderer.domElement.setPointerCapture?.(e.pointerId);
-});
-renderer.domElement.addEventListener("pointermove",e=>{
-  if(!dragging)return;
-  const dx=e.clientX-previousX, dy=e.clientY-previousY;
-  mouseMoved+=Math.abs(dx)+Math.abs(dy);
-  yaw-=dx*.006;
-  pitch=Math.max(-.1,Math.min(.65,pitch+dy*.003));
-  previousX=e.clientX; previousY=e.clientY;
-});
-renderer.domElement.addEventListener("pointerup",()=>{dragging=false;});
-renderer.domElement.addEventListener("pointercancel",()=>{dragging=false;});
-
-// Botones táctiles de movimiento.
-document.querySelectorAll("[data-move]").forEach(button=>{
-  const dir=button.dataset.move;
-  const down=e=>{e.preventDefault();moveButtons[dir]=true;};
-  const up=e=>{e.preventDefault();moveButtons[dir]=false;};
-  button.addEventListener("pointerdown",down);
-  button.addEventListener("pointerup",up);
-  button.addEventListener("pointerleave",up);
-  button.addEventListener("pointercancel",up);
-});
-document.getElementById("jumpButton").addEventListener("pointerdown",e=>{
-  e.preventDefault(); if(!jumping){velocityY=7.4;jumping=true;}
-});
-
-// Cámara detrás del personaje.
-function updateCamera() {
-  const distance=7.2;
-  const target=new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z);
-  const desired=new THREE.Vector3(
-    player.position.x+Math.sin(yaw)*distance,
-    player.position.y+2.4+pitch*4,
-    player.position.z+Math.cos(yaw)*distance
+  addMesh(
+    new THREE.CylinderGeometry(.035,.055,.55,6),
+    makeMaterial(0x39734b),0,.27,0,group
   );
-  camera.position.lerp(desired,.12);
-  camera.lookAt(target);
-}
 
-// Interacción al acercarse a un portal o corazón.
-function interact() {
-  if(nearPortal) {
-    openPanel(nearPortal.type);
-  } else {
-    notify("Acércate a un portal brillante para descubrir su secreto ✨");
-  }
-}
-document.getElementById("interact").addEventListener("click",interact);
-
-function updateWorld(dt,t) {
-  const forward=(keys.KeyW||keys.ArrowUp||moveButtons.forward?1:0)-
-                (keys.KeyS||keys.ArrowDown||moveButtons.back?1:0);
-  const sideways=(keys.KeyD||keys.ArrowRight||moveButtons.right?1:0)-
-                 (keys.KeyA||keys.ArrowLeft||moveButtons.left?1:0);
-  const magnitude=Math.hypot(forward,sideways);
-  walking=magnitude>0;
-
-  if(walking){
-    const f=forward/magnitude, s=sideways/magnitude;
-    const dx=(-Math.sin(yaw)*f+Math.cos(yaw)*s)*6*dt;
-    const dz=(-Math.cos(yaw)*f-Math.sin(yaw)*s)*6*dt;
-    player.position.x+=dx;
-    player.position.z+=dz;
-    player.rotation.y=Math.atan2(dx,dz);
-    legs[0].rotation.x=Math.sin(t*10)*.65;
-    legs[1].rotation.x=-Math.sin(t*10)*.65;
-    leftArm.rotation.x=-Math.sin(t*10)*.35;
-    rightArm.rotation.x=Math.sin(t*10)*.35;
-  }else{
-    legs.forEach(l=>l.rotation.x*=.75);
-    leftArm.rotation.x*=.75; rightArm.rotation.x*=.75;
-  }
-
-  // Mantener al jugador dentro de la isla.
-  const radius=Math.hypot(player.position.x,player.position.z);
-  if(radius>24.5){
-    player.position.x*=24.5/radius;
-    player.position.z*=24.5/radius;
-  }
-
-  // Salto con gravedad.
-  player.position.y+=velocityY*dt;
-  velocityY-=17*dt;
-  if(player.position.y<=0){player.position.y=0;velocityY=0;jumping=false;}
-  if(walking&&!jumping)player.position.y+=Math.sin(t*10)*.035;
-
-  nearPortal=null;
-  let nearest=999;
-  portals.forEach((p,i)=>{
-    p.torus.rotation.y+=dt*.55;
-    p.crystal.rotation.x+=dt*.8;
-    p.crystal.rotation.y+=dt*.7;
-    p.group.position.y=Math.sin(t*1.4+i)*.08;
-    const d=Math.hypot(player.position.x-p.x,player.position.z-p.z);
-    if(d<2.8 && d<nearest){nearest=d;nearPortal=p;}
+  const petalMat = makeMaterial(color, {
+    emissive:color,
+    emissiveIntensity:.12
   });
 
-  const button=document.getElementById("interact");
-  const status=document.getElementById("status");
-  if(nearPortal){
-    button.style.display="block";
-    button.textContent="E · "+nearPortal.name;
-    status.textContent="Has encontrado un lugar especial ✨";
-  }else{
-    button.style.display="none";
-    status.textContent=`Corazones encontrados: ${collected}/12 · Sigue explorando el planeta`;
+  for (let i=0;i<5;i++) {
+    const a=i*Math.PI*2/5;
+    const petal=addMesh(
+      new THREE.SphereGeometry(.13,10,8),
+      petalMat,
+      Math.cos(a)*.18,.57,Math.sin(a)*.18,group
+    );
+    petal.scale.set(1.2,.65,1);
   }
 
-  hearts.forEach(h=>{
-    if(h.collected)return;
-    h.mesh.rotation.y+=dt*1.4;
-    h.mesh.position.y=h.baseY+Math.sin(t*2+h.phase)*.22;
-    if(player.position.distanceTo(h.mesh.position)<1.05){
-      h.collected=true; h.mesh.visible=false; collected++;
-      notify(`¡Encontraste un corazón! 💗 ${collected}/12`);
-      if(collected===12) notify("¡Encontraste todos los corazones! Eres mi universo 💖");
+  addMesh(
+    new THREE.SphereGeometry(.09,10,8),
+    makeMaterial(0xffe7a0),0,.6,0,group
+  );
+
+  objects.push({
+    mesh:group,
+    x,z,
+    title:"Una flor para ti",
+    action:() => showMessage("🌸 Como esta flor, mi amor por ti sigue creciendo.")
+  });
+}
+
+function createPlayer() {
+  player = new THREE.Group();
+  scene.add(player);
+  player.position.set(0,.25,8);
+
+  const skin = makeMaterial(0xf0bd98);
+  const clothes = makeMaterial(0x9d4ce0);
+  const pants = makeMaterial(0x242543);
+  const shoes = makeMaterial(0x171522);
+  const hair = makeMaterial(0x30202a);
+
+  // Cuerpo y cabeza: geometrías compatibles con Three.js r128
+  const torso = addMesh(
+    new THREE.CylinderGeometry(.32,.38,.85,16),
+    clothes,0,1.1,0,player
+  );
+  torso.castShadow = true;
+
+  const head = addMesh(
+    new THREE.SphereGeometry(.29,20,16),
+    skin,0,1.83,0,player
+  );
+  head.castShadow = true;
+
+  addMesh(
+    new THREE.SphereGeometry(.3,16,12),
+    hair,0,2.02,-.045,player
+  );
+
+  // Ojos
+  for (const x of [-.105,.105]) {
+    addMesh(
+      new THREE.SphereGeometry(.035,8,8),
+      makeMaterial(0x27192b),x,1.85,.263,player
+    );
+  }
+
+  // Brazos
+  playerParts.arms=[];
+  for (const side of [-1,1]) {
+    const arm = addMesh(
+      new THREE.CylinderGeometry(.105,.13,.58,10),
+      clothes,side*.43,1.13,0,player
+    );
+    arm.rotation.z = side*-.16;
+    playerParts.arms.push({mesh:arm,side});
+  }
+
+  // Piernas
+  playerParts.legs=[];
+  for (const side of [-1,1]) {
+    const leg = addMesh(
+      new THREE.CylinderGeometry(.13,.14,.62,10),
+      pants,side*.17,.48,0,player
+    );
+    const foot = addMesh(
+      new THREE.BoxGeometry(.23,.14,.35),
+      shoes,side*.17,.16,.07,player
+    );
+    playerParts.legs.push({mesh:leg,side});
+  }
+
+  const aura = addMesh(
+    new THREE.TorusGeometry(.53,.025,8,40),
+    new THREE.MeshBasicMaterial({color:0xff8ec5}),
+    0,.12,0,player
+  );
+  aura.rotation.x=Math.PI/2;
+}
+
+function createHeart(x,y,z) {
+  const group = new THREE.Group();
+  group.position.set(x,y,z);
+  scene.add(group);
+
+  const material = new THREE.MeshStandardMaterial({
+    color:0xff3c88,
+    emissive:0xb90c4e,
+    emissiveIntensity:.8,
+    roughness:.3
+  });
+
+  // Corazón construido con dos esferas y una punta, sin modelos externos
+  const left=addMesh(new THREE.SphereGeometry(.25,16,12),material,-.16,.12,0,group);
+  const right=addMesh(new THREE.SphereGeometry(.25,16,12),material,.16,.12,0,group);
+  left.scale.set(1,1, .65);
+  right.scale.set(1,1,.65);
+
+  const tip=addMesh(
+    new THREE.ConeGeometry(.29,.48,4),
+    material,0,-.13,0,group
+  );
+  tip.rotation.y=Math.PI/4;
+  tip.rotation.z=Math.PI;
+
+  hearts.push({mesh:group,baseY:y,collected:false});
+  objects.push({
+    mesh:group,x,z,
+    title:"Un corazón brillante",
+    action:() => {
+      const heart=hearts.find(h=>h.mesh===group);
+      if (!heart || heart.collected) return;
+      heart.collected=true;
+      group.visible=false;
+      score++;
+      $("score").textContent=score;
+      if(score===5) {
+        showMessage("💖 ¡Encontraste los 5 corazones! Nuestro amor es mágico.");
+        setTimeout(() => openModal(
+          "<h2>¡Encontraste todos los corazones! 💖</h2>"+
+          "<p>Mi preciosa, el tesoro más grande de este mundo eres tú. Gracias por llenar mi vida de amor.</p>"
+        ),500);
+      } else {
+        showMessage("💗 ¡Encontraste un corazón! ("+score+"/5) Sigue explorando.");
+      }
+    }
+  });
+}
+
+function createPortal(x,y,z) {
+  const ring=addMesh(
+    new THREE.TorusGeometry(1.35,.12,12,40),
+    new THREE.MeshStandardMaterial({
+      color:0xff83d0,
+      emissive:0xff3ca8,
+      emissiveIntensity:1.2
+    }),x,y,z
+  );
+  ring.rotation.y=.3;
+
+  addMesh(
+    new THREE.TorusGeometry(1.05,.045,8,40),
+    new THREE.MeshBasicMaterial({color:0x9deaff}),
+    x,y,z
+  );
+
+  objects.push({
+    mesh:ring,x,z,
+    title:"El portal de nuestros sueños",
+    action:() => openModal(
+      "<h2>✨ Nuestro portal secreto ✨</h2>"+
+      "<p>Si pudiera viajar a cualquier lugar del universo, elegiría uno donde pudiera seguir tomándote de la mano.</p>"+
+      "<p>Porque mi lugar favorito no es un sitio: eres tú. ❤️</p>"
+    )
+  });
+}
+
+function createMemoryStone(x,y,z) {
+  const stone=addMesh(
+    new THREE.DodecahedronGeometry(.65,0),
+    makeMaterial(0x9a77cb,{emissive:0x3b1e65,emissiveIntensity:.45}),
+    x,y,z
+  );
+
+  addMesh(
+    new THREE.SphereGeometry(.13,12,12),
+    new THREE.MeshBasicMaterial({color:0xffb4df}),
+    x,y+.7,z
+  );
+
+  objects.push({
+    mesh:stone,x,z,
+    title:"Piedra de los recuerdos",
+    action:() => openModal(
+      "<h2>💌 Un recuerdo para siempre</h2>"+
+      "<p>Entre millones de personas, qué bonito que la vida nos haya permitido encontrarnos.</p>"+
+      "<p>Quiero seguir creando recuerdos contigo, reír a tu lado y acompañarte en los días buenos y en los difíciles.</p>"+
+      "<p><strong>Te elegiría una y mil veces. ❤️</strong></p>"
+    )
+  });
+}
+
+function createBench(x,y,z) {
+  const wood=makeMaterial(0x9b526b);
+  addMesh(new THREE.BoxGeometry(2,.18,.55),wood,x,y+.5,z);
+  addMesh(new THREE.BoxGeometry(2,.5,.13),wood,x,y+.8,z-.23);
+  for(const side of [-.75,.75]) {
+    addMesh(new THREE.BoxGeometry(.13,.55,.45),wood,x+side,y+.25,z);
+  }
+  objects.push({
+    mesh:{position:new THREE.Vector3(x,y,z)},x,z,
+    title:"Nuestro banquito",
+    action:() => openModal(
+      "<h2>🌙 Una cita bajo las estrellas</h2>"+
+      "<p>Imagínanos aquí, viendo las estrellas, hablando de nuestros sueños y riéndonos de cualquier tontería.</p>"+
+      "<p>No necesito un lugar perfecto. Solo quiero compartir muchos momentos contigo. ❤️</p>"
+    )
+  });
+}
+
+function setupControls() {
+  window.addEventListener("keydown",e=>{
+    const key=e.key.toLowerCase();
+    keys[key]=true;
+    if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(key)) e.preventDefault();
+    if(key==="e") interact();
+    if(key===" " && grounded) {
+      verticalSpeed=7;
+      grounded=false;
     }
   });
 
-  flowers.forEach((f,i)=>{f.rotation.y=Math.sin(t*.5+i)*.05;});
-  motes.forEach((m,i)=>{m.position.y+=Math.sin(t*1.3+m.userData.phase)*.0018;});
-  starField.rotation.y+=dt*.003;
-  distantPlanet.rotation.y+=dt*.025;
-  distantRing.rotation.z+=dt*.003;
-  updateCamera();
+  window.addEventListener("keyup",e=>{
+    keys[e.key.toLowerCase()]=false;
+  });
+
+  renderer.domElement.addEventListener("pointerdown",e=>{
+    mouseDown=true;
+    lastMouseX=e.clientX;
+  });
+  window.addEventListener("pointerup",()=>mouseDown=false);
+  window.addEventListener("pointermove",e=>{
+    if(mouseDown && running) {
+      cameraAngle-=(e.clientX-lastMouseX)*.006;
+      lastMouseX=e.clientX;
+    }
+  });
+
+  document.querySelectorAll("[data-key]").forEach(button=>{
+    const key=button.dataset.key;
+    const on=ev=>{ev.preventDefault();keys[key]=true};
+    const off=ev=>{ev.preventDefault();keys[key]=false};
+    button.addEventListener("pointerdown",on);
+    button.addEventListener("pointerup",off);
+    button.addEventListener("pointerleave",off);
+    button.addEventListener("pointercancel",off);
+  });
+
+  $("jump").addEventListener("pointerdown",e=>{
+    e.preventDefault();
+    if(grounded) {
+      verticalSpeed=7;
+      grounded=false;
+    }
+  });
+
+  $("interact").addEventListener("click",interact);
+  $("letter").addEventListener("click",showLetter);
+  $("photos").addEventListener("click",showPhotos);
+  $("music").addEventListener("click",()=>{
+    window.open(
+      "https://www.youtube.com/results?search_query=Tutu+Camilo+Pedro+Capo",
+      "_blank","noopener"
+    );
+  });
 }
 
-const clock=new THREE.Clock();
-function animate(){
-  requestAnimationFrame(animate);
-  const dt=Math.min(clock.getDelta(),.04);
-  updateWorld(dt,clock.elapsedTime);
-  renderer.render(scene,camera);
+function interact() {
+  if(!running) return;
+  if(nearby && nearby.action) {
+    nearby.action();
+  } else {
+    showMessage("🌸 Explora el jardín y acércate a una flor, corazón u objeto para descubrir una sorpresa.");
+  }
 }
-updateCamera();
-animate();
 
-window.addEventListener("resize",()=>{
-  camera.aspect=innerWidth/innerHeight;
+function showLetter() {
+  openModal(
+    "<h2>Para mi preciosa Nohemi ❤️</h2>"+
+    "<p>Mi amor, quiero que sepas que eres una persona muy especial para mí. Desde que llegaste a mi vida, has hecho que muchos momentos sean más bonitos.</p>"+
+    "<p>Quiero seguir compartiendo contigo risas, sueños, aventuras y hasta esos días en los que simplemente necesitamos un abrazo.</p>"+
+    "<p>Este pequeño mundo no es más que una forma de recordarte que mi cariño por ti es enorme.</p>"+
+    "<p>Gracias por ser tú, por tus detalles y por los momentos que estamos construyendo juntos.</p>"+
+    "<h2>Te quiero muchísimo, mi preciosa. 💖</h2>"+
+    "<p>Con todo mi amor. 🌹</p>"
+  );
+}
+
+function showPhotos() {
+  openModal(
+    "<h2>📸 Nuestra galería de recuerdos</h2>"+
+    "<p>Un lugar para guardar nuestros momentos favoritos.</p>"+
+    '<img src="foto1.jpeg" alt="Nuestro recuerdo 1" onerror="this.style.display=\'none\'">'+
+    '<img src="foto2.jpeg" alt="Nuestro recuerdo 2" onerror="this.style.display=\'none\'">'+
+    '<img src="foto3.jpeg" alt="Nuestro recuerdo 3" onerror="this.style.display=\'none\'">'+
+    '<img src="foto4.jpeg" alt="Nuestro recuerdo 4" onerror="this.style.display=\'none\'">'+
+    "<p>Lo más bonito de cada foto es la historia que hay detrás. ❤️</p>"
+  );
+}
+
+function onResize() {
+  if(!camera || !renderer) return;
+  camera.aspect=window.innerWidth/window.innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));
-  renderer.setSize(innerWidth,innerHeight);
-});
+  renderer.setSize(window.innerWidth,window.innerHeight);
+}
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(),.05);
+  worldTime+=dt;
+
+  // Movimiento del personaje
+  if(running && player) {
+    let forward=0,side=0;
+    if(keys.w || keys.arrowup) forward+=1;
+    if(keys.s || keys.arrowdown) forward-=1;
+    if(keys.a || keys.arrowleft) side-=1;
+    if(keys.d || keys.arrowright) side+=1;
+
+    const moving=forward!==0 || side!==0;
+
+    if(moving) {
+      const length=Math.hypot(forward,side);
+      forward/=length;
+      side/=length;
+
+      const angle=cameraAngle;
+      const dx=side*Math.cos(angle)+forward*Math.sin(angle);
+      const dz=-forward*Math.cos(angle)+side*Math.sin(angle);
+
+      player.position.x+=dx*5*dt;
+      player.position.z+=dz*5*dt;
+      player.rotation.y=Math.atan2(dx,dz);
+
+      playerParts.legs.forEach((part,i)=>{
+        part.mesh.rotation.x=Math.sin(worldTime*11+i*Math.PI)*.65;
+      });
+      playerParts.arms.forEach((part,i)=>{
+        part.mesh.rotation.x=Math.sin(worldTime*11+i*Math.PI+Math.PI)*.45;
+      });
+    } else {
+      playerParts.legs.forEach(part=>part.mesh.rotation.x=0);
+      playerParts.arms.forEach(part=>part.mesh.rotation.x=0);
+    }
+
+    // Mantener al personaje dentro de la isla
+    const dist=Math.hypot(player.position.x,player.position.z);
+    if(dist>16) {
+      player.position.x*=16/dist;
+      player.position.z*=16/dist;
+    }
+
+    // Salto
+    if(!grounded) {
+      player.position.y+=verticalSpeed*dt;
+      verticalSpeed-=18*dt;
+      if(player.position.y<=.25) {
+        player.position.y=.25;
+        verticalSpeed=0;
+        grounded=true;
+      }
+    }
+
+    // Cámara de tercera persona
+    const distance=7;
+    const targetX=player.position.x-Math.sin(cameraAngle)*distance;
+    const targetZ=player.position.z-Math.cos(cameraAngle)*distance;
+    camera.position.x+=(targetX-camera.position.x)*Math.min(1,dt*5);
+    camera.position.y+=(player.position.y+cameraHeight-camera.position.y)*Math.min(1,dt*5);
+    camera.position.z+=(targetZ-camera.position.z)*Math.min(1,dt*5);
+    camera.lookAt(player.position.x,player.position.y+1.1,player.position.z);
+
+    // Buscar objeto cercano
+    nearby=null;
+    let best=2.5;
+    for(const obj of objects) {
+      if(!obj.mesh || obj.mesh.visible===false) continue;
+      const dx=player.position.x-obj.x;
+      const dz=player.position.z-obj.z;
+      const d=Math.hypot(dx,dz);
+      if(d<best) {
+        best=d;
+        nearby=obj;
+      }
+    }
+
+    if(nearby) {
+      $("interact").textContent="💌 "+nearby.title;
+    } else {
+      $("interact").textContent="💌 Interactuar";
+    }
+  } else if(camera) {
+    camera.position.set(0,6,17);
+    camera.lookAt(0,1,0);
+  }
+
+  // Corazones flotantes y objetos animados
+  hearts.forEach((heart,i)=>{
+    if(!heart.collected) {
+      heart.mesh.position.y=heart.baseY+Math.sin(worldTime*2+i)*.2;
+      heart.mesh.rotation.y+=dt*.8;
+    }
+  });
+
+  scene.traverse(obj=>{
+    if(obj.geometry && obj.geometry.type==="TorusGeometry" && obj.position.z===-14) {
+      obj.rotation.z+=dt*.5;
+    }
+  });
+
+  if(renderer && scene && camera) renderer.render(scene,camera);
+}
+
+createWorld();
+
 })();
 </script>
 </body>
