@@ -3,383 +3,178 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050511">
-<title>Para Mi Preciosa ❤️ | Nuestro Universo</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#08051a">
+<title>El Universo de Nohemi ❤️</title>
 <style>
 :root {
-  --pink: #ff8fd8;
-  --purple: #bca0ff;
-  --glass: rgba(13, 12, 35, .82);
+  --pink: #ff9bdd;
+  --purple: #b89cff;
+  --glass: rgba(12, 10, 35, .88);
 }
-
 * { box-sizing: border-box; }
-
 body {
-  margin: 0;
-  overflow: hidden;
-  background: #03030c;
-  color: white;
-  font-family: Georgia, "Times New Roman", serif;
+  margin: 0; overflow: hidden; background: #050411; color: white;
+  font-family: Arial, sans-serif; touch-action: none;
 }
-
 button {
-  font: inherit;
-  color: white;
-  border: 1px solid rgba(255, 177, 230, .65);
-  background: linear-gradient(135deg, #9a3d91, #4735a0);
-  padding: 11px 16px;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 0 18px rgba(199, 104, 255, .2);
-  transition: transform .2s, filter .2s;
+  color: white; cursor: pointer; border: 1px solid #e6a6ff;
+  border-radius: 22px; padding: 10px 15px;
+  background: linear-gradient(135deg, #9b3c91, #4435a0);
+  box-shadow: 0 0 16px #9c55e633;
 }
-
-button:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.2);
+button:active { transform: scale(.97); }
+#game { position: fixed; inset: 0; }
+#game canvas { display: block; width: 100%; height: 100%; }
+#hud { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+#hud button, #hud .interactive { pointer-events: auto; }
+.topbar {
+  position: absolute; top: 12px; left: 12px; right: 12px;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
 }
-
-button:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 4px;
+.brand {
+  font-family: Georgia, serif; font-size: clamp(14px, 3vw, 22px);
+  color: #ffd8f5; text-shadow: 0 0 14px #ed77ff;
 }
-
-#universo {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-}
-
-#universo canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.vignette {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,10,.42) 100%);
-}
-
-header {
-  position: fixed;
-  z-index: 3;
-  top: 15px;
-  left: 15px;
-  right: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  pointer-events: none;
-}
-
-header > * { pointer-events: auto; }
-
-.logo {
-  font-size: clamp(15px, 2.8vw, 23px);
-  color: #ffe4fa;
-  text-shadow: 0 0 14px #d86cff;
-}
-
 .counter {
-  position: fixed;
-  z-index: 3;
-  top: 70px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: calc(100% - 24px);
-  padding: 10px 17px;
-  text-align: center;
-  border: 1px solid rgba(255, 173, 232, .25);
-  border-radius: 20px;
-  background: rgba(7, 6, 24, .56);
-  backdrop-filter: blur(10px);
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  color: #f8d8ff;
-}
-
-#tiempo {
-  display: block;
-  margin-top: 4px;
-  font-size: 13px;
-  color: white;
-}
-
-.hint {
-  position: fixed;
-  z-index: 2;
-  left: 50%;
-  bottom: 95px;
-  transform: translateX(-50%);
-  width: calc(100% - 30px);
-  text-align: center;
-  font-family: Arial, sans-serif;
-  color: #e7d9ff;
-  font-size: 13px;
-  text-shadow: 0 0 12px #9b6bff;
-  pointer-events: none;
-}
-
-.nav {
-  position: fixed;
-  z-index: 4;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  width: calc(100% - 20px);
-  flex-wrap: wrap;
-}
-
-.nav button {
-  padding: 10px 13px;
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-}
-
-.screen {
-  position: fixed;
-  z-index: 10;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px;
-  background: radial-gradient(ellipse at center, rgba(39, 16, 75, .72), rgba(2, 2, 12, .96));
+  position: absolute; top: 62px; left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: 95%; text-align: center;
+  background: #09071dbb; border: 1px solid #d6a3ff66;
+  border-radius: 16px; padding: 8px 12px; font-size: 11px;
   backdrop-filter: blur(8px);
+}
+#time { display: block; color: #ffe3f8; margin-top: 4px; }
+#status {
+  position: absolute; top: 125px; left: 50%; transform: translateX(-50%);
+  text-align: center; width: 90%; font-size: 13px; color: #fff0ff;
+  text-shadow: 0 1px 8px #000; line-height: 1.5;
+}
+#interact {
+  position: absolute; left: 50%; bottom: 105px; transform: translateX(-50%);
+  display: none; font-weight: bold; font-size: 15px;
+}
+#help {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  text-align: center; width: 96%; font-size: 11px; color: #e2d6ff;
+  text-shadow: 0 1px 5px #000;
+}
+#mobileControls {
+  display: none; position: absolute; bottom: 45px; left: 12px;
+  grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(2, 46px);
+  gap: 5px;
+}
+#mobileControls button {
+  padding: 0; border-radius: 14px; font-size: 20px;
+  background: #25144dcc; border-color: #d6a3ff99;
+  touch-action: none;
+}
+#jumpButton {
+  display: none; position: absolute; bottom: 56px; right: 16px;
+  width: 62px; height: 62px; border-radius: 50%; font-size: 12px;
+}
+.overlay {
+  position: fixed; z-index: 5; inset: 0; padding: 16px;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at center, #28164de8, #03030cf5);
   overflow-y: auto;
 }
-
-.intro-card {
-  width: min(540px, 100%);
-  padding: clamp(22px, 5vw, 42px);
-  text-align: center;
-  border-radius: 28px;
-  border: 1px solid rgba(255, 175, 235, .45);
-  background: linear-gradient(145deg, rgba(32, 18, 65, .9), rgba(10, 9, 31, .94));
-  box-shadow: 0 0 70px rgba(177, 76, 255, .22);
-}
-
-.intro-card h1 {
-  color: #ffd4f4;
-  font-size: clamp(29px, 6vw, 46px);
-  margin: 10px 0;
-  text-shadow: 0 0 25px #d14aff;
-}
-
-.intro-card p {
-  line-height: 1.7;
-  color: #e6ddff;
-}
-
-.big-heart {
-  font-size: 50px;
-  filter: drop-shadow(0 0 16px #ff59cf);
-  animation: beat 1.3s infinite;
-}
-
-@keyframes beat {
-  50% { transform: scale(1.15); }
-}
-
-.panel {
-  width: min(760px, 100%);
-  max-height: min(82vh, 850px);
-  overflow-y: auto;
-  padding: clamp(18px, 4vw, 32px);
-  border-radius: 25px;
-  border: 1px solid rgba(255, 173, 232, .45);
-  background: var(--glass);
-  box-shadow: 0 0 60px rgba(150, 78, 255, .25);
-  backdrop-filter: blur(16px);
-}
-
-.panel h2 {
-  color: #ffc9ef;
-  text-align: center;
-  font-size: clamp(25px, 5vw, 36px);
-  margin-top: 0;
-}
-
-.panel p {
-  line-height: 1.8;
-  color: #f1e9ff;
-}
-
-.panel-actions {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 9px;
-  margin-top: 20px;
-}
-
-.close-btn {
-  display: block;
-  margin: 0 0 15px auto;
-  background: rgba(255,255,255,.08);
-}
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.gallery figure {
-  margin: 0;
-  padding: 8px;
-  border-radius: 15px;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.13);
-}
-
-.gallery img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-.gallery figcaption {
-  padding: 9px 4px 3px;
-  text-align: center;
-  color: #ffdaf3;
-  font-size: 14px;
-}
-
-.letter {
-  white-space: pre-line;
-  padding: 20px;
-  border-radius: 16px;
-  border-left: 3px solid #ff9add;
-  background: rgba(255,255,255,.045);
-  line-height: 1.9;
-}
-
-.secret-message {
-  text-align: center;
-  padding: 15px;
-  color: #ffd5f4;
-  font-size: 19px;
-  line-height: 1.7;
-}
-
 .hidden { display: none !important; }
-
-#toast {
-  position: fixed;
-  z-index: 20;
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: max-content;
-  max-width: 90%;
-  text-align: center;
-  color: white;
-  background: rgba(15, 8, 40, .92);
-  border: 1px solid #ff9add;
-  border-radius: 18px;
-  padding: 15px 20px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .3s;
+.card {
+  width: min(600px, 100%); max-height: 90vh; overflow-y: auto;
+  padding: clamp(20px, 5vw, 38px); text-align: center;
+  border-radius: 25px; border: 1px solid #e5a6ff88;
+  background: linear-gradient(145deg, #20133eeF, #09081bf2);
+  box-shadow: 0 0 70px #a850ff30;
 }
-
+.card h1, .card h2 { color: #ffd2f2; font-family: Georgia, serif; }
+.card h1 { font-size: clamp(29px, 7vw, 45px); margin: 10px 0; }
+.card p { line-height: 1.7; color: #e9e1ff; }
+.bigheart { font-size: 45px; animation: beat 1.3s infinite; }
+@keyframes beat { 50% { transform: scale(1.15); } }
+.panel {
+  width: min(760px, 100%); max-height: 88vh; overflow-y: auto;
+  background: var(--glass); padding: 20px; border-radius: 22px;
+  border: 1px solid #dfadff88; box-shadow: 0 0 55px #b65aff30;
+}
+.panel h2 { text-align: center; color: #ffd0f3; font-family: Georgia, serif; }
+.panel p { line-height: 1.8; white-space: pre-line; }
+.close { display: block; margin-left: auto; }
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+.gallery figure { margin: 0; padding: 7px; background: #ffffff0d; border-radius: 12px; }
+.gallery img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 8px; display: block; }
+.gallery figcaption { text-align: center; font-size: 12px; padding: 8px 2px; color: #ffdbf4; }
+.letter { white-space: pre-line; line-height: 1.9; padding: 15px; border-left: 3px solid #ff9bdd; background: #ffffff08; }
+#toast {
+  position: fixed; z-index: 10; top: 45%; left: 50%; transform: translate(-50%,-50%);
+  background: #100b2bea; border: 1px solid #e9a6ff; border-radius: 15px;
+  padding: 14px 18px; text-align: center; max-width: 88%; opacity: 0;
+  pointer-events: none; transition: opacity .25s;
+}
 #toast.show { opacity: 1; }
-
-@media (max-width: 520px) {
-  header { top: 10px; left: 10px; right: 10px; }
-  header button { padding: 9px 11px; font-size: 11px; }
-  .counter { top: 62px; }
-  .hint { bottom: 118px; font-size: 12px; }
-  .nav { bottom: 12px; gap: 6px; }
-  .nav button { padding: 9px 10px; font-size: 11px; }
-  .gallery { gap: 8px; }
+@media (pointer: coarse), (max-width: 700px) {
+  #mobileControls { display: grid; }
+  #jumpButton { display: block; }
+  #help { bottom: 8px; font-size: 10px; }
+  #interact { bottom: 120px; }
+  .topbar button { padding: 9px 10px; font-size: 11px; }
 }
 </style>
 </head>
-
 <body>
-<div id="universo" aria-label="Universo romántico 3D"></div>
-<div class="vignette"></div>
+<div id="game"></div>
 
-<header>
-  <div class="logo">✦ Nuestro Universo ✦</div>
-  <button id="musicButton" type="button">🎵 Escuchar Tutu</button>
-</header>
+<div id="hud">
+  <div class="topbar">
+    <div class="brand">✦ El Universo de Nohemi ✦</div>
+    <button id="musicButton">🎵 Tutu</button>
+  </div>
+  <div class="counter">
+    Nuestro día especial ❤️
+    <span id="time">Cargando contador...</span>
+  </div>
+  <div id="status">Explora el planeta y descubre sus secretos ✨</div>
+  <button id="interact">E · Descubrir</button>
 
-<div class="counter">
-  Nuestro tiempo juntos ❤️
-  <span id="tiempo">Calculando estrellas...</span>
+  <div id="mobileControls" class="interactive">
+    <span></span><button data-move="forward">▲</button><span></span>
+    <button data-move="left">◀</button><button data-move="back">▼</button><button data-move="right">▶</button>
+  </div>
+  <button id="jumpButton">SALTAR</button>
+  <div id="help">WASD: caminar · Ratón: girar cámara · E: interactuar · Espacio: saltar</div>
 </div>
 
-<div class="hint" id="hint">
-  Arrastra para explorar la galaxia · Toca los lugares brillantes para descubrir secretos ✨
-</div>
-
-<nav class="nav" aria-label="Lugares del universo">
-  <button type="button" data-open="recuerdos">📸 Recuerdos</button>
-  <button type="button" data-open="carta">💌 Mi carta</button>
-  <button type="button" data-open="jardin">🌷 Jardín secreto</button>
-  <button type="button" data-open="secreto">💫 Sorpresa</button>
-</nav>
-
-<!-- Pantalla de bienvenida -->
-<section class="screen" id="intro">
-  <div class="intro-card">
-    <div class="big-heart">💗</div>
+<section class="overlay" id="intro">
+  <div class="card">
+    <div class="bigheart">💗</div>
     <h1>Para Mi Preciosa</h1>
-    <p>
-      Hay millones de galaxias en el universo, pero mi lugar favorito
-      siempre será aquel donde estás tú.
-    </p>
-    <p>
-      Preparé un pequeño universo para ti, con nuestros recuerdos,
-      una carta y algunos secretos escondidos entre las estrellas.
-    </p>
-    <button type="button" id="enterButton">❤️ Abrir mi universo ❤️</button>
-    <p style="font-size:12px">Hecho con todo mi amor, para Nohemi.</p>
+    <p>He creado un pequeño planeta para ti, lleno de flores luminosas, estrellas, recuerdos y secretos.</p>
+    <p>Camina por este universo, encuentra los portales y descubre todo lo que preparé para ti.</p>
+    <button id="startButton">❤️ Entrar a nuestro planeta</button>
+    <p style="font-size:12px">Un mundo hecho con amor para Nohemi.</p>
   </div>
 </section>
 
-<!-- Paneles secretos -->
-<section class="screen hidden" id="panelScreen">
+<section class="overlay hidden" id="panelScreen">
   <article class="panel">
-    <button class="close-btn" id="closePanel" type="button">✕ Cerrar</button>
+    <button class="close" id="closePanel">✕ Cerrar</button>
     <div id="panelContent"></div>
   </article>
 </section>
-
 <div id="toast" role="status"></div>
 
-<!-- Three.js: requiere conexión a internet para cargar la biblioteca -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
 <script>
 (() => {
-  "use strict";
+"use strict";
 
-  // Nombres de las fotos que ya existen en tu repositorio.
-  const fotos = [
-    { src: "foto1.jpeg", caption: "Un recuerdo de nosotros ❤️" },
-    { src: "foto2.jpeg", caption: "Un momento que guardo en mi corazón ✨" },
-    { src: "foto3.jpeg", caption: "Tú haces más bonito mi mundo 🌷" },
-    { src: "foto4.jpeg", caption: "Y quiero seguir creando recuerdos contigo 💗" }
-  ];
+const fotos = [
+  {src:"foto1.jpeg", caption:"Un recuerdo de nosotros ❤️"},
+  {src:"foto2.jpeg", caption:"Un momento que guardo en mi corazón ✨"},
+  {src:"foto3.jpeg", caption:"Tú haces más bonito mi mundo 🌷"},
+  {src:"foto4.jpeg", caption:"Quiero seguir creando recuerdos contigo 💗"}
+];
 
-  const carta = `Mi preciosa Nohemi:
+const carta = `Mi preciosa Nohemi:
 
 Si pudiera regalarte una estrella por cada vez que pienso en ti,
 el cielo ya no tendría oscuridad.
@@ -395,611 +190,522 @@ Gracias por existir, por ser tú y por formar parte de mi vida.
 Si algún día miras el cielo y ves una estrella brillando,
 imagina que ahí te estoy mandando un beso y un abrazo.
 
-Te quiero muchísimo, mi preciosa.
-Con todo mi amor, para ti. ❤️`;
+Te quiero muchísimo, mi preciosa. ❤️`;
 
-  // Cambia este mensaje cuando quieras personalizarlo.
-  const mensajeSecreto =
-    "Si pudiera elegir un lugar en todas las galaxias, " +
-    "te elegiría a ti. Tú eres mi lugar favorito en el universo. ❤️";
+const secretos = {
+  recuerdos: "recuerdos",
+  carta: "carta",
+  jardin: "jardin",
+  sorpresa: "sorpresa"
+};
 
-  const startDate = new Date(2026, 8, 11, 0, 0, 0);
+const startDate = new Date(2026, 8, 11, 0, 0, 0);
+function updateCounter() {
+  const now = new Date();
+  const d = Math.abs(now - startDate);
+  const days = Math.floor(d / 86400000);
+  const hours = Math.floor(d / 3600000) % 24;
+  const minutes = Math.floor(d / 60000) % 60;
+  const seconds = Math.floor(d / 1000) % 60;
+  document.getElementById("time").textContent =
+    `${now >= startDate ? "Juntos desde" : "Faltan"} ${days} días, ${hours} h, ${minutes} min, ${seconds} s`;
+}
+updateCounter();
+setInterval(updateCounter, 1000);
 
-  // Contador desde el 11 de septiembre de 2026.
-  function actualizarContador() {
-    const ahora = new Date();
-    const diferencia = Math.abs(ahora - startDate);
-    const totalSegundos = Math.floor(diferencia / 1000);
-    const dias = Math.floor(totalSegundos / 86400);
-    const horas = Math.floor((totalSegundos % 86400) / 3600);
-    const minutos = Math.floor((totalSegundos % 3600) / 60);
-    const segundos = totalSegundos % 60;
+const toast = document.getElementById("toast");
+function notify(message) {
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(notify.timer);
+  notify.timer = setTimeout(() => toast.classList.remove("show"), 2600);
+}
 
-    const textoFecha = ahora >= startDate
-      ? "Desde nuestro día especial 💞"
-      : "Faltan para nuestro día especial 💞";
-
-    document.getElementById("tiempo").textContent =
-      `${textoFecha} ${dias} días, ${horas} h, ${minutos} min, ${segundos} s`;
-  }
-  actualizarContador();
-  setInterval(actualizarContador, 1000);
-
-  // Música: abre la búsqueda de Tutu para evitar un enlace de vídeo incorrecto.
-  document.getElementById("musicButton").addEventListener("click", () => {
-    window.open(
-      "https://www.youtube.com/results?search_query=Tutu+Camilo+Pedro+Cap%C3%B3+video+oficial",
-      "_blank",
-      "noopener,noreferrer"
-    );
-    mostrarToast("Busca el video oficial de Tutu y pulsa reproducir 🎵");
-  });
-
-  // Paneles de contenido.
-  const panelScreen = document.getElementById("panelScreen");
-  const panelContent = document.getElementById("panelContent");
-
-  function abrirPanel(tipo) {
-    let html = "";
-
-    if (tipo === "recuerdos") {
-      html = `
-        <h2>✨ Nuestra constelación de recuerdos ✨</h2>
-        <p style="text-align:center">
-          Cada fotografía es una pequeña estrella de nuestra historia.
-        </p>
-        <div class="gallery">
-          ${fotos.map((foto, i) => `
-            <figure>
-              <img src="${foto.src}" alt="Recuerdo ${i + 1}" loading="lazy">
-              <figcaption>${foto.caption}</figcaption>
-            </figure>
-          `).join("")}
-        </div>
-        <p style="text-align:center;font-size:13px">
-          Si una foto no aparece, revisa que su nombre coincida exactamente
-          con el archivo de GitHub, incluidas las mayúsculas y minúsculas.
-        </p>
-      `;
-    } else if (tipo === "carta") {
-      html = `
-        <h2>💌 Una carta entre las estrellas</h2>
-        <div class="letter" id="letterText"></div>
-        <div class="panel-actions">
-          <button type="button" id="readLetter">💗 Volver a leer</button>
-        </div>
-      `;
-    } else if (tipo === "jardin") {
-      html = `
-        <h2>🌷 Nuestro jardín secreto</h2>
-        <p class="secret-message">
-          En este rincón del universo crecen flores por cada sonrisa tuya,
-          luces por cada recuerdo bonito y corazones por todo lo que siento.
-        </p>
-        <p style="text-align:center">
-          🌸 🌷 🌹 ✨ 💗 ✨ 🌹 🌷 🌸
-        </p>
-        <p>
-          Mi deseo es que nunca nos falten motivos para reír, abrazarnos
-          y seguir construyendo momentos que algún día recordemos con cariño.
-        </p>
-      `;
-    } else if (tipo === "secreto") {
-      html = `
-        <h2>💫 Un secreto del universo</h2>
-        <p class="secret-message">${mensajeSecreto}</p>
-        <p style="text-align:center;font-size:30px">🌌 💖 🌌</p>
-        <div class="panel-actions">
-          <button type="button" id="heartSurprise">💗 Enviar lluvia de corazones</button>
-        </div>
-      `;
-    }
-
-    panelContent.innerHTML = html;
-    panelScreen.classList.remove("hidden");
-
-    if (tipo === "carta") {
-      const letterText = document.getElementById("letterText");
-      let index = 0;
-      letterText.textContent = "";
-      const timer = setInterval(() => {
-        if (!document.body.contains(letterText)) {
-          clearInterval(timer);
-          return;
-        }
-        letterText.textContent = carta.slice(0, index);
-        index += 4;
-        if (index >= carta.length) {
-          letterText.textContent = carta;
-          clearInterval(timer);
-        }
-      }, 18);
-
-      document.getElementById("readLetter").addEventListener("click", () => {
-        letterText.textContent = carta;
-      });
-    }
-
-    const surpriseButton = document.getElementById("heartSurprise");
-    if (surpriseButton) {
-      surpriseButton.addEventListener("click", lluviaCorazones);
-    }
-  }
-
-  document.getElementById("closePanel").addEventListener("click", () => {
-    panelScreen.classList.add("hidden");
-  });
-
-  panelScreen.addEventListener("click", (event) => {
-    if (event.target === panelScreen) {
-      panelScreen.classList.add("hidden");
-    }
-  });
-
-  document.querySelectorAll("[data-open]").forEach(button => {
-    button.addEventListener("click", () => abrirPanel(button.dataset.open));
-  });
-
-  document.getElementById("enterButton").addEventListener("click", () => {
-    document.getElementById("intro").classList.add("hidden");
-    mostrarToast("Bienvenida a nuestro universo, mi preciosa ❤️");
-  });
-
-  function mostrarToast(texto) {
-    const toast = document.getElementById("toast");
-    toast.textContent = texto;
-    toast.classList.add("show");
-    clearTimeout(mostrarToast.timer);
-    mostrarToast.timer = setTimeout(() => toast.classList.remove("show"), 2800);
-  }
-
-  function lluviaCorazones() {
-    for (let i = 0; i < 28; i++) {
-      const heart = document.createElement("div");
-      heart.textContent = ["💗", "💖", "💕", "❤️", "✨"][Math.floor(Math.random() * 5)];
-      heart.style.position = "fixed";
-      heart.style.zIndex = "30";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.top = "-40px";
-      heart.style.fontSize = (18 + Math.random() * 24) + "px";
-      heart.style.pointerEvents = "none";
-      heart.style.transition = "transform 3s linear, opacity 3s linear";
-      document.body.appendChild(heart);
-
-      requestAnimationFrame(() => {
-        heart.style.transform = `translate(${Math.random() * 100 - 50}px, ${window.innerHeight + 100}px) rotate(${Math.random() * 600}deg)`;
-        heart.style.opacity = "0";
-      });
-
-      setTimeout(() => heart.remove(), 3200);
-    }
-  }
-
-  // Si Three.js no se carga, mostrar un mensaje útil en vez de dejar la página vacía.
-  if (!window.THREE) {
-    mostrarToast("No se pudo cargar el mundo 3D. Revisa tu conexión a internet.");
-    document.getElementById("hint").textContent =
-      "Este universo necesita conexión a internet para cargar Three.js.";
-    return;
-  }
-
-  // ------------------ MUNDO 3D ------------------
-  const THREE = window.THREE;
-  const container = document.getElementById("universo");
-
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x03030c);
-  scene.fog = new THREE.FogExp2(0x050516, 0.009);
-
-  const camera = new THREE.PerspectiveCamera(
-    58,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
+document.getElementById("musicButton").addEventListener("click", () => {
+  window.open(
+    "https://www.youtube.com/results?search_query=Tutu+Camilo+Pedro+Capo+video+oficial",
+    "_blank", "noopener,noreferrer"
   );
-  camera.position.set(0, 1.2, 13);
+  notify("Busca Tutu de Camilo y Pedro Capó y reproduce la canción 🎵");
+});
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.outputEncoding = THREE.sRGBEncoding;
-  container.appendChild(renderer.domElement);
+const panelScreen = document.getElementById("panelScreen");
+const panelContent = document.getElementById("panelContent");
 
-  scene.add(new THREE.AmbientLight(0x8c85c9, 1.25));
-
-  const moonLight = new THREE.PointLight(0xff8bd9, 2.3, 60);
-  moonLight.position.set(5, 5, 7);
-  scene.add(moonLight);
-
-  const blueLight = new THREE.PointLight(0x5e7dff, 2, 55);
-  blueLight.position.set(-7, -3, -4);
-  scene.add(blueLight);
-
-  const world = new THREE.Group();
-  scene.add(world);
-
-  // Estrellas lejanas.
-  const starCount = 2600;
-  const starPositions = new Float32Array(starCount * 3);
-  for (let i = 0; i < starCount; i++) {
-    starPositions[i * 3] = (Math.random() - 0.5) * 190;
-    starPositions[i * 3 + 1] = (Math.random() - 0.5) * 130;
-    starPositions[i * 3 + 2] = -Math.random() * 150 - 10;
+function openPanel(type) {
+  if (type === "recuerdos") {
+    panelContent.innerHTML = `
+      <h2>📸 Nuestra constelación de recuerdos</h2>
+      <p style="text-align:center">Cada foto es una estrella de nuestra historia.</p>
+      <div class="gallery">${fotos.map((f,i)=>`
+        <figure><img src="${f.src}" alt="Recuerdo ${i+1}">
+        <figcaption>${f.caption}</figcaption></figure>`).join("")}</div>`;
+  } else if (type === "carta") {
+    panelContent.innerHTML = `<h2>💌 Una carta para ti</h2><div class="letter" id="letter"></div>
+      <p style="text-align:center"><button id="showFullLetter">Leer carta completa</button></p>`;
+  } else if (type === "jardin") {
+    panelContent.innerHTML = `
+      <h2>🌷 El jardín de nuestro amor</h2>
+      <p>Has encontrado un rincón mágico. Cada flor representa una sonrisa tuya; cada luz, un recuerdo bonito.</p>
+      <p style="text-align:center;font-size:26px">🌸 🌷 🌹 ✨ 💗 ✨ 🌹 🌷 🌸</p>
+      <p>Mi deseo es que siempre tengamos razones para reír, abrazarnos y construir recuerdos juntos.</p>`;
+  } else {
+    panelContent.innerHTML = `
+      <h2>💫 Tu secreto especial</h2>
+      <p style="text-align:center;font-size:19px">Entre todas las estrellas y todos los planetas, mi lugar favorito siempre será a tu lado. Te elegiría en cada universo, mi preciosa. ❤️</p>
+      <p style="text-align:center;font-size:30px">🌌 💖 🌌</p>
+      <p style="text-align:center"><button id="heartRain">💗 Lluvia de corazones</button></p>`;
   }
-  const starGeometry = new THREE.BufferGeometry();
-  starGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(starPositions, 3)
-  );
-  const stars = new THREE.Points(
-    starGeometry,
-    new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 0.13,
-      transparent: true,
-      opacity: 0.9
-    })
-  );
-  scene.add(stars);
+  panelScreen.classList.remove("hidden");
 
-  // Nebulosas: grandes nubes translúcidas de color.
-  function crearNebulosa(color, x, y, z, scale) {
-    const mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(1, 24, 18),
-      new THREE.MeshBasicMaterial({
-        color,
-        transparent: true,
-        opacity: 0.10,
-        side: THREE.BackSide,
-        depthWrite: false
-      })
-    );
-    mesh.position.set(x, y, z);
-    mesh.scale.set(scale * 1.5, scale, scale * 0.35);
-    scene.add(mesh);
+  const letter = document.getElementById("letter");
+  if (letter) {
+    let i = 0;
+    const timer = setInterval(() => {
+      if (!document.body.contains(letter)) { clearInterval(timer); return; }
+      letter.textContent = carta.slice(0, i);
+      i += 5;
+      if (i >= carta.length) { letter.textContent = carta; clearInterval(timer); }
+    }, 16);
+    document.getElementById("showFullLetter").addEventListener("click", () => {
+      letter.textContent = carta;
+    });
   }
-  crearNebulosa(0x6523a8, -13, 5, -25, 12);
-  crearNebulosa(0x153e9a, 14, -5, -35, 15);
-  crearNebulosa(0xa12576, 3, 12, -50, 18);
+  const rainButton = document.getElementById("heartRain");
+  if (rainButton) rainButton.addEventListener("click", heartRain);
+}
 
-  // Planeta principal.
-  const planet = new THREE.Mesh(
-    new THREE.SphereGeometry(3, 64, 64),
+document.getElementById("closePanel").addEventListener("click", () => panelScreen.classList.add("hidden"));
+panelScreen.addEventListener("click", e => {
+  if (e.target === panelScreen) panelScreen.classList.add("hidden");
+});
+document.getElementById("startButton").addEventListener("click", () => {
+  document.getElementById("intro").classList.add("hidden");
+  notify("¡Bienvenida a nuestro planeta, Nohemi! 💖");
+});
+
+function heartRain() {
+  for (let i = 0; i < 35; i++) {
+    const h = document.createElement("div");
+    h.textContent = ["💗","💖","💕","❤️","✨"][Math.floor(Math.random()*5)];
+    Object.assign(h.style, {
+      position:"fixed", zIndex:20, left:Math.random()*100+"vw", top:"-35px",
+      fontSize:(18+Math.random()*22)+"px", pointerEvents:"none",
+      transition:"transform 3s linear, opacity 3s linear"
+    });
+    document.body.appendChild(h);
+    requestAnimationFrame(() => {
+      h.style.transform = `translate(${Math.random()*80-40}px, ${innerHeight+80}px) rotate(${Math.random()*500}deg)`;
+      h.style.opacity = "0";
+    });
+    setTimeout(() => h.remove(), 3200);
+  }
+}
+
+if (!window.THREE) {
+  notify("No se cargó Three.js. Revisa tu conexión a internet.");
+  return;
+}
+const THREE = window.THREE;
+const root = document.getElementById("game");
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x050411);
+scene.fog = new THREE.Fog(0x090720, 35, 100);
+
+const camera = new THREE.PerspectiveCamera(65, innerWidth/innerHeight, 0.1, 300);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputEncoding = THREE.sRGBEncoding;
+root.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xbab5ff, 0x241337, 1.6));
+const sun = new THREE.DirectionalLight(0xffd5ed, 2.2);
+sun.position.set(-10, 18, 10);
+scene.add(sun);
+const pinkLight = new THREE.PointLight(0xff63cf, 2.4, 45);
+pinkLight.position.set(5, 7, -4);
+scene.add(pinkLight);
+const blueLight = new THREE.PointLight(0x5478ff, 2, 45);
+blueLight.position.set(-12, 6, 5);
+scene.add(blueLight);
+
+// Cielo estrellado.
+const starPositions = [];
+for (let i=0; i<2600; i++) {
+  const r = 65 + Math.random()*80;
+  const a = Math.random()*Math.PI*2;
+  const y = (Math.random()-.5)*100;
+  starPositions.push(Math.cos(a)*r, y, Math.sin(a)*r);
+}
+const starGeo = new THREE.BufferGeometry();
+starGeo.setAttribute("position", new THREE.Float32BufferAttribute(starPositions,3));
+const starField = new THREE.Points(starGeo, new THREE.PointsMaterial({
+  color:0xffffff, size:.22, transparent:true, opacity:.92
+}));
+scene.add(starField);
+
+// Planeta lejano decorativo.
+const distantPlanet = new THREE.Mesh(
+  new THREE.SphereGeometry(7, 40, 40),
+  new THREE.MeshStandardMaterial({color:0x372c87, roughness:1, metalness:.1})
+);
+distantPlanet.position.set(25, 20, -75);
+scene.add(distantPlanet);
+const distantRing = new THREE.Mesh(
+  new THREE.RingGeometry(8.5, 11, 80),
+  new THREE.MeshBasicMaterial({color:0xb18bff, side:THREE.DoubleSide, transparent:true, opacity:.45})
+);
+distantRing.position.copy(distantPlanet.position);
+distantRing.rotation.set(1.2,.2,.2);
+scene.add(distantRing);
+
+// Isla-jardín flotante.
+const island = new THREE.Mesh(
+  new THREE.CylinderGeometry(27, 23, 3.4, 96),
+  new THREE.MeshStandardMaterial({color:0x302c58, roughness:.95})
+);
+island.position.y = -1.9;
+scene.add(island);
+const ground = new THREE.Mesh(
+  new THREE.CircleGeometry(26.8, 96),
+  new THREE.MeshStandardMaterial({color:0x315b56, roughness:.96})
+);
+ground.rotation.x = -Math.PI/2;
+ground.position.y = -.18;
+scene.add(ground);
+
+// Senderos curvos.
+function path(points, color, radius) {
+  const curve = new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(p[0],p[1],p[2])));
+  const mesh = new THREE.Mesh(
+    new THREE.TubeGeometry(curve, 100, radius, 8, false),
+    new THREE.MeshStandardMaterial({color, emissive:color, emissiveIntensity:.42, roughness:.6})
+  );
+  scene.add(mesh);
+}
+path([[-14,.01,5],[-8,.01,1],[-2,.01,0],[3,.01,3],[8,.01,1],[14,.01,-5]],0x6acdc4,.12);
+path([[-2,.02,0],[0,.02,-6],[5,.02,-11],[12,.02,-12]],0xe18bdc,.08);
+
+// Rocas y cristales.
+for (let i=0; i<95; i++) {
+  const a=Math.random()*Math.PI*2, r=7+Math.random()*18;
+  const x=Math.cos(a)*r, z=Math.sin(a)*r;
+  const size=.15+Math.random()*.65;
+  const rock=new THREE.Mesh(
+    new THREE.DodecahedronGeometry(size,0),
     new THREE.MeshStandardMaterial({
-      color: 0x594b9d,
-      roughness: 0.86,
-      metalness: 0.08,
-      emissive: 0x17103d,
-      emissiveIntensity: 0.45
+      color:[0x665b9b,0x3c9e91,0x74508e][i%3],
+      roughness:.8, metalness:.15
     })
   );
-  world.add(planet);
+  rock.position.set(x, size*.45, z);
+  rock.rotation.set(Math.random(),Math.random(),Math.random());
+  scene.add(rock);
+}
 
-  // Continentes decorativos para darle textura al planeta.
-  const landMaterial = new THREE.MeshStandardMaterial({
-    color: 0x4b9b91,
-    roughness: 1,
-    transparent: true,
-    opacity: 0.78
-  });
-
-  for (let i = 0; i < 32; i++) {
-    const a = Math.random() * Math.PI * 2;
-    const b = Math.acos(2 * Math.random() - 1);
-    const radius = 3.015;
-    const patch = new THREE.Mesh(
-      new THREE.SphereGeometry(0.08 + Math.random() * 0.2, 9, 7),
-      landMaterial
-    );
-    patch.position.set(
-      radius * Math.sin(b) * Math.cos(a),
-      radius * Math.cos(b),
-      radius * Math.sin(b) * Math.sin(a)
-    );
-    patch.scale.set(1.4, 0.6, 0.8);
-    patch.lookAt(0, 0, 0);
-    world.add(patch);
-  }
-
-  // Atmósfera luminosa alrededor del planeta.
-  const atmosphere = new THREE.Mesh(
-    new THREE.SphereGeometry(3.12, 48, 48),
-    new THREE.MeshBasicMaterial({
-      color: 0xb56dff,
-      transparent: true,
-      opacity: 0.12,
-      side: THREE.BackSide
-    })
+// Flores con tallos y pétalos luminosos.
+const flowers=[];
+function makeFlower(x,z,s=1) {
+  const group=new THREE.Group();
+  group.position.set(x,0,z);
+  const stem=new THREE.Mesh(
+    new THREE.CylinderGeometry(.035,.06,.65,7),
+    new THREE.MeshStandardMaterial({color:0x4bc88a})
   );
-  world.add(atmosphere);
-
-  // Anillos del planeta.
-  const ring = new THREE.Mesh(
-    new THREE.RingGeometry(3.8, 5.0, 100),
-    new THREE.MeshBasicMaterial({
-      color: 0xe2a4ff,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.46
-    })
-  );
-  ring.rotation.x = Math.PI * 0.36;
-  ring.rotation.y = 0.12;
-  world.add(ring);
-
-  // Forma de corazón en 3D.
-  const heartShape = new THREE.Shape();
-  heartShape.moveTo(0, 0.3);
-  heartShape.bezierCurveTo(0, 0.3, -0.5, 0.8, -0.85, 0.45);
-  heartShape.bezierCurveTo(-1.25, 0.02, -0.55, -0.48, 0, -0.9);
-  heartShape.bezierCurveTo(0.55, -0.48, 1.25, 0.02, 0.85, 0.45);
-  heartShape.bezierCurveTo(0.5, 0.8, 0, 0.3, 0, 0.3);
-
-  const heartGeometry = new THREE.ExtrudeGeometry(heartShape, {
-    depth: 0.12,
-    bevelEnabled: true,
-    bevelSegments: 2,
-    steps: 1,
-    bevelSize: 0.04,
-    bevelThickness: 0.04
-  });
-  heartGeometry.center();
-
-  const heartMaterial = new THREE.MeshStandardMaterial({
-    color: 0xff4fbf,
-    emissive: 0xc21883,
-    emissiveIntensity: 0.85,
-    metalness: 0.2,
-    roughness: 0.3
-  });
-
-  const floatingHearts = [];
-  for (let i = 0; i < 18; i++) {
-    const heart = new THREE.Mesh(heartGeometry, heartMaterial);
-    const angle = i / 18 * Math.PI * 2;
-    heart.position.set(
-      Math.cos(angle) * (4.3 + Math.random() * 2.2),
-      (Math.random() - 0.5) * 7,
-      Math.sin(angle) * (4.0 + Math.random() * 2.2)
-    );
-    const s = 0.12 + Math.random() * 0.18;
-    heart.scale.setScalar(s);
-    heart.rotation.z = Math.PI;
-    world.add(heart);
-    floatingHearts.push(heart);
-  }
-
-  // Flores 3D colocadas alrededor del planeta.
-  const flowers = [];
-  function crearFlor(x, y, z, scale = 1) {
-    const flower = new THREE.Group();
-    const center = new THREE.Vector3(x, y, z).normalize().multiplyScalar(3.02);
-    flower.position.copy(center);
-    flower.lookAt(center.clone().multiplyScalar(2));
-
-    const stem = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.018, 0.025, 0.45, 7),
-      new THREE.MeshStandardMaterial({ color: 0x54c78b, roughness: 0.8 })
-    );
-    stem.position.y = -0.18;
-    flower.add(stem);
-
-    const petalMaterial = new THREE.MeshStandardMaterial({
-      color: [0xff8dcf, 0xffc4f1, 0xd3a3ff, 0xffe0a6][Math.floor(Math.random() * 4)],
-      emissive: 0x481344,
-      emissiveIntensity: 0.4,
-      roughness: 0.5
-    });
-
-    for (let p = 0; p < 6; p++) {
-      const angle = p * Math.PI / 3;
-      const petal = new THREE.Mesh(
-        new THREE.SphereGeometry(0.105, 10, 8),
-        petalMaterial
-      );
-      petal.position.set(Math.cos(angle) * 0.12, 0.12, Math.sin(angle) * 0.12);
-      petal.scale.set(1, 0.65, 1.45);
-      petal.rotation.y = -angle;
-      flower.add(petal);
-    }
-
-    const centerFlower = new THREE.Mesh(
-      new THREE.SphereGeometry(0.09, 12, 10),
+  stem.position.y=.3; group.add(stem);
+  const colors=[0xff8fd3,0xd2a0ff,0xffd78e,0x8beaff];
+  for(let j=0;j<7;j++){
+    const angle=j*Math.PI*2/7;
+    const petal=new THREE.Mesh(
+      new THREE.SphereGeometry(.18,10,8),
       new THREE.MeshStandardMaterial({
-        color: 0xffe7a0,
-        emissive: 0xffbb39,
-        emissiveIntensity: 1.2
+        color:colors[Math.floor(Math.random()*colors.length)],
+        emissive:0x531c62, emissiveIntensity:.7, roughness:.4
       })
     );
-    centerFlower.position.y = 0.12;
-    flower.add(centerFlower);
+    petal.position.set(Math.cos(angle)*.18,.73,Math.sin(angle)*.18);
+    petal.scale.set(1,.55,1.35); group.add(petal);
+  }
+  const center=new THREE.Mesh(
+    new THREE.SphereGeometry(.12,12,10),
+    new THREE.MeshStandardMaterial({color:0xfff0a1,emissive:0xffc34a,emissiveIntensity:1.2})
+  );
+  center.position.y=.74; group.add(center);
+  group.scale.setScalar(s);
+  scene.add(group); flowers.push(group);
+}
+for(let i=0;i<190;i++){
+  const a=Math.random()*Math.PI*2, r=4+Math.random()*21;
+  const x=Math.cos(a)*r, z=Math.sin(a)*r;
+  if(Math.hypot(x,z)>4.2 && Math.random()>.07) makeFlower(x,z,.55+Math.random()*.8);
+}
 
-    flower.scale.setScalar(scale);
-    world.add(flower);
-    flowers.push(flower);
+// Pequeñas luces flotantes.
+const motes=[];
+for(let i=0;i<90;i++){
+  const mote=new THREE.Mesh(
+    new THREE.SphereGeometry(.045+Math.random()*.055,8,8),
+    new THREE.MeshBasicMaterial({color:[0xffb4e8,0x9ddfff,0xffeaa1][i%3]})
+  );
+  mote.position.set((Math.random()-.5)*46,.5+Math.random()*5,(Math.random()-.5)*46);
+  mote.userData.phase=Math.random()*6;
+  scene.add(mote); motes.push(mote);
+}
+
+// Personaje construido con geometría 3D, sin descargar modelos.
+const player=new THREE.Group();
+scene.add(player);
+const skin=new THREE.MeshStandardMaterial({color:0xf2c5b4,roughness:.8});
+const hair=new THREE.MeshStandardMaterial({color:0x33203d,roughness:.9});
+const clothes=new THREE.MeshStandardMaterial({color:0xe9b1e8,roughness:.65});
+const darkClothes=new THREE.MeshStandardMaterial({color:0x4e428c,roughness:.7});
+const shoeMat=new THREE.MeshStandardMaterial({color:0x251c3e});
+const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.32,.65,5,10),clothes);
+torso.position.y=1.15; player.add(torso);
+const head=new THREE.Mesh(new THREE.SphereGeometry(.28,18,16),skin);
+head.position.y=1.85; player.add(head);
+const hairCap=new THREE.Mesh(new THREE.SphereGeometry(.29,18,14,0,Math.PI*2,0,Math.PI*.58),hair);
+hairCap.position.set(0,1.94,-.035); player.add(hairCap);
+const hairBack=new THREE.Mesh(new THREE.SphereGeometry(.27,14,12),hair);
+hairBack.scale.set(.9,1.15,.65); hairBack.position.set(0,1.77,-.16); player.add(hairBack);
+const armGeo=new THREE.CapsuleGeometry(.105,.42,4,8);
+const leftArm=new THREE.Mesh(armGeo,clothes);
+leftArm.position.set(-.4,1.2,0); leftArm.rotation.z=-.18; player.add(leftArm);
+const rightArm=new THREE.Mesh(armGeo,clothes);
+rightArm.position.set(.4,1.2,0); rightArm.rotation.z=.18; player.add(rightArm);
+const legs=[];
+for(const side of [-1,1]){
+  const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.42,4,8),darkClothes);
+  leg.position.set(side*.17,.48,0); player.add(leg); legs.push(leg);
+  const shoe=new THREE.Mesh(new THREE.BoxGeometry(.22,.13,.34),shoeMat);
+  shoe.position.set(side*.17,.12,.06); player.add(shoe);
+}
+const playerGlow=new THREE.PointLight(0xff8edc,.6,3);
+playerGlow.position.y=1.3; player.add(playerGlow);
+player.position.set(0,0,9);
+
+// Portales de interacción.
+const portals=[];
+function makePortal(name,type,x,z,color) {
+  const group=new THREE.Group();
+  group.position.set(x,0,z);
+  const base=new THREE.Mesh(
+    new THREE.CylinderGeometry(1.15,1.3,.2,32),
+    new THREE.MeshStandardMaterial({color:0x38305b,metalness:.3,roughness:.5})
+  );
+  base.position.y=.05; group.add(base);
+  const torus=new THREE.Mesh(
+    new THREE.TorusGeometry(.88,.12,14,48),
+    new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:1.3,metalness:.25,roughness:.25})
+  );
+  torus.position.y=1.65; group.add(torus);
+  const inner=new THREE.Mesh(
+    new THREE.CircleGeometry(.77,48),
+    new THREE.MeshBasicMaterial({color,transparent:true,opacity:.24,side:THREE.DoubleSide})
+  );
+  inner.position.y=1.65; inner.rotation.y=.12; group.add(inner);
+  const light=new THREE.PointLight(color,1.8,8);
+  light.position.y=1.6; group.add(light);
+  const crystal=new THREE.Mesh(
+    new THREE.OctahedronGeometry(.35,1),
+    new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:.9,metalness:.3,roughness:.25})
+  );
+  crystal.position.y=1.65; group.add(crystal);
+  scene.add(group);
+  portals.push({name,type,x,z,group,torus,crystal});
+}
+makePortal("Portal de los recuerdos","recuerdos",-10,-3,0xff83d7);
+makePortal("Portal de mi carta","carta",8,-8,0xb59bff);
+makePortal("Jardín secreto","jardin",-11,10,0x6bf1c8);
+makePortal("La sorpresa final","sorpresa",12,8,0xffd27c);
+
+// Corazones que se pueden recoger.
+const hearts=[];
+function heartShape() {
+  const s=new THREE.Shape();
+  s.moveTo(0,.15);
+  s.bezierCurveTo(0,.15,-.45,.65,-.65,.25);
+  s.bezierCurveTo(-.9,-.1,-.3,-.45,0,-.68);
+  s.bezierCurveTo(.3,-.45,.9,-.1,.65,.25);
+  s.bezierCurveTo(.45,.65,0,.15,0,.15);
+  return s;
+}
+const heartGeo=new THREE.ExtrudeGeometry(heartShape(),{depth:.12,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:.035,bevelThickness:.035});
+heartGeo.center();
+const heartMat=new THREE.MeshStandardMaterial({color:0xff5dbf,emissive:0xff238d,emissiveIntensity:1});
+for(let i=0;i<12;i++){
+  const a=i/12*Math.PI*2, r=5+Math.random()*15;
+  const mesh=new THREE.Mesh(heartGeo,heartMat);
+  mesh.position.set(Math.cos(a)*r,.9+Math.random()*1.2,Math.sin(a)*r);
+  mesh.scale.setScalar(.35); scene.add(mesh);
+  hearts.push({mesh,baseY:mesh.position.y,phase:Math.random()*6,collected:false});
+}
+let collected=0;
+let nearPortal=null;
+
+// Controles.
+const keys={};
+let yaw=0, pitch=.22, isLocked=false, dragging=false;
+let previousX=0, previousY=0, mouseMoved=0;
+let velocityY=0, jumping=false, walking=false;
+const moveButtons={forward:false,back:false,left:false,right:false};
+
+window.addEventListener("keydown",e=>{
+  keys[e.code]=true;
+  if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code)) e.preventDefault();
+  if(e.code==="KeyE" || e.code==="Enter") interact();
+  if(e.code==="Space" && !jumping){velocityY=7.4;jumping=true;}
+});
+window.addEventListener("keyup",e=>keys[e.code]=false);
+
+// Ratón: arrastrar para girar la cámara.
+renderer.domElement.addEventListener("pointerdown",e=>{
+  dragging=true; previousX=e.clientX; previousY=e.clientY; mouseMoved=0;
+  renderer.domElement.setPointerCapture?.(e.pointerId);
+});
+renderer.domElement.addEventListener("pointermove",e=>{
+  if(!dragging)return;
+  const dx=e.clientX-previousX, dy=e.clientY-previousY;
+  mouseMoved+=Math.abs(dx)+Math.abs(dy);
+  yaw-=dx*.006;
+  pitch=Math.max(-.1,Math.min(.65,pitch+dy*.003));
+  previousX=e.clientX; previousY=e.clientY;
+});
+renderer.domElement.addEventListener("pointerup",()=>{dragging=false;});
+renderer.domElement.addEventListener("pointercancel",()=>{dragging=false;});
+
+// Botones táctiles de movimiento.
+document.querySelectorAll("[data-move]").forEach(button=>{
+  const dir=button.dataset.move;
+  const down=e=>{e.preventDefault();moveButtons[dir]=true;};
+  const up=e=>{e.preventDefault();moveButtons[dir]=false;};
+  button.addEventListener("pointerdown",down);
+  button.addEventListener("pointerup",up);
+  button.addEventListener("pointerleave",up);
+  button.addEventListener("pointercancel",up);
+});
+document.getElementById("jumpButton").addEventListener("pointerdown",e=>{
+  e.preventDefault(); if(!jumping){velocityY=7.4;jumping=true;}
+});
+
+// Cámara detrás del personaje.
+function updateCamera() {
+  const distance=7.2;
+  const target=new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z);
+  const desired=new THREE.Vector3(
+    player.position.x+Math.sin(yaw)*distance,
+    player.position.y+2.4+pitch*4,
+    player.position.z+Math.cos(yaw)*distance
+  );
+  camera.position.lerp(desired,.12);
+  camera.lookAt(target);
+}
+
+// Interacción al acercarse a un portal o corazón.
+function interact() {
+  if(nearPortal) {
+    openPanel(nearPortal.type);
+  } else {
+    notify("Acércate a un portal brillante para descubrir su secreto ✨");
+  }
+}
+document.getElementById("interact").addEventListener("click",interact);
+
+function updateWorld(dt,t) {
+  const forward=(keys.KeyW||keys.ArrowUp||moveButtons.forward?1:0)-
+                (keys.KeyS||keys.ArrowDown||moveButtons.back?1:0);
+  const sideways=(keys.KeyD||keys.ArrowRight||moveButtons.right?1:0)-
+                 (keys.KeyA||keys.ArrowLeft||moveButtons.left?1:0);
+  const magnitude=Math.hypot(forward,sideways);
+  walking=magnitude>0;
+
+  if(walking){
+    const f=forward/magnitude, s=sideways/magnitude;
+    const dx=(-Math.sin(yaw)*f+Math.cos(yaw)*s)*6*dt;
+    const dz=(-Math.cos(yaw)*f-Math.sin(yaw)*s)*6*dt;
+    player.position.x+=dx;
+    player.position.z+=dz;
+    player.rotation.y=Math.atan2(dx,dz);
+    legs[0].rotation.x=Math.sin(t*10)*.65;
+    legs[1].rotation.x=-Math.sin(t*10)*.65;
+    leftArm.rotation.x=-Math.sin(t*10)*.35;
+    rightArm.rotation.x=Math.sin(t*10)*.35;
+  }else{
+    legs.forEach(l=>l.rotation.x*=.75);
+    leftArm.rotation.x*=.75; rightArm.rotation.x*=.75;
   }
 
-  for (let i = 0; i < 36; i++) {
-    const a = Math.random() * Math.PI * 2;
-    const b = 0.4 + Math.random() * 2.3;
-    crearFlor(
-      Math.sin(b) * Math.cos(a),
-      Math.cos(b),
-      Math.sin(b) * Math.sin(a),
-      0.55 + Math.random() * 0.6
-    );
+  // Mantener al jugador dentro de la isla.
+  const radius=Math.hypot(player.position.x,player.position.z);
+  if(radius>24.5){
+    player.position.x*=24.5/radius;
+    player.position.z*=24.5/radius;
   }
 
-  // Lugares secretos flotantes y clicables.
-  const clickable = [];
+  // Salto con gravedad.
+  player.position.y+=velocityY*dt;
+  velocityY-=17*dt;
+  if(player.position.y<=0){player.position.y=0;velocityY=0;jumping=false;}
+  if(walking&&!jumping)player.position.y+=Math.sin(t*10)*.035;
 
-  function crearPortal(nombre, tipo, color, x, y, z, size) {
-    const group = new THREE.Group();
-    group.position.set(x, y, z);
-
-    const orb = new THREE.Mesh(
-      new THREE.SphereGeometry(size, 32, 32),
-      new THREE.MeshStandardMaterial({
-        color,
-        emissive: color,
-        emissiveIntensity: 0.9,
-        metalness: 0.15,
-        roughness: 0.25
-      })
-    );
-    orb.userData.secret = tipo;
-    orb.userData.secretName = nombre;
-    group.add(orb);
-
-    const glow = new THREE.Mesh(
-      new THREE.SphereGeometry(size * 1.45, 24, 24),
-      new THREE.MeshBasicMaterial({
-        color,
-        transparent: true,
-        opacity: 0.13
-      })
-    );
-    group.add(glow);
-
-    const orbit = new THREE.Mesh(
-      new THREE.TorusGeometry(size * 1.45, 0.025, 8, 48),
-      new THREE.MeshBasicMaterial({ color: 0xffd6fa })
-    );
-    orbit.rotation.x = Math.PI / 2.5;
-    group.add(orbit);
-
-    world.add(group);
-    clickable.push(orb);
-    return group;
-  }
-
-  const portals = [
-    crearPortal("Recuerdos", "recuerdos", 0xff6ec7, -5.2, 1.2, 1.2, 0.55),
-    crearPortal("Carta de amor", "carta", 0xa78bff, 5.0, 1.8, -0.6, 0.58),
-    crearPortal("Jardín secreto", "jardin", 0x64eac5, -4.2, -2.3, -1.2, 0.5),
-    crearPortal("Sorpresa", "secreto", 0xffca75, 4.1, -2.1, 1.3, 0.48)
-  ];
-
-  // Pequeñas luces que orbitan el mundo.
-  const orbs = [];
-  for (let i = 0; i < 50; i++) {
-    const orb = new THREE.Mesh(
-      new THREE.SphereGeometry(0.025 + Math.random() * 0.035, 8, 8),
-      new THREE.MeshBasicMaterial({
-        color: [0xff9ee5, 0x9caaff, 0xffe6a8][i % 3]
-      })
-    );
-    const angle = Math.random() * Math.PI * 2;
-    const radius = 4 + Math.random() * 4;
-    orb.userData.angle = angle;
-    orb.userData.radius = radius;
-    orb.userData.speed = 0.08 + Math.random() * 0.2;
-    orb.userData.height = (Math.random() - 0.5) * 8;
-    world.add(orb);
-    orbs.push(orb);
-  }
-
-  // Controles sencillos: arrastra para girar; haz clic en un portal para abrirlo.
-  const raycaster = new THREE.Raycaster();
-  const pointer = new THREE.Vector2();
-  let isDragging = false;
-  let downX = 0;
-  let downY = 0;
-  let lastX = 0;
-  let lastY = 0;
-  let dragDistance = 0;
-
-  renderer.domElement.addEventListener("pointerdown", event => {
-    isDragging = true;
-    downX = lastX = event.clientX;
-    downY = lastY = event.clientY;
-    dragDistance = 0;
-    renderer.domElement.setPointerCapture?.(event.pointerId);
+  nearPortal=null;
+  let nearest=999;
+  portals.forEach((p,i)=>{
+    p.torus.rotation.y+=dt*.55;
+    p.crystal.rotation.x+=dt*.8;
+    p.crystal.rotation.y+=dt*.7;
+    p.group.position.y=Math.sin(t*1.4+i)*.08;
+    const d=Math.hypot(player.position.x-p.x,player.position.z-p.z);
+    if(d<2.8 && d<nearest){nearest=d;nearPortal=p;}
   });
 
-  renderer.domElement.addEventListener("pointermove", event => {
-    if (!isDragging) return;
-    const dx = event.clientX - lastX;
-    const dy = event.clientY - lastY;
-    dragDistance += Math.abs(dx) + Math.abs(dy);
-    world.rotation.y += dx * 0.005;
-    world.rotation.x += dy * 0.003;
-    world.rotation.x = Math.max(-0.65, Math.min(0.65, world.rotation.x));
-    lastX = event.clientX;
-    lastY = event.clientY;
-  });
+  const button=document.getElementById("interact");
+  const status=document.getElementById("status");
+  if(nearPortal){
+    button.style.display="block";
+    button.textContent="E · "+nearPortal.name;
+    status.textContent="Has encontrado un lugar especial ✨";
+  }else{
+    button.style.display="none";
+    status.textContent=`Corazones encontrados: ${collected}/12 · Sigue explorando el planeta`;
+  }
 
-  function pointerUp(event) {
-    if (!isDragging) return;
-    isDragging = false;
-
-    if (dragDistance < 8) {
-      const rect = renderer.domElement.getBoundingClientRect();
-      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(pointer, camera);
-      const hits = raycaster.intersectObjects(clickable, false);
-      if (hits.length) {
-        abrirPanel(hits[0].object.userData.secret);
-      } else {
-        mostrarToast("Explora las esferas brillantes para descubrir secretos ✨");
-      }
+  hearts.forEach(h=>{
+    if(h.collected)return;
+    h.mesh.rotation.y+=dt*1.4;
+    h.mesh.position.y=h.baseY+Math.sin(t*2+h.phase)*.22;
+    if(player.position.distanceTo(h.mesh.position)<1.05){
+      h.collected=true; h.mesh.visible=false; collected++;
+      notify(`¡Encontraste un corazón! 💗 ${collected}/12`);
+      if(collected===12) notify("¡Encontraste todos los corazones! Eres mi universo 💖");
     }
-  }
-
-  renderer.domElement.addEventListener("pointerup", pointerUp);
-  renderer.domElement.addEventListener("pointercancel", () => {
-    isDragging = false;
   });
 
-  renderer.domElement.addEventListener("wheel", event => {
-    camera.position.z += event.deltaY * 0.006;
-    camera.position.z = Math.max(8, Math.min(20, camera.position.z));
-  }, { passive: true });
+  flowers.forEach((f,i)=>{f.rotation.y=Math.sin(t*.5+i)*.05;});
+  motes.forEach((m,i)=>{m.position.y+=Math.sin(t*1.3+m.userData.phase)*.0018;});
+  starField.rotation.y+=dt*.003;
+  distantPlanet.rotation.y+=dt*.025;
+  distantRing.rotation.z+=dt*.003;
+  updateCamera();
+}
 
-  // Animación continua.
-  const clock = new THREE.Clock();
+const clock=new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(),.04);
+  updateWorld(dt,clock.elapsedTime);
+  renderer.render(scene,camera);
+}
+updateCamera();
+animate();
 
-  function animar() {
-    requestAnimationFrame(animar);
-    const t = clock.getElapsedTime();
-
-    planet.rotation.y += 0.0008;
-    atmosphere.rotation.y -= 0.0004;
-    ring.rotation.z += 0.0004;
-
-    floatingHearts.forEach((heart, i) => {
-      heart.position.y += Math.sin(t * 1.2 + i) * 0.0008;
-      heart.rotation.y += 0.008;
-    });
-
-    flowers.forEach((flower, i) => {
-      flower.rotation.z = Math.sin(t * 0.6 + i) * 0.05;
-    });
-
-    portals.forEach((portal, i) => {
-      portal.rotation.y += 0.004 + i * 0.0005;
-      portal.position.y += Math.sin(t * 1.1 + i * 2) * 0.0015;
-    });
-
-    orbs.forEach(orb => {
-      orb.userData.angle += orb.userData.speed * 0.006;
-      orb.position.x = Math.cos(orb.userData.angle) * orb.userData.radius;
-      orb.position.z = Math.sin(orb.userData.angle) * orb.userData.radius;
-      orb.position.y = orb.userData.height + Math.sin(t + orb.userData.angle) * 0.25;
-    });
-
-    stars.rotation.y += 0.00004;
-    renderer.render(scene, camera);
-  }
-  animar();
-
-  window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+window.addEventListener("resize",()=>{
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));
+  renderer.setSize(innerWidth,innerHeight);
+});
 })();
 </script>
 </body>
