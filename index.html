@@ -1,203 +1,717 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Mi Preciosa ❤️</title>
+    <meta name="theme-color" content="#19060e">
+    <title>Para Nohemi, Mi Preciosa ❤️</title>
+
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #111111 0%, #2a0808 100%);
-            color: #ffffff;
             margin: 0;
-            padding: 20px;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: white;
+            background: linear-gradient(145deg, #10070d, #390918, #16070e);
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        /* PANTALLA DE BIENVENIDA */
+        #bienvenida {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-        }
-        .contenedor {
-            max-width: 550px;
-            width: 100%;
-            margin-top: 20px;
-        }
-        .tarjeta {
-            background: rgba(20, 20, 20, 0.85);
-            border: 1px solid #d63031;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
-            margin-bottom: 30px;
+            padding: 25px;
             text-align: center;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse at center, #64152c 0%, #280914 48%, #10060b 100%);
         }
-        h1 { color: #d63031; font-size: 2.2em; margin-bottom: 5px; }
-        h2 { color: #ff7675; font-size: 1.5em; margin-top: 0; }
-        .subtitulo { color: #aaaaaa; font-style: italic; margin-bottom: 20px; }
-        p { color: #dddddd; font-size: 1.1em; line-height: 1.7; text-align: justify; }
-        
-        .contador-box {
-            background: linear-gradient(135deg, #d63031 0%, #8b0000 100%);
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1.25em;
-            font-weight: bold;
+
+        .brillos {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(circle at 20% 25%, #ffb6c933 1px, transparent 3px),
+                radial-gradient(circle at 80% 35%, #ffffff22 1px, transparent 3px),
+                radial-gradient(circle at 35% 80%, #ff668833 1px, transparent 3px);
+        }
+
+        .corazon-principal {
+            font-size: 65px;
+            animation: latido 1.3s infinite;
+            filter: drop-shadow(0 0 18px #ff174f);
+        }
+
+        .etiqueta {
+            margin-top: 22px;
+            color: #ffc0d0;
+            letter-spacing: 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        #bienvenida h1 {
+            margin: 15px 0;
+            color: #ffd5df;
+            font-family: Georgia, serif;
+            font-size: clamp(42px, 10vw, 68px);
+            font-weight: normal;
+            text-shadow: 0 0 28px #ff174f66;
+        }
+
+        .mensaje-inicial {
+            max-width: 390px;
+            color: #ffe8ee;
+            font-family: Georgia, serif;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .boton-regalo,
+        .btn-interactivo {
+            border: 1px solid #ffb6c9;
+            border-radius: 50px;
+            padding: 16px 27px;
             color: white;
+            background: linear-gradient(135deg, #f02e60, #a10e39);
+            box-shadow: 0 0 28px #ff174f44;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform .25s, box-shadow .25s;
+        }
+
+        .boton-regalo {
+            position: relative;
+            z-index: 1;
+            margin-top: 20px;
+            animation: latido 1.8s infinite;
+        }
+
+        .boton-regalo:hover,
+        .btn-interactivo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px #ff174f88;
+        }
+
+        .firma-inicial {
+            margin-top: 30px;
+            color: #eab2c1;
+            font-family: Georgia, serif;
+            font-style: italic;
+        }
+
+        @keyframes latido {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.07); }
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        #contenido {
+            display: none;
+            width: 100%;
+            padding: 25px 16px 45px;
+        }
+
+        #contenido.visible {
+            display: block;
+            animation: aparecer 1s ease;
+        }
+
+        .contenedor {
+            width: 100%;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .tarjeta {
+            margin: 22px auto;
+            padding: 28px;
+            text-align: center;
+            background: #160e12eF;
+            border: 1px solid #a52b4c;
+            border-radius: 22px;
+            box-shadow: 0 15px 40px #00000055;
+        }
+
+        .encabezado {
+            padding-top: 38px;
+            padding-bottom: 38px;
+            background: linear-gradient(150deg, #35101f, #190d14);
+        }
+
+        .rosa {
+            font-size: 40px;
+        }
+
+        .tarjeta h1 {
+            margin: 12px 0;
+            color: #ff9ab6;
+            font-family: Georgia, serif;
+            font-size: clamp(30px, 7vw, 43px);
+        }
+
+        .tarjeta h2 {
+            margin-top: 0;
+            color: #ff9ab6;
+            font-family: Georgia, serif;
+            font-size: 25px;
+        }
+
+        .subtitulo {
+            margin-bottom: 20px;
+            color: #eab7c5;
+            font-style: italic;
+        }
+
+        .tarjeta p {
+            color: #f0dfe5;
+            font-size: 16px;
+            line-height: 1.9;
+        }
+
+        .contador-box {
             margin: 25px 0;
-            box-shadow: 0 5px 15px rgba(214, 48, 49, 0.4);
+            padding: 20px 12px;
+            color: white;
+            background: linear-gradient(135deg, #c21e4c, #740d30);
+            border: 1px solid #ff9ab6;
+            border-radius: 16px;
+            box-shadow: 0 5px 24px #d6303133;
+        }
+
+        .contador-titulo {
+            margin-bottom: 12px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #ffd5df;
+        }
+
+        #contador {
+            font-size: clamp(17px, 4vw, 23px);
+            font-weight: bold;
+            line-height: 1.7;
         }
 
         .reproductor {
-            background: #1a1a1a;
-            border-left: 5px solid #d63031;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
+            padding: 18px;
             text-align: left;
+            background: #24121b;
+            border-left: 4px solid #f05a81;
+            border-radius: 12px;
         }
-        .cancion-texto { font-weight: bold; color: #ff7675; }
-        .lyrics { font-style: italic; color: #cccccc; font-size: 0.95em; margin-top: 5px; }
 
-        .galeria {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            margin-top: 25px;
-        }
-        .polaroid {
-            background: white;
-            padding: 15px 15px 25px 15px;
-            border-radius: 4px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            transform: rotate(calc(var(--r, 0) * 1deg));
-            transition: transform 0.3s;
-        }
-        .polaroid:hover {
-            transform: rotate(0deg) scale(1.04);
-            z-index: 10;
-        }
-        .polaroid img {
-            width: 100%;
-            height: auto;
-            border-radius: 2px;
-        }
-        .caption {
-            font-family: 'Courier New', Courier, monospace;
-            color: #222222;
-            font-size: 1.1em;
+        .cancion-texto {
+            color: #ffb0c5;
             font-weight: bold;
-            margin-top: 15px;
+        }
+
+        .lyrics {
+            margin-top: 10px;
+            color: #e6cbd4;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        .video-musica {
+            margin-top: 18px;
+            overflow: hidden;
+            border-radius: 14px;
+            background: #090609;
+            border: 1px solid #713149;
+        }
+
+        .video-musica iframe {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: 0;
+        }
+
+        .aviso-musica {
+            color: #d9b9c5 !important;
+            font-size: 13px !important;
             text-align: center;
         }
 
-        .btn-interactivo {
-            background-color: #d63031;
-            color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 1.1em;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-            box-shadow: 0 4px 15px rgba(214, 48, 49, 0.4);
+        /* GALERÍA */
+        .galeria {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+            margin-top: 25px;
         }
-        .btn-interactivo:hover { transform: scale(1.05); background-color: #ff7675; }
 
+        .polaroid {
+            padding: 12px 12px 22px;
+            background: #fff8f5;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px #00000066;
+            transform: rotate(var(--r, 0deg));
+            transition: transform .3s;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        .polaroid img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 3px;
+        }
+
+        .caption {
+            margin-top: 15px;
+            color: #492331;
+            font-family: Georgia, serif;
+            font-size: 16px;
+            font-style: italic;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .boton-centro {
+            margin-top: 15px;
+        }
+
+        .despedida {
+            color: #ffb0c5 !important;
+            font-family: Georgia, serif;
+            font-size: 22px !important;
+            font-style: italic;
+        }
+
+        footer {
+            padding: 15px;
+            color: #d7a6b6;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* CORAZONES FLOTANTES */
         .heart {
             position: fixed;
-            color: #d63031;
-            font-size: 30px;
-            animation: floatUp 3s linear forwards;
+            bottom: -50px;
+            z-index: 11000;
             pointer-events: none;
-            z-index: 999;
+            animation: flotar 4s linear forwards;
+            filter: drop-shadow(0 0 6px #ff174f66);
         }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.4); opacity: 0; }
+
+        @keyframes flotar {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(.6);
+                opacity: 0;
+            }
+            15% { opacity: 1; }
+            100% {
+                transform: translateY(-115vh) rotate(35deg) scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            #contenido {
+                padding: 12px 8px 30px;
+            }
+
+            .tarjeta {
+                padding: 22px 17px;
+                border-radius: 17px;
+            }
+
+            .mensaje-inicial {
+                font-size: 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <div class="contenedor">
-        <div class="tarjeta">
-            <h1>Para Mi Preciosa ❤️</h1>
-            <div class="subtitulo">Conmigo hasta el final</div>
-            <p>Cada línea de este espacio la programé pensando en ti, Chiquita. No importa el lugar en el que nos encontremos, mi corazón se quedó contigo. Creé este rincón eterno solo para nosotros, porque la distancia no disminuye lo que siento por ti; solo me hace contar los segundos para volver a sentir tu presencia.</p>
-            
-            <div class="contador-box" id="contador">Calculando nuestros latidos...</div>
-            <button class="btn-interactivo" onclick="crearLluvia()">¡Presiona aquí, Chiquita! ✨</button>
+    <!-- PANTALLA INICIAL -->
+    <section id="bienvenida">
+        <div class="brillos"></div>
+
+        <div class="corazon-principal">❤️</div>
+
+        <div class="etiqueta">Un regalo hecho con amor</div>
+
+        <h1>Para Nohemi</h1>
+
+        <p class="mensaje-inicial">
+            Mi Preciosa, tengo algo muy especial
+            preparado para ti... 💌
+            <br><br>
+            He guardado un pedacito de mi corazón
+            en este pequeño regalo.
+        </p>
+
+        <button class="boton-regalo" id="botonRegalo"
+                onclick="iniciarSorpresa()">
+            ❤️ Abrir mi regalo ❤️
+        </button>
+
+        <div class="firma-inicial">Conmigo hasta el final 🌹</div>
+    </section>
+
+
+    <!-- CONTENIDO DEL REGALO -->
+    <main id="contenido">
+        <div class="contenedor">
+
+            <section class="tarjeta encabezado">
+                <div class="rosa">🌹 ❤️ 🌹</div>
+
+                <h1>Para Mi Preciosa</h1>
+
+                <div class="subtitulo">
+                    Para ti, Nohemi, con todo mi amor
+                </div>
+
+                <p>
+                    Cada línea de este espacio la programé pensando
+                    en ti, Chiquita. No importa el lugar en el que
+                    nos encontremos, mi corazón se quedó contigo.
+                    Creé este rincón especial solo para nosotros,
+                    porque la distancia no disminuye lo que siento
+                    por ti; solo me hace contar los segundos para
+                    volver a sentir tu presencia.
+                </p>
+
+                <div class="contador-box">
+                    <div class="contador-titulo">
+                        ❤️ EL TIEMPO DESDE NUESTRO COMIENZO ❤️
+                    </div>
+                    <div id="contador" aria-live="polite">
+                        Preparando nuestros latidos...
+                    </div>
+                </div>
+
+                <button class="btn-interactivo"
+                        onclick="crearLluvia(35)">
+                    ¡Lluvia de amor para ti! 💕
+                </button>
+            </section>
+
+
+            <!-- CANCIÓN -->
+            <section class="tarjeta">
+                <h2>Nuestra canción 🎵</h2>
+
+                <div class="reproductor">
+                    <div class="cancion-texto">
+                        💝 Para mi Nohemi:
+                    </div>
+
+                    <div class="lyrics">
+                        Hay canciones que nos hacen pensar en alguien
+                        especial. Esta me recuerda a ti, a tu sonrisa
+                        y a lo bonito que es tenerte en mi vida. ❤️
+                    </div>
+                </div>
+
+                <div class="video-musica" id="videoMusica">
+                    <p style="padding: 15px; text-align: center;">
+                        Pulsa el botón de abajo para cargar nuestra
+                        canción. ❤️
+                    </p>
+                </div>
+
+                <button class="btn-interactivo boton-centro"
+                        onclick="cargarMusica()">
+                    🎵 Escuchar Tutu
+                </button>
+
+                <p class="aviso-musica">
+                    La canción se reproduce desde YouTube.
+                    Si no comienza automáticamente, pulsa reproducir
+                    en el video.
+                </p>
+
+                <p>
+                    Cada vez que pienso en ti recuerdo lo especial
+                    que eres para mí. No hay nadie que pueda ocupar
+                    el lugar que tienes en mi corazón.
+                </p>
+            </section>
+
+
+            <!-- CARTA -->
+            <section class="tarjeta">
+                <h2>Una carta para ti 💌</h2>
+
+                <p>
+                    Mi querida Nohemi:
+                </p>
+
+                <p>
+                    Quería regalarte algo diferente, algo que pudieras
+                    abrir y que te recordara cuánto significas para mí.
+                    Por eso hice esta pequeña página, pensando en tu
+                    sonrisa y en todos esos momentos que quiero seguir
+                    compartiendo contigo.
+                </p>
+
+                <p>
+                    Tal vez estas palabras no alcancen para expresar
+                    todo lo que siento, pero cada detalle de este regalo
+                    lleva un poquito de mi corazón. Aunque haya
+                    distancia, siempre hay motivos para recordarte,
+                    extrañarte y soñar con volver a abrazarte.
+                </p>
+
+                <p>
+                    Gracias por ser tú, por los recuerdos que hemos
+                    creado y por todos los momentos bonitos que aún
+                    nos esperan. Quiero seguir escribiendo nuestra
+                    historia, paso a paso, con cariño, paciencia y amor.
+                </p>
+
+                <p class="despedida">
+                    Te quiero, mi Preciosa. ❤️
+                </p>
+
+                <p>
+                    Con todo mi amor,<br>
+                    tu Chiquito. 💕
+                </p>
+
+                <button class="btn-interactivo"
+                        onclick="crearLluvia(45)">
+                    Un montón de besitos para ti 😘
+                </button>
+            </section>
+
+
+            <!-- FOTOGRAFÍAS -->
+            <section class="tarjeta">
+                <h2>Nuestros momentos guardados 📸</h2>
+
+                <p style="text-align: center;">
+                    Cada recuerdo contigo tiene un lugar especial
+                    en mi corazón.
+                </p>
+
+                <div class="galeria">
+
+                    <div class="polaroid" style="--r: -2deg">
+                        <img src="foto1.jpeg" alt="Nuestro primer recuerdo"
+                             loading="lazy">
+                        <div class="caption">
+                            El instante exacto en que mi vida se volvió
+                            más bonita. Nuestro inicio, mi Preciosa. ❤️
+                        </div>
+                    </div>
+
+                    <div class="polaroid" style="--r: 2deg">
+                        <img src="foto2.jpeg" alt="Un recuerdo de nosotros"
+                             loading="lazy">
+                        <div class="caption">
+                            Extraño tus abrazos, esos que me hacen sentir
+                            que el mundo se detiene por completo. 🫂
+                        </div>
+                    </div>
+
+                    <div class="polaroid" style="--r: -1deg">
+                        <img src="foto3.jpeg" alt="Un momento especial"
+                             loading="lazy">
+                        <div class="caption">
+                            Tus besos, tu calor y tu presencia...
+                            Lo que más anhelo cada noche al dormir. 💋
+                        </div>
+                    </div>
+
+                    <div class="polaroid" style="--r: 2deg">
+                        <img src="foto4.jpeg" alt="Nuestra promesa"
+                             loading="lazy">
+                        <div class="caption">
+                            «Conmigo hasta el final».
+                            Nuestra promesa escrita para siempre. ❤️
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- DESPEDIDA -->
+            <section class="tarjeta">
+                <div class="rosa">💖 🌹 💖</div>
+
+                <h2>Y esto es solo para ti...</h2>
+
+                <p>
+                    Si pudiera pedir un deseo, sería tenerte cerca,
+                    abrazarte fuerte y recordarte mirándote a los ojos
+                    lo importante que eres para mí.
+                </p>
+
+                <p class="despedida">
+                    Para Nohemi, mi Preciosa.<br>
+                    Hoy, mañana y en cada recuerdo bonito. ❤️
+                </p>
+
+                <button class="btn-interactivo"
+                        onclick="crearLluvia(60)">
+                    ❤️ Pulsa para recibir todo mi amor ❤️
+                </button>
+            </section>
+
+            <footer>
+                Hecho con amor para Nohemi ❤️<br>
+                Conmigo hasta el final. 🌹
+            </footer>
+
         </div>
+    </main>
 
-        <div class="tarjeta">
-            <h2>Una Letra Para Ti 🎵</h2>
-            <div class="reproductor">
-                <div class="cancion-texto">💝 Dedicado con todo mi amor:</div>
-                <div class="lyrics">"Porque tutu, nadie como tutu, no hay nadie como tutu... Que me haga sentir lo que siento cuando estás tú..."</div>
-            </div>
-            <p>Cada vez que leo o escucho estos versos pienso en ti, en cómo encajamos a la perfección y en que no hay absolutamente nadie en este mundo que se compare a lo que tú eres para mí.</p>
-        </div>
 
-        <div class="tarjeta">
-            <h2>Nuestros Momentos Guardados 📸</h2>
-            <p style="text-align: center; color: #aaa; font-size: 0.95em;">(Pasa el mouse sobre las fotos para enfocarlas)</p>
-            
-            <div class="galeria">
-                <div class="polaroid" style="--r: -2">
-                    <img src="foto1.jpeg" alt="Momento 1">
-                    <div class="caption">El instante exacto en que mi vida se volvió más bonita. Nuestro inicio, mi Preciosa.</div>
-                </div>
+    <script>
+        "use strict";
 
-                <div class="polaroid" style="--r: 3">
-                    <img src="foto2.jpeg" alt="Momento 2">
-                    <div class="caption">Extraño tus abrazos, esos que me hacen sentir que el mundo se detiene por completo.</div>
-                </div>
+        // Fecha: 11 de septiembre de 2026.
+        // En JavaScript, septiembre es el mes 8.
+        const fechaAniversario = new Date(2026, 8, 11, 0, 0, 0);
 
-                <div class="polaroid" style="--r: -1">
-                    <img src="foto3.jpeg" alt="Momento 3">
-                    <div class="caption">Tus besos, tu calor y tu presencia... Lo que más anhelo cada noche al dormir.</div>
-                </div>
+        let musicaCargada = false;
 
-                <div class="polaroid" style="--r: 2">
-                    <img src="foto4.jpeg" alt="Momento 4">
-                    <div class="caption">"Conmigo hasta el final". Nuestra promesa escrita para siempre.</div>
-                </div>
-            </div>
-        </div>
-    </div>
+        // Muestra el tiempo transcurrido desde el aniversario.
+        function actualizarReloj() {
+            const contador = document.getElementById("contador");
+            const ahora = new Date();
+            const diferencia = ahora.getTime() - fechaAniversario.getTime();
 
- <script>
-    const fechaAniversario = new Date(2026, 8, 11, 0, 0, 0);
+            if (diferencia < 0) {
+                const restante = Math.abs(diferencia);
+                const dias = Math.floor(restante / 86400000);
+                const horas = Math.floor((restante % 86400000) / 3600000);
+                const minutos = Math.floor((restante % 3600000) / 60000);
+                const segundos = Math.floor((restante % 60000) / 1000);
 
-    function actualizarReloj() {
-        const ahora = new Date();
-        const tiempoPasado = ahora - fechaAniversario;
+                contador.textContent =
+                    `Faltan ${dias} días, ${horas}h ${minutos}m ${segundos}s ❤️`;
+                return;
+            }
 
-        const dias = Math.floor(tiempoPasado / (1000 * 60 * 60 * 24));
-        const horas = Math.floor((tiempoPasado % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutos = Math.floor((tiempoPasado % (1000 * 60 * 60)) / (1000 * 60));
-        const segundos = Math.floor((tiempoPasado % (1000 * 60)) / 1000);
+            const dias = Math.floor(diferencia / 86400000);
+            const horas = Math.floor((diferencia % 86400000) / 3600000);
+            const minutos = Math.floor((diferencia % 3600000) / 60000);
+            const segundos = Math.floor((diferencia % 60000) / 1000);
 
-        document.getElementById('contador').innerHTML =
-            `${dias} días, ${horas}h : ${minutos}m : ${segundos}s juntos`;
-    }
-
-    setInterval(actualizarReloj, 1000);
-    actualizarReloj();
-
-    function crearLluvia() {
-        for (let i = 0; i < 35; i++) {
-            setTimeout(() => {
-                const h = document.createElement('div');
-                h.classList.add('heart');
-                h.innerText = '❤️';
-                h.style.left = Math.random() * 100 + 'vw';
-                h.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                document.body.appendChild(h);
-                setTimeout(() => h.remove(), 3000);
-            }, i * 80);
+            contador.textContent =
+                `${dias} días, ${horas}h ${minutos}m ${segundos}s juntos ❤️`;
         }
-    }
-</script>
+
+        // Abre el regalo.
+        function iniciarSorpresa() {
+            const bienvenida = document.getElementById("bienvenida");
+            const contenido = document.getElementById("contenido");
+
+            bienvenida.style.display = "none";
+            contenido.classList.add("visible");
+
+            crearLluvia(35);
+            actualizarReloj();
+
+            // La música se puede iniciar con el botón dedicado.
+            // Esto permite que el visitante decida cuándo escucharla.
+        }
+
+        // Carga el reproductor de YouTube al pulsar el botón.
+        function cargarMusica() {
+            if (musicaCargada) {
+                const video = document.querySelector("#videoMusica iframe");
+                if (video) {
+                    video.focus();
+                }
+                return;
+            }
+
+            const contenedor = document.getElementById("videoMusica");
+            const video = document.createElement("iframe");
+
+            video.src =
+                "https://www.youtube-nocookie.com/embed/5AkDqm-cEgg?autoplay=1&playsinline=1&rel=0";
+
+            video.title = "Tutu - Camilo y Pedro Capó";
+            video.allow =
+                "autoplay; encrypted-media; picture-in-picture; fullscreen";
+            video.allowFullscreen = true;
+            video.loading = "eager";
+
+            contenedor.replaceChildren(video);
+            musicaCargada = true;
+            crearLluvia(20);
+        }
+
+        // Lluvia de corazones.
+        function crearLluvia(cantidad = 35) {
+            const simbolos = ["❤️", "💕", "💖", "💗", "💘", "🌹"];
+
+            for (let i = 0; i < cantidad; i++) {
+                setTimeout(() => {
+                    const corazon = document.createElement("div");
+
+                    corazon.className = "heart";
+                    corazon.textContent =
+                        simbolos[Math.floor(Math.random() * simbolos.length)];
+
+                    corazon.style.left = Math.random() * 96 + "vw";
+                    corazon.style.fontSize =
+                        (18 + Math.random() * 24) + "px";
+                    corazon.style.animationDuration =
+                        (3 + Math.random() * 3) + "s";
+
+                    document.body.appendChild(corazon);
+
+                    corazon.addEventListener("animationend", () => {
+                        corazon.remove();
+                    }, { once: true });
+
+                    // Respaldo por si no se dispara animationend.
+                    setTimeout(() => corazon.remove(), 7000);
+                }, i * 90);
+            }
+        }
+
+        actualizarReloj();
+        setInterval(actualizarReloj, 1000);
+    </script>
+
 </body>
 </html>
