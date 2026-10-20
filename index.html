@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Preciosa ❤️</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #111111 0%, #2a0808 100%);
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .contenedor {
+            max-width: 550px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .tarjeta {
+            background: rgba(20, 20, 20, 0.85);
+            border: 1px solid #d63031;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h1 { color: #d63031; font-size: 2.2em; margin-bottom: 5px; }
+        h2 { color: #ff7675; font-size: 1.5em; margin-top: 0; }
+        .subtitulo { color: #aaaaaa; font-style: italic; margin-bottom: 20px; }
+        p { color: #dddddd; font-size: 1.1em; line-height: 1.7; text-align: justify; }
+        
+        .contador-box {
+            background: linear-gradient(135deg, #d63031 0%, #8b0000 100%);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.25em;
+            font-weight: bold;
+            color: white;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(214, 48, 49, 0.4);
+        }
+
+        .reproductor {
+            background: #1a1a1a;
+            border-left: 5px solid #d63031;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .cancion-texto { font-weight: bold; color: #ff7675; }
+        .lyrics { font-style: italic; color: #cccccc; font-size: 0.95em; margin-top: 5px; }
+
+        .galeria {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-top: 25px;
+        }
+        .polaroid {
+            background: white;
+            padding: 15px 15px 25px 15px;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transform: rotate(calc(var(--r, 0) * 1deg));
+            transition: transform 0.3s;
+        }
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.04);
+            z-index: 10;
+        }
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+        }
+        .caption {
+            font-family: 'Courier New', Courier, monospace;
+            color: #222222;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .btn-interactivo {
+            background-color: #d63031;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            box-shadow: 0 4px 15px rgba(214, 48, 49, 0.4);
+        }
+        .btn-interactivo:hover { transform: scale(1.05); background-color: #ff7675; }
+
+        .heart {
+            position: fixed;
+            color: #d63031;
+            font-size: 30px;
+            animation: floatUp 3s linear forwards;
+            pointer-events: none;
+            z-index: 999;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.4); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <div class="tarjeta">
+            ...<h1>Para Mi Preciosa ❤️</h1>
+            <div class="subtitulo">Conmigo hasta el final</div>
+            <p>Cada línea de este espacio la programé pensando en ti, Chiquita. No importa el lugar en el que nos encontremos, mi corazón se quedó contigo. Creé este rincón eterno solo para nosotros, porque la distancia no disminuye lo que siento por ti; solo me hace contar los segundos para volver a sentir tu presencia.</p>
+            
+            <div class="contador-box" id="contador">Calculando nuestros latidos...</div>
+            <button class="btn-interactivo" onclick="crearLluvia()">¡Presiona aquí, Chiquita! ✨</button>
+        </div>
+
+        <div class="tarjeta">
+            <h2>Una Letra Para Ti 🎵</h2>
+            <div class="reproductor">
+                <div class="cancion-texto">💝 Dedicado con todo mi amor:</div>
+                <div class="lyrics">"Porque tutu, nadie como tutu, no hay nadie como tutu... Que me haga sentir lo que siento cuando estás tú..."</div>
+            </div>
+            <p>Cada vez que leo o escucho estos versos pienso en ti, en cómo encajamos a la perfección y en que no hay absolutamente nadie en este mundo que se compare a lo que tú eres para mí.</p>
+        </div>
+
+        <div class="tarjeta">
+            <h2>Nuestros Momentos Guardados 📸</h2>
+            <p style="text-align: center; color: #aaa; font-size: 0.95em;">(Pasa el mouse sobre las fotos para enfocarlas)</p>
+            
+            <div class="galeria">
+                <div class="polaroid" style="--r: -2">
+                    <img src="foto1.jpeg" alt="Momento 1">
+                    <div class="caption">El instante exacto en que mi vida se volvió más bonita. Nuestro inicio, mi Preciosa.</div>
+                </div>
+
+                <div class="polaroid" style="--r: 3">
+                    <img src="foto2.jpeg" alt="Momento 2">
+                    <div class="caption">Extraño tus abrazos, esos que me hacen sentir que el mundo se detiene por completo.</div>
+                </div>
+
+                <div class="polaroid" style="--r: -1">
+                    <img src="foto3.jpeg" alt="Momento 3">
+                    <div class="caption">Tus besos, tu calor y tu presencia... Lo que más anhelo cada noche al dormir.</div>
+                </div>
+
+                <div class="polaroid" style="--r: 2">
+                    <img src="foto4.jpeg" alt="Momento 4">
+                    <div class="caption">"Conmigo hasta el final". Nuestra promesa escrita para siempre.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fecha de aniversario exacta configurada: 11 de Septiembre de 2026
+        const fechaAniversario = new Date(2026, 8, 11, 0, 0, 0);
+
+        function actualizarReloj() {
+            const ahora = new Date();
+            const tiempoPasado = ahora - fechaAniversario;
+
+            const dias = Math.floor(tiempoPasado / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((tiempoPasado % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((tiempoPasado % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((tiempoPasado % (1000 * 60)) / 1000);
+
+            document.getElementById('contador').innerHTML = 
+                `${dias} días, ${horas}h : ${minutes}m : ${segundos}s juntos`;
+        }
+        setInterval(actualizarReloj, 1000);
+        actualizarReloj();
+
+        function crearLluvia() {
+            for (let i = 0; i < 35; i++) {
+                setTimeout(() => {
+                    const h = document.createElement('div');
+                    h.classList.add('heart');
+                    h.innerText = '❤️';
+                    h.style.left = Math.random() * 100 + 'vw';
+                    h.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(h);
+                    setTimeout(() => h.remove(), 3000);
+                }, i * 80);
+            }
+        }
+    </script>
+</body>
+</html>
