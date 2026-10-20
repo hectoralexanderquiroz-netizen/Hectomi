@@ -4,924 +4,1003 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#170914">
-<title>Para Mi Preciosa ❤️</title>
+<meta name="theme-color" content="#050511">
+<title>Para Mi Preciosa ❤️ | Nuestro Universo</title>
 
 <style>
 :root {
-  --fondo: #170914;
-  --vino: #6e173c;
-  --rosa: #ff709d;
-  --rosa-claro: #ffd1df;
-  --dorado: #f4d39a;
-  --texto: #fff3f7;
-  --panel: rgba(44, 17, 36, .82);
+  --pink: #ff8fd8;
+  --purple: #bca0ff;
+  --glass: rgba(13, 12, 35, .82);
 }
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
-
 body {
   margin: 0;
-  color: var(--texto);
+  overflow: hidden;
+  background: #03030c;
+  color: white;
   font-family: Georgia, "Times New Roman", serif;
-  background:
-    radial-gradient(ellipse at top, #57203f 0%, transparent 45%),
-    linear-gradient(150deg, #100a17, #29101f 55%, #100913);
-  overflow-x: hidden;
 }
-
-button, a { -webkit-tap-highlight-color: transparent; }
 
 button {
   font: inherit;
-  cursor: pointer;
-}
-
-button:focus-visible, a:focus-visible {
-  outline: 3px solid var(--dorado);
-  outline-offset: 4px;
-}
-
-#cielo {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.estrella {
-  position: absolute;
-  color: #fff2cb;
-  opacity: .55;
-  animation: brillar 3s infinite alternate;
-}
-
-@keyframes brillar {
-  from { opacity: .2; transform: scale(.7); }
-  to { opacity: .9; transform: scale(1.3); }
-}
-
-.corazon-flotante {
-  position: fixed;
-  z-index: 30;
-  bottom: -40px;
-  pointer-events: none;
-  animation: subir 4s linear forwards;
-}
-
-@keyframes subir {
-  to { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
-}
-
-button, .boton {
-  border: 1px solid rgba(255, 209, 223, .35);
-  border-radius: 999px;
-  padding: 13px 22px;
   color: white;
-  background: linear-gradient(135deg, #b42e68, #72234f);
-  box-shadow: 0 7px 25px rgba(255, 70, 137, .15);
+  border: 1px solid rgba(255, 177, 230, .65);
+  background: linear-gradient(135deg, #9a3d91, #4735a0);
+  padding: 11px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 0 18px rgba(199, 104, 255, .2);
   transition: transform .2s, filter .2s;
 }
 
-button:hover, .boton:hover {
+button:hover {
   transform: translateY(-2px);
-  filter: brightness(1.13);
+  filter: brightness(1.2);
 }
 
-button:disabled { opacity: .55; cursor: default; }
-
-.contenido {
-  position: relative;
-  z-index: 1;
+button:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 4px;
 }
 
-.portada {
+#universo {
   position: fixed;
   inset: 0;
-  z-index: 100;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-  text-align: center;
-  background:
-    radial-gradient(ellipse at 50% 40%, rgba(133, 33, 83, .52), transparent 55%),
-    #120a16;
-  transition: opacity .8s, visibility .8s;
+  z-index: 0;
 }
 
-.portada.oculta {
-  opacity: 0;
-  visibility: hidden;
+#universo canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,10,.42) 100%);
+}
+
+header {
+  position: fixed;
+  z-index: 3;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   pointer-events: none;
 }
 
-.portada-interior { max-width: 680px; }
+header > * { pointer-events: auto; }
 
-.sello {
-  font-size: clamp(55px, 12vw, 95px);
-  filter: drop-shadow(0 0 24px #ff568d);
-  animation: latir 1.8s infinite;
+.logo {
+  font-size: clamp(15px, 2.8vw, 23px);
+  color: #ffe4fa;
+  text-shadow: 0 0 14px #d86cff;
 }
 
-@keyframes latir {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.09); }
-}
-
-.etiqueta {
-  color: var(--dorado);
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  font: 11px Arial, sans-serif;
-}
-
-h1, h2, h3 { font-weight: normal; }
-
-.portada h1 {
-  font-size: clamp(38px, 8vw, 72px);
-  line-height: 1.06;
-  margin: 18px 0;
-  color: var(--rosa-claro);
-  text-shadow: 0 0 32px rgba(255, 112, 157, .35);
-}
-
-.portada p {
-  line-height: 1.8;
-  color: #f4dce7;
-}
-
-#abrir { margin-top: 20px; font-size: 16px; }
-
-header {
-  padding: 20px 18px;
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1100px;
-  margin: auto;
-}
-
-.marca {
-  color: var(--rosa-claro);
-  font-size: 20px;
-}
-
-nav {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-nav a {
-  color: #f6dbe6;
-  text-decoration: none;
-  font: 12px Arial, sans-serif;
-}
-
-nav a:hover { color: var(--dorado); }
-
-.hero {
+.counter {
+  position: fixed;
+  z-index: 3;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 24px);
+  padding: 10px 17px;
   text-align: center;
-  padding: 65px 20px 45px;
-  max-width: 900px;
-  margin: auto;
+  border: 1px solid rgba(255, 173, 232, .25);
+  border-radius: 20px;
+  background: rgba(7, 6, 24, .56);
+  backdrop-filter: blur(10px);
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: #f8d8ff;
 }
 
-.hero h1 {
-  font-size: clamp(42px, 8vw, 76px);
-  color: var(--rosa-claro);
-  margin: 16px 0;
-}
-
-.hero p {
-  line-height: 1.9;
-  max-width: 620px;
-  margin: 14px auto;
-  color: #f0dbe5;
-}
-
-.ornamento { color: var(--dorado); letter-spacing: 8px; }
-
-.contador {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  max-width: 620px;
-  margin: 28px auto;
-}
-
-.tiempo {
-  border: 1px solid rgba(255, 188, 211, .22);
-  background: rgba(255,255,255,.045);
-  border-radius: 17px;
-  padding: 16px 5px;
-  backdrop-filter: blur(8px);
-}
-
-.tiempo strong {
+#tiempo {
   display: block;
-  font-size: clamp(24px, 5vw, 38px);
-  color: var(--rosa-claro);
+  margin-top: 4px;
+  font-size: 13px;
+  color: white;
 }
 
-.tiempo span {
-  font: 10px Arial, sans-serif;
-  letter-spacing: 1px;
-  color: #e9c4d6;
-  text-transform: uppercase;
+.hint {
+  position: fixed;
+  z-index: 2;
+  left: 50%;
+  bottom: 95px;
+  transform: translateX(-50%);
+  width: calc(100% - 30px);
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #e7d9ff;
+  font-size: 13px;
+  text-shadow: 0 0 12px #9b6bff;
+  pointer-events: none;
 }
 
-.seccion {
-  max-width: 1050px;
-  padding: 62px 20px;
-  margin: auto;
-  scroll-margin-top: 20px;
+.nav {
+  position: fixed;
+  z-index: 4;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 20px);
+  flex-wrap: wrap;
 }
 
-.seccion-titulo { text-align: center; margin-bottom: 32px; }
-
-.seccion-titulo h2 {
-  font-size: clamp(30px, 5vw, 45px);
-  color: var(--rosa-claro);
-  margin: 12px 0;
+.nav button {
+  padding: 10px 13px;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
 }
 
-.seccion-titulo p {
-  color: #e9cbd9;
-  line-height: 1.8;
+.screen {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: radial-gradient(ellipse at center, rgba(39, 16, 75, .72), rgba(2, 2, 12, .96));
+  backdrop-filter: blur(8px);
+  overflow-y: auto;
+}
+
+.intro-card {
+  width: min(540px, 100%);
+  padding: clamp(22px, 5vw, 42px);
+  text-align: center;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 175, 235, .45);
+  background: linear-gradient(145deg, rgba(32, 18, 65, .9), rgba(10, 9, 31, .94));
+  box-shadow: 0 0 70px rgba(177, 76, 255, .22);
+}
+
+.intro-card h1 {
+  color: #ffd4f4;
+  font-size: clamp(29px, 6vw, 46px);
+  margin: 10px 0;
+  text-shadow: 0 0 25px #d14aff;
+}
+
+.intro-card p {
+  line-height: 1.7;
+  color: #e6ddff;
+}
+
+.big-heart {
+  font-size: 50px;
+  filter: drop-shadow(0 0 16px #ff59cf);
+  animation: beat 1.3s infinite;
+}
+
+@keyframes beat {
+  50% { transform: scale(1.15); }
 }
 
 .panel {
-  background: var(--panel);
-  border: 1px solid rgba(255, 190, 213, .2);
-  border-radius: 22px;
-  padding: 24px;
-  box-shadow: 0 15px 45px rgba(0,0,0,.13);
+  width: min(760px, 100%);
+  max-height: min(82vh, 850px);
+  overflow-y: auto;
+  padding: clamp(18px, 4vw, 32px);
+  border-radius: 25px;
+  border: 1px solid rgba(255, 173, 232, .45);
+  background: var(--glass);
+  box-shadow: 0 0 60px rgba(150, 78, 255, .25);
+  backdrop-filter: blur(16px);
 }
 
-.galeria {
+.panel h2 {
+  color: #ffc9ef;
+  text-align: center;
+  font-size: clamp(25px, 5vw, 36px);
+  margin-top: 0;
+}
+
+.panel p {
+  line-height: 1.8;
+  color: #f1e9ff;
+}
+
+.panel-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.close-btn {
+  display: block;
+  margin: 0 0 15px auto;
+  background: rgba(255,255,255,.08);
+}
+
+.gallery {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: 12px;
 }
 
-.foto {
-  border: 1px solid rgba(255, 203, 222, .23);
-  border-radius: 18px;
-  background: rgba(255,255,255,.045);
-  padding: 10px;
-  text-align: center;
-  overflow: hidden;
+.gallery figure {
+  margin: 0;
+  padding: 8px;
+  border-radius: 15px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.13);
 }
 
-.foto img {
+.gallery img {
   display: block;
   width: 100%;
-  height: 300px;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
-  border-radius: 12px;
-  cursor: zoom-in;
-  transition: transform .45s;
+  border-radius: 10px;
 }
 
-.foto img:hover { transform: scale(1.035); }
+.gallery figcaption {
+  padding: 9px 4px 3px;
+  text-align: center;
+  color: #ffdaf3;
+  font-size: 14px;
+}
 
-.foto p { color: var(--rosa-claro); line-height: 1.5; }
+.letter {
+  white-space: pre-line;
+  padding: 20px;
+  border-radius: 16px;
+  border-left: 3px solid #ff9add;
+  background: rgba(255,255,255,.045);
+  line-height: 1.9;
+}
 
-.nota {
-  color: #dcbfd0;
-  font: 12px Arial, sans-serif;
+.secret-message {
+  text-align: center;
+  padding: 15px;
+  color: #ffd5f4;
+  font-size: 19px;
   line-height: 1.7;
 }
 
-.mensaje {
-  font-size: 19px;
-  line-height: 1.95;
-  color: #f8e7ee;
-}
+.hidden { display: none !important; }
 
-.carta {
-  max-width: 760px;
-  margin: auto;
-  text-align: center;
-}
-
-.sobre {
-  display: block;
-  margin: 0 auto 20px;
-  font-size: 64px;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-#textoCarta { white-space: pre-line; }
-
-.juego {
-  text-align: center;
-}
-
-.corazones-juego {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  margin: 25px auto;
-  max-width: 560px;
-}
-
-.corazon-casilla {
-  min-height: 90px;
-  padding: 10px;
-  border-radius: 17px;
-  font-size: 30px;
-  background: linear-gradient(145deg, #51203f, #32162d);
-  border: 1px solid rgba(255, 174, 204, .2);
-}
-
-.corazon-casilla.descubierto {
-  font-size: 14px;
-  color: var(--rosa-claro);
-  background: #291522;
-  line-height: 1.5;
-}
-
-.progreso {
-  height: 7px;
-  border-radius: 9px;
-  max-width: 420px;
-  margin: 20px auto;
-  background: #44243a;
-  overflow: hidden;
-}
-
-#barra {
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, #ff548b, #f4d39a);
-  transition: width .3s;
-}
-
-.promesas {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.promesa {
-  padding: 20px 12px;
-  min-height: 150px;
-  border-radius: 18px;
-  text-align: center;
-  background: rgba(255,255,255,.045);
-  border: 1px solid rgba(255, 190, 213, .18);
-}
-
-.promesa button {
-  border-radius: 15px;
-  width: 100%;
-  height: 100%;
-  min-height: 110px;
-  padding: 12px;
-  background: transparent;
-  box-shadow: none;
-  border: 0;
-}
-
-.promesa .icono { display: block; font-size: 30px; margin-bottom: 10px; }
-
-#revelacion {
-  min-height: 30px;
-  margin-top: 20px;
-  color: var(--dorado);
-  line-height: 1.8;
-  text-align: center;
-}
-
-.musica { text-align: center; }
-
-#reproductor {
-  margin: 22px auto 0;
-  max-width: 560px;
-}
-
-#reproductor iframe {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16/9;
-  border: 0;
-  border-radius: 15px;
-}
-
-.final {
-  text-align: center;
-  padding: 90px 20px 100px;
-}
-
-.final h2 {
-  font-size: clamp(34px, 7vw, 62px);
-  color: var(--rosa-claro);
-}
-
-.final p { line-height: 1.9; }
-
-.pie {
-  padding: 25px 15px;
-  text-align: center;
-  color: #cda9bd;
-  font-size: 13px;
-  border-top: 1px solid rgba(255,255,255,.08);
-}
-
-.oculto { display: none !important; }
-
-#visorFoto {
+#toast {
   position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: none;
-  place-items: center;
-  padding: 20px;
-  background: rgba(9, 4, 11, .94);
+  z-index: 20;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  max-width: 90%;
+  text-align: center;
+  color: white;
+  background: rgba(15, 8, 40, .92);
+  border: 1px solid #ff9add;
+  border-radius: 18px;
+  padding: 15px 20px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s;
 }
 
-#visorFoto.abierto { display: grid; }
+#toast.show { opacity: 1; }
 
-#visorFoto img {
-  max-width: 95%;
-  max-height: 82vh;
-  border-radius: 12px;
-}
-
-#cerrarFoto { position: absolute; top: 20px; right: 20px; }
-
-@media (max-width: 650px) {
-  header { flex-direction: column; }
-  nav { gap: 12px; }
-  .hero { padding-top: 45px; }
-  .seccion { padding: 45px 15px; }
-  .galeria { grid-template-columns: 1fr; }
-  .foto img { height: 280px; }
-  .promesas { grid-template-columns: 1fr; }
-  .promesa { min-height: 105px; }
-  .corazones-juego { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .corazon-casilla { min-height: 82px; font-size: 27px; }
-  .panel { padding: 19px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    scroll-behavior: auto !important;
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-  }
+@media (max-width: 520px) {
+  header { top: 10px; left: 10px; right: 10px; }
+  header button { padding: 9px 11px; font-size: 11px; }
+  .counter { top: 62px; }
+  .hint { bottom: 118px; font-size: 12px; }
+  .nav { bottom: 12px; gap: 6px; }
+  .nav button { padding: 9px 10px; font-size: 11px; }
+  .gallery { gap: 8px; }
 }
 </style>
 </head>
 
 <body>
-<div id="cielo" aria-hidden="true"></div>
+<div id="universo" aria-label="Universo romántico 3D"></div>
+<div class="vignette"></div>
 
-<div class="portada" id="portada">
-  <div class="portada-interior">
-    <div class="sello">💖</div>
-    <div class="etiqueta">Un regalo hecho con amor</div>
-    <h1>Para mi preciosa</h1>
+<header>
+  <div class="logo">✦ Nuestro Universo ✦</div>
+  <button id="musicButton" type="button">🎵 Escuchar Tutu</button>
+</header>
+
+<div class="counter">
+  Nuestro tiempo juntos ❤️
+  <span id="tiempo">Calculando estrellas...</span>
+</div>
+
+<div class="hint" id="hint">
+  Arrastra para explorar la galaxia · Toca los lugares brillantes para descubrir secretos ✨
+</div>
+
+<nav class="nav" aria-label="Lugares del universo">
+  <button type="button" data-open="recuerdos">📸 Recuerdos</button>
+  <button type="button" data-open="carta">💌 Mi carta</button>
+  <button type="button" data-open="jardin">🌷 Jardín secreto</button>
+  <button type="button" data-open="secreto">💫 Sorpresa</button>
+</nav>
+
+<!-- Pantalla de bienvenida -->
+<section class="screen" id="intro">
+  <div class="intro-card">
+    <div class="big-heart">💗</div>
+    <h1>Para Mi Preciosa</h1>
     <p>
-      Hay personas que hacen bonito el mundo sin darse cuenta.
-      Tú eres una de ellas, Nohemi.
-      <br>Preparé este pequeño universo solo para ti...
+      Hay millones de galaxias en el universo, pero mi lugar favorito
+      siempre será aquel donde estás tú.
     </p>
-    <button id="abrir">❤️ Abrir mi regalo ❤️</button>
-    <p class="nota">Toca el botón y descubre lo que preparé para ti.</p>
+    <p>
+      Preparé un pequeño universo para ti, con nuestros recuerdos,
+      una carta y algunos secretos escondidos entre las estrellas.
+    </p>
+    <button type="button" id="enterButton">❤️ Abrir mi universo ❤️</button>
+    <p style="font-size:12px">Hecho con todo mi amor, para Nohemi.</p>
   </div>
-</div>
+</section>
 
-<div class="contenido">
-  <header>
-    <div class="marca">♡ Para Mi Preciosa</div>
-    <nav aria-label="Navegación principal">
-      <a href="#historia">Recuerdos</a>
-      <a href="#juego">Jugar</a>
-      <a href="#carta">Mi carta</a>
-      <a href="#universo">Promesas</a>
-      <a href="#musica">Música</a>
-    </nav>
-  </header>
+<!-- Paneles secretos -->
+<section class="screen hidden" id="panelScreen">
+  <article class="panel">
+    <button class="close-btn" id="closePanel" type="button">✕ Cerrar</button>
+    <div id="panelContent"></div>
+  </article>
+</section>
 
-  <main>
-    <section class="hero" id="inicio">
-      <div class="ornamento">✧ ♡ ✧</div>
-      <div class="etiqueta">Mi lugar favorito es contigo</div>
-      <h1>Nohemi ❤️</h1>
-      <p>
-        Si pudiera regalarte algo, te regalaría la capacidad de verte
-        a través de mis ojos. Así sabrías lo especial que eres para mí.
-      </p>
-      <div class="ornamento">✦ ✧ ✦</div>
+<div id="toast" role="status"></div>
 
-      <div class="contador" aria-label="Tiempo juntos">
-        <div class="tiempo"><strong id="dias">0</strong><span>Días</span></div>
-        <div class="tiempo"><strong id="horas">00</strong><span>Horas</span></div>
-        <div class="tiempo"><strong id="minutos">00</strong><span>Minutos</span></div>
-        <div class="tiempo"><strong id="segundos">00</strong><span>Segundos</span></div>
-      </div>
-      <p class="nota">Cada segundo contigo tiene algo especial. ♡</p>
-      <button onclick="crearLluvia(24)">Enviar lluvia de corazones 💕</button>
-    </section>
-
-    <section class="seccion" id="historia">
-      <div class="seccion-titulo">
-        <div class="etiqueta">Pequeños pedazos de felicidad</div>
-        <h2>Nuestros recuerdos 📸</h2>
-        <p>Cuatro fotos, muchos sentimientos y una historia que me encanta vivir contigo.</p>
-      </div>
-
-      <div class="galeria" id="galeria">
-        <article class="foto">
-          <img src="foto1.jpeg" alt="Nuestro recuerdo número uno" loading="lazy">
-          <p>Un recuerdo que guardo en el corazón ❤️</p>
-        </article>
-        <article class="foto">
-          <img src="foto2.jpeg" alt="Nuestro recuerdo número dos" loading="lazy">
-          <p>Tu sonrisa hace más bonito todo ✨</p>
-        </article>
-        <article class="foto">
-          <img src="foto3.jpeg" alt="Nuestro recuerdo número tres" loading="lazy">
-          <p>De esos momentos que quisiera repetir 💗</p>
-        </article>
-        <article class="foto">
-          <img src="foto4.jpeg" alt="Nuestro recuerdo número cuatro" loading="lazy">
-          <p>Y todavía nos quedan recuerdos por crear 🌹</p>
-        </article>
-      </div>
-
-      <p class="nota" style="text-align:center;margin-top:18px">
-        Para agregar más fotos, sigue las instrucciones que aparecen después del código.
-      </p>
-    </section>
-
-    <section class="seccion" id="juego">
-      <div class="seccion-titulo">
-        <div class="etiqueta">Un pequeño reto para ti</div>
-        <h2>Encuentra los corazones 💘</h2>
-        <p>Toca los corazones para descubrir seis mensajitos escondidos. ¡Cada uno guarda algo bonito!</p>
-      </div>
-
-      <div class="panel juego">
-        <div class="nota">Corazones descubiertos: <strong id="puntuacion">0</strong> de 6</div>
-        <div class="progreso"><div id="barra"></div></div>
-        <div class="corazones-juego" id="corazonesJuego"></div>
-        <p id="mensajeJuego" aria-live="polite">¡Vamos, preciosa! Toca cualquier corazón. ❤️</p>
-        <button id="reiniciarJuego">Jugar otra vez ↻</button>
-      </div>
-    </section>
-
-    <section class="seccion" id="carta">
-      <div class="seccion-titulo">
-        <div class="etiqueta">Algo que quiero decirte</div>
-        <h2>Una carta para ti 💌</h2>
-        <p>Hay palabras que merecen abrirse despacito.</p>
-      </div>
-
-      <div class="panel carta">
-        <button class="sobre" id="abrirCarta" aria-label="Abrir la carta">💌</button>
-        <p class="nota">Toca el sobre para abrir tu carta.</p>
-        <div id="textoCarta" class="mensaje oculto"></div>
-        <button id="volverCarta" class="oculto">Leerla otra vez ❤️</button>
-      </div>
-    </section>
-
-    <section class="seccion" id="universo">
-      <div class="seccion-titulo">
-        <div class="etiqueta">Cosas que quiero compartir contigo</div>
-        <h2>Nuestro pequeño universo ✨</h2>
-        <p>Toca cada tarjeta y descubre una promesa, un sueño o un deseo.</p>
-      </div>
-
-      <div class="promesas">
-        <div class="promesa">
-          <button data-secreto="Prometo seguir buscando motivos para hacerte sonreír, incluso en los días difíciles.">
-            <span class="icono">🌷</span>Una promesa
-          </button>
-        </div>
-        <div class="promesa">
-          <button data-secreto="Sueño con seguir creando recuerdos contigo, descubrir lugares nuevos y reírnos de cualquier tontería.">
-            <span class="icono">🌙</span>Un sueño
-          </button>
-        </div>
-        <div class="promesa">
-          <button data-secreto="Mi deseo es que nunca te falten cariño, respeto, tranquilidad y alguien que celebre tus alegrías.">
-            <span class="icono">⭐</span>Un deseo
-          </button>
-        </div>
-      </div>
-      <div id="revelacion" aria-live="polite">Hay más cosas bonitas que quiero vivir contigo. 💗</div>
-    </section>
-
-    <section class="seccion" id="musica">
-      <div class="seccion-titulo">
-        <div class="etiqueta">Una canción para nosotros</div>
-        <h2>Nuestra música 🎵</h2>
-        <p>Porque hay canciones que nos hacen pensar en alguien especial.</p>
-      </div>
-
-      <div class="panel musica">
-        <div style="font-size:42px">🎶 💗 🎶</div>
-        <h3>Tutu — Camilo y Pedro Capó</h3>
-        <p class="nota">Pulsa el botón para cargar la canción. Si el video no se reproduce, podrás abrirlo en YouTube.</p>
-        <button id="cargarMusica">🎵 Escuchar Tutu</button>
-        <div id="reproductor"></div>
-        <p><a href="https://www.youtube.com/results?search_query=Tutu+Camilo+Pedro+Capo+video+oficial" target="_blank" rel="noopener noreferrer" style="color:#ffd1df">Buscar la canción en YouTube ↗</a></p>
-      </div>
-    </section>
-
-    <section class="final" id="final">
-      <div class="sello">💖</div>
-      <div class="etiqueta">Y si volviera a empezar...</div>
-      <h2>Te volvería a elegir, Nohemi</h2>
-      <p>
-        Entre tantas personas en este mundo, qué bonito que nuestras vidas
-        se hayan encontrado.<br>
-        Gracias por formar parte de mi historia.<br>
-        <strong>Lo más bonito todavía puede estar por venir. ❤️</strong>
-      </p>
-      <button id="otraVez">Volver a vivir nuestra historia ↻</button>
-      <p style="margin-top:25px;color:#f4d39a">Hecho con mucho amor, solo para ti. ♡</p>
-    </section>
-  </main>
-
-  <footer class="pie">Una pequeña página, un sentimiento enorme. ❤️</footer>
-</div>
-
-<div id="visorFoto" role="dialog" aria-modal="true" aria-label="Foto ampliada">
-  <button id="cerrarFoto">Cerrar ✕</button>
-  <img id="fotoAmpliada" src="" alt="Foto ampliada">
-</div>
+<!-- Three.js: requiere conexión a internet para cargar la biblioteca -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-/* ESTRELLAS */
-const cielo = document.getElementById("cielo");
-for (let i = 0; i < 65; i++) {
-  const estrella = document.createElement("span");
-  estrella.className = "estrella";
-  estrella.textContent = Math.random() > 0.5 ? "✦" : "·";
-  estrella.style.left = Math.random() * 100 + "%";
-  estrella.style.top = Math.random() * 100 + "%";
-  estrella.style.fontSize = (8 + Math.random() * 12) + "px";
-  estrella.style.animationDelay = Math.random() * 4 + "s";
-  cielo.appendChild(estrella);
-}
+(() => {
+  "use strict";
 
-/* ABRIR EL REGALO */
-document.getElementById("abrir").addEventListener("click", () => {
-  document.getElementById("portada").classList.add("oculta");
-  crearLluvia(18);
-});
+  // Nombres de las fotos que ya existen en tu repositorio.
+  const fotos = [
+    { src: "foto1.jpeg", caption: "Un recuerdo de nosotros ❤️" },
+    { src: "foto2.jpeg", caption: "Un momento que guardo en mi corazón ✨" },
+    { src: "foto3.jpeg", caption: "Tú haces más bonito mi mundo 🌷" },
+    { src: "foto4.jpeg", caption: "Y quiero seguir creando recuerdos contigo 💗" }
+  ];
 
-/* CONTADOR
-   11 de septiembre de 2026.
-   En JavaScript, septiembre es el mes 8 porque se empieza a contar desde 0.
-*/
-const fechaInicio = new Date(2026, 8, 11, 0, 0, 0);
+  const carta = `Mi preciosa Nohemi:
 
-function actualizarContador() {
-  const ahora = new Date();
-  const diferencia = ahora - fechaInicio;
+Si pudiera regalarte una estrella por cada vez que pienso en ti,
+el cielo ya no tendría oscuridad.
 
-  if (diferencia < 0) {
-    document.getElementById("dias").textContent = "—";
-    document.getElementById("horas").textContent = "—";
-    document.getElementById("minutos").textContent = "—";
-    document.getElementById("segundos").textContent = "—";
+Quiero que sepas que eres una persona muy especial para mí.
+Me encanta tener recuerdos contigo, imaginar nuevos momentos
+y pensar en todas las aventuras que todavía nos esperan.
+
+Así como este universo parece infinito, quiero que sepas que
+mi cariño por ti tiene muchísimas formas de crecer.
+Gracias por existir, por ser tú y por formar parte de mi vida.
+
+Si algún día miras el cielo y ves una estrella brillando,
+imagina que ahí te estoy mandando un beso y un abrazo.
+
+Te quiero muchísimo, mi preciosa.
+Con todo mi amor, para ti. ❤️`;
+
+  // Cambia este mensaje cuando quieras personalizarlo.
+  const mensajeSecreto =
+    "Si pudiera elegir un lugar en todas las galaxias, " +
+    "te elegiría a ti. Tú eres mi lugar favorito en el universo. ❤️";
+
+  const startDate = new Date(2026, 8, 11, 0, 0, 0);
+
+  // Contador desde el 11 de septiembre de 2026.
+  function actualizarContador() {
+    const ahora = new Date();
+    const diferencia = Math.abs(ahora - startDate);
+    const totalSegundos = Math.floor(diferencia / 1000);
+    const dias = Math.floor(totalSegundos / 86400);
+    const horas = Math.floor((totalSegundos % 86400) / 3600);
+    const minutos = Math.floor((totalSegundos % 3600) / 60);
+    const segundos = totalSegundos % 60;
+
+    const textoFecha = ahora >= startDate
+      ? "Desde nuestro día especial 💞"
+      : "Faltan para nuestro día especial 💞";
+
+    document.getElementById("tiempo").textContent =
+      `${textoFecha} ${dias} días, ${horas} h, ${minutos} min, ${segundos} s`;
+  }
+  actualizarContador();
+  setInterval(actualizarContador, 1000);
+
+  // Música: abre la búsqueda de Tutu para evitar un enlace de vídeo incorrecto.
+  document.getElementById("musicButton").addEventListener("click", () => {
+    window.open(
+      "https://www.youtube.com/results?search_query=Tutu+Camilo+Pedro+Cap%C3%B3+video+oficial",
+      "_blank",
+      "noopener,noreferrer"
+    );
+    mostrarToast("Busca el video oficial de Tutu y pulsa reproducir 🎵");
+  });
+
+  // Paneles de contenido.
+  const panelScreen = document.getElementById("panelScreen");
+  const panelContent = document.getElementById("panelContent");
+
+  function abrirPanel(tipo) {
+    let html = "";
+
+    if (tipo === "recuerdos") {
+      html = `
+        <h2>✨ Nuestra constelación de recuerdos ✨</h2>
+        <p style="text-align:center">
+          Cada fotografía es una pequeña estrella de nuestra historia.
+        </p>
+        <div class="gallery">
+          ${fotos.map((foto, i) => `
+            <figure>
+              <img src="${foto.src}" alt="Recuerdo ${i + 1}" loading="lazy">
+              <figcaption>${foto.caption}</figcaption>
+            </figure>
+          `).join("")}
+        </div>
+        <p style="text-align:center;font-size:13px">
+          Si una foto no aparece, revisa que su nombre coincida exactamente
+          con el archivo de GitHub, incluidas las mayúsculas y minúsculas.
+        </p>
+      `;
+    } else if (tipo === "carta") {
+      html = `
+        <h2>💌 Una carta entre las estrellas</h2>
+        <div class="letter" id="letterText"></div>
+        <div class="panel-actions">
+          <button type="button" id="readLetter">💗 Volver a leer</button>
+        </div>
+      `;
+    } else if (tipo === "jardin") {
+      html = `
+        <h2>🌷 Nuestro jardín secreto</h2>
+        <p class="secret-message">
+          En este rincón del universo crecen flores por cada sonrisa tuya,
+          luces por cada recuerdo bonito y corazones por todo lo que siento.
+        </p>
+        <p style="text-align:center">
+          🌸 🌷 🌹 ✨ 💗 ✨ 🌹 🌷 🌸
+        </p>
+        <p>
+          Mi deseo es que nunca nos falten motivos para reír, abrazarnos
+          y seguir construyendo momentos que algún día recordemos con cariño.
+        </p>
+      `;
+    } else if (tipo === "secreto") {
+      html = `
+        <h2>💫 Un secreto del universo</h2>
+        <p class="secret-message">${mensajeSecreto}</p>
+        <p style="text-align:center;font-size:30px">🌌 💖 🌌</p>
+        <div class="panel-actions">
+          <button type="button" id="heartSurprise">💗 Enviar lluvia de corazones</button>
+        </div>
+      `;
+    }
+
+    panelContent.innerHTML = html;
+    panelScreen.classList.remove("hidden");
+
+    if (tipo === "carta") {
+      const letterText = document.getElementById("letterText");
+      let index = 0;
+      letterText.textContent = "";
+      const timer = setInterval(() => {
+        if (!document.body.contains(letterText)) {
+          clearInterval(timer);
+          return;
+        }
+        letterText.textContent = carta.slice(0, index);
+        index += 4;
+        if (index >= carta.length) {
+          letterText.textContent = carta;
+          clearInterval(timer);
+        }
+      }, 18);
+
+      document.getElementById("readLetter").addEventListener("click", () => {
+        letterText.textContent = carta;
+      });
+    }
+
+    const surpriseButton = document.getElementById("heartSurprise");
+    if (surpriseButton) {
+      surpriseButton.addEventListener("click", lluviaCorazones);
+    }
+  }
+
+  document.getElementById("closePanel").addEventListener("click", () => {
+    panelScreen.classList.add("hidden");
+  });
+
+  panelScreen.addEventListener("click", (event) => {
+    if (event.target === panelScreen) {
+      panelScreen.classList.add("hidden");
+    }
+  });
+
+  document.querySelectorAll("[data-open]").forEach(button => {
+    button.addEventListener("click", () => abrirPanel(button.dataset.open));
+  });
+
+  document.getElementById("enterButton").addEventListener("click", () => {
+    document.getElementById("intro").classList.add("hidden");
+    mostrarToast("Bienvenida a nuestro universo, mi preciosa ❤️");
+  });
+
+  function mostrarToast(texto) {
+    const toast = document.getElementById("toast");
+    toast.textContent = texto;
+    toast.classList.add("show");
+    clearTimeout(mostrarToast.timer);
+    mostrarToast.timer = setTimeout(() => toast.classList.remove("show"), 2800);
+  }
+
+  function lluviaCorazones() {
+    for (let i = 0; i < 28; i++) {
+      const heart = document.createElement("div");
+      heart.textContent = ["💗", "💖", "💕", "❤️", "✨"][Math.floor(Math.random() * 5)];
+      heart.style.position = "fixed";
+      heart.style.zIndex = "30";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.top = "-40px";
+      heart.style.fontSize = (18 + Math.random() * 24) + "px";
+      heart.style.pointerEvents = "none";
+      heart.style.transition = "transform 3s linear, opacity 3s linear";
+      document.body.appendChild(heart);
+
+      requestAnimationFrame(() => {
+        heart.style.transform = `translate(${Math.random() * 100 - 50}px, ${window.innerHeight + 100}px) rotate(${Math.random() * 600}deg)`;
+        heart.style.opacity = "0";
+      });
+
+      setTimeout(() => heart.remove(), 3200);
+    }
+  }
+
+  // Si Three.js no se carga, mostrar un mensaje útil en vez de dejar la página vacía.
+  if (!window.THREE) {
+    mostrarToast("No se pudo cargar el mundo 3D. Revisa tu conexión a internet.");
+    document.getElementById("hint").textContent =
+      "Este universo necesita conexión a internet para cargar Three.js.";
     return;
   }
 
-  const totalSegundos = Math.floor(diferencia / 1000);
-  document.getElementById("dias").textContent =
-    Math.floor(totalSegundos / 86400).toLocaleString("es-CO");
-  document.getElementById("horas").textContent =
-    String(Math.floor((totalSegundos % 86400) / 3600)).padStart(2, "0");
-  document.getElementById("minutos").textContent =
-    String(Math.floor((totalSegundos % 3600) / 60)).padStart(2, "0");
-  document.getElementById("segundos").textContent =
-    String(totalSegundos % 60).padStart(2, "0");
-}
-actualizarContador();
-setInterval(actualizarContador, 1000);
+  // ------------------ MUNDO 3D ------------------
+  const THREE = window.THREE;
+  const container = document.getElementById("universo");
 
-/* LLUVIA DE CORAZONES */
-function crearLluvia(cantidad = 18) {
-  const simbolos = ["❤️", "💗", "💕", "💖", "✨"];
-  for (let i = 0; i < cantidad; i++) {
-    const corazon = document.createElement("span");
-    corazon.className = "corazon-flotante";
-    corazon.textContent = simbolos[Math.floor(Math.random() * simbolos.length)];
-    corazon.style.left = Math.random() * 100 + "vw";
-    corazon.style.fontSize = (15 + Math.random() * 23) + "px";
-    corazon.style.animationDuration = (3 + Math.random() * 3) + "s";
-    document.body.appendChild(corazon);
-    setTimeout(() => corazon.remove(), 6500);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x03030c);
+  scene.fog = new THREE.FogExp2(0x050516, 0.009);
+
+  const camera = new THREE.PerspectiveCamera(
+    58,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 1.2, 13);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  container.appendChild(renderer.domElement);
+
+  scene.add(new THREE.AmbientLight(0x8c85c9, 1.25));
+
+  const moonLight = new THREE.PointLight(0xff8bd9, 2.3, 60);
+  moonLight.position.set(5, 5, 7);
+  scene.add(moonLight);
+
+  const blueLight = new THREE.PointLight(0x5e7dff, 2, 55);
+  blueLight.position.set(-7, -3, -4);
+  scene.add(blueLight);
+
+  const world = new THREE.Group();
+  scene.add(world);
+
+  // Estrellas lejanas.
+  const starCount = 2600;
+  const starPositions = new Float32Array(starCount * 3);
+  for (let i = 0; i < starCount; i++) {
+    starPositions[i * 3] = (Math.random() - 0.5) * 190;
+    starPositions[i * 3 + 1] = (Math.random() - 0.5) * 130;
+    starPositions[i * 3 + 2] = -Math.random() * 150 - 10;
   }
-}
+  const starGeometry = new THREE.BufferGeometry();
+  starGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(starPositions, 3)
+  );
+  const stars = new THREE.Points(
+    starGeometry,
+    new THREE.PointsMaterial({
+      color: 0xffffff,
+      size: 0.13,
+      transparent: true,
+      opacity: 0.9
+    })
+  );
+  scene.add(stars);
 
-/* GALERÍA: AMPLIAR FOTOS Y OCULTAR ARCHIVOS QUE NO EXISTAN */
-const galeria = document.getElementById("galeria");
+  // Nebulosas: grandes nubes translúcidas de color.
+  function crearNebulosa(color, x, y, z, scale) {
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(1, 24, 18),
+      new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.10,
+        side: THREE.BackSide,
+        depthWrite: false
+      })
+    );
+    mesh.position.set(x, y, z);
+    mesh.scale.set(scale * 1.5, scale, scale * 0.35);
+    scene.add(mesh);
+  }
+  crearNebulosa(0x6523a8, -13, 5, -25, 12);
+  crearNebulosa(0x153e9a, 14, -5, -35, 15);
+  crearNebulosa(0xa12576, 3, 12, -50, 18);
 
-galeria.querySelectorAll("img").forEach(img => {
-  img.addEventListener("error", () => {
-    img.closest(".foto").style.display = "none";
+  // Planeta principal.
+  const planet = new THREE.Mesh(
+    new THREE.SphereGeometry(3, 64, 64),
+    new THREE.MeshStandardMaterial({
+      color: 0x594b9d,
+      roughness: 0.86,
+      metalness: 0.08,
+      emissive: 0x17103d,
+      emissiveIntensity: 0.45
+    })
+  );
+  world.add(planet);
+
+  // Continentes decorativos para darle textura al planeta.
+  const landMaterial = new THREE.MeshStandardMaterial({
+    color: 0x4b9b91,
+    roughness: 1,
+    transparent: true,
+    opacity: 0.78
   });
 
-  img.addEventListener("click", () => {
-    if (!img.naturalWidth) return;
-    document.getElementById("fotoAmpliada").src = img.src;
-    document.getElementById("visorFoto").classList.add("abierto");
+  for (let i = 0; i < 32; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const b = Math.acos(2 * Math.random() - 1);
+    const radius = 3.015;
+    const patch = new THREE.Mesh(
+      new THREE.SphereGeometry(0.08 + Math.random() * 0.2, 9, 7),
+      landMaterial
+    );
+    patch.position.set(
+      radius * Math.sin(b) * Math.cos(a),
+      radius * Math.cos(b),
+      radius * Math.sin(b) * Math.sin(a)
+    );
+    patch.scale.set(1.4, 0.6, 0.8);
+    patch.lookAt(0, 0, 0);
+    world.add(patch);
+  }
+
+  // Atmósfera luminosa alrededor del planeta.
+  const atmosphere = new THREE.Mesh(
+    new THREE.SphereGeometry(3.12, 48, 48),
+    new THREE.MeshBasicMaterial({
+      color: 0xb56dff,
+      transparent: true,
+      opacity: 0.12,
+      side: THREE.BackSide
+    })
+  );
+  world.add(atmosphere);
+
+  // Anillos del planeta.
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(3.8, 5.0, 100),
+    new THREE.MeshBasicMaterial({
+      color: 0xe2a4ff,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.46
+    })
+  );
+  ring.rotation.x = Math.PI * 0.36;
+  ring.rotation.y = 0.12;
+  world.add(ring);
+
+  // Forma de corazón en 3D.
+  const heartShape = new THREE.Shape();
+  heartShape.moveTo(0, 0.3);
+  heartShape.bezierCurveTo(0, 0.3, -0.5, 0.8, -0.85, 0.45);
+  heartShape.bezierCurveTo(-1.25, 0.02, -0.55, -0.48, 0, -0.9);
+  heartShape.bezierCurveTo(0.55, -0.48, 1.25, 0.02, 0.85, 0.45);
+  heartShape.bezierCurveTo(0.5, 0.8, 0, 0.3, 0, 0.3);
+
+  const heartGeometry = new THREE.ExtrudeGeometry(heartShape, {
+    depth: 0.12,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    steps: 1,
+    bevelSize: 0.04,
+    bevelThickness: 0.04
   });
-});
+  heartGeometry.center();
 
-function cerrarVisor() {
-  document.getElementById("visorFoto").classList.remove("abierto");
-  document.getElementById("fotoAmpliada").src = "";
-}
-document.getElementById("cerrarFoto").addEventListener("click", cerrarVisor);
-document.getElementById("visorFoto").addEventListener("click", e => {
-  if (e.target.id === "visorFoto") cerrarVisor();
-});
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") cerrarVisor();
-});
-
-/* AÑADIR MÁS FOTOS:
-   Añade sus archivos al repositorio y agrega entradas al arreglo de abajo.
-   Las fotos que no existan se omiten automáticamente.
-*/
-const fotosExtra = [
-  // Ejemplo: { archivo: "foto5.jpeg", texto: "Otro recuerdo bonito ❤️" },
-  // Ejemplo: { archivo: "foto6.jpeg", texto: "Un momento especial ✨" },
-];
-
-fotosExtra.forEach((foto, indice) => {
-  const tarjeta = document.createElement("article");
-  tarjeta.className = "foto";
-  const imagen = document.createElement("img");
-  imagen.src = foto.archivo;
-  imagen.alt = "Recuerdo adicional " + (indice + 1);
-  imagen.loading = "lazy";
-  const pie = document.createElement("p");
-  pie.textContent = foto.texto || "Otro recuerdo especial ❤️";
-  tarjeta.append(imagen, pie);
-  galeria.appendChild(tarjeta);
-
-  imagen.addEventListener("error", () => tarjeta.remove());
-  imagen.addEventListener("click", () => {
-    if (!imagen.naturalWidth) return;
-    document.getElementById("fotoAmpliada").src = imagen.src;
-    document.getElementById("visorFoto").classList.add("abierto");
+  const heartMaterial = new THREE.MeshStandardMaterial({
+    color: 0xff4fbf,
+    emissive: 0xc21883,
+    emissiveIntensity: 0.85,
+    metalness: 0.2,
+    roughness: 0.3
   });
-});
 
-/* JUEGO DE CORAZONES */
-const mensajesSecretos = [
-  "Tu sonrisa ilumina mis días. ❤️",
-  "Te mando un abrazo enorme. 🤗",
-  "Eres alguien muy especial para mí. 💗",
-  "Quiero seguir creando recuerdos contigo. ✨",
-  "Ojalá hoy tengas mil motivos para sonreír. 🌷",
-  "Te guardo un beso enorme. 😘"
-];
+  const floatingHearts = [];
+  for (let i = 0; i < 18; i++) {
+    const heart = new THREE.Mesh(heartGeometry, heartMaterial);
+    const angle = i / 18 * Math.PI * 2;
+    heart.position.set(
+      Math.cos(angle) * (4.3 + Math.random() * 2.2),
+      (Math.random() - 0.5) * 7,
+      Math.sin(angle) * (4.0 + Math.random() * 2.2)
+    );
+    const s = 0.12 + Math.random() * 0.18;
+    heart.scale.setScalar(s);
+    heart.rotation.z = Math.PI;
+    world.add(heart);
+    floatingHearts.push(heart);
+  }
 
-let descubiertos = new Set();
+  // Flores 3D colocadas alrededor del planeta.
+  const flowers = [];
+  function crearFlor(x, y, z, scale = 1) {
+    const flower = new THREE.Group();
+    const center = new THREE.Vector3(x, y, z).normalize().multiplyScalar(3.02);
+    flower.position.copy(center);
+    flower.lookAt(center.clone().multiplyScalar(2));
 
-function iniciarJuego() {
-  descubiertos = new Set();
-  const tablero = document.getElementById("corazonesJuego");
-  tablero.innerHTML = "";
-  document.getElementById("puntuacion").textContent = "0";
-  document.getElementById("barra").style.width = "0%";
-  document.getElementById("mensajeJuego").textContent =
-    "¡Vamos, preciosa! Toca cualquier corazón. ❤️";
+    const stem = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.018, 0.025, 0.45, 7),
+      new THREE.MeshStandardMaterial({ color: 0x54c78b, roughness: 0.8 })
+    );
+    stem.position.y = -0.18;
+    flower.add(stem);
 
-  const orden = mensajesSecretos
-    .map((mensaje, indice) => ({ mensaje, indice }))
-    .sort(() => Math.random() - 0.5);
-
-  orden.forEach(item => {
-    const boton = document.createElement("button");
-    boton.className = "corazon-casilla";
-    boton.textContent = "💖";
-    boton.setAttribute("aria-label", "Descubrir mensaje secreto");
-
-    boton.addEventListener("click", () => {
-      if (descubiertos.has(item.indice)) return;
-      descubiertos.add(item.indice);
-      boton.classList.add("descubierto");
-      boton.textContent = item.mensaje;
-      boton.disabled = true;
-
-      const total = descubiertos.size;
-      document.getElementById("puntuacion").textContent = total;
-      document.getElementById("barra").style.width = (total / 6 * 100) + "%";
-      document.getElementById("mensajeJuego").textContent =
-        total === 6
-          ? "¡Encontraste todos los mensajes! Te ganaste una lluvia de corazones. 💖"
-          : "¡Descubriste un mensaje! Sigue buscando. 💕";
-
-      crearLluvia(4);
+    const petalMaterial = new THREE.MeshStandardMaterial({
+      color: [0xff8dcf, 0xffc4f1, 0xd3a3ff, 0xffe0a6][Math.floor(Math.random() * 4)],
+      emissive: 0x481344,
+      emissiveIntensity: 0.4,
+      roughness: 0.5
     });
 
-    tablero.appendChild(boton);
-  });
-}
-
-document.getElementById("reiniciarJuego").addEventListener("click", iniciarJuego);
-iniciarJuego();
-
-/* CARTA ANIMADA */
-const carta =
-  "Mi preciosa Nohemi:\n\n" +
-  "Quiero que sepas lo importante que eres para mí. A veces las palabras no alcanzan para explicar todo lo que siento, pero aun así quiero intentarlo.\n\n" +
-  "Me encanta saber que compartimos una historia y que todavía tenemos tantos momentos por vivir. No necesito que todos los días sean perfectos; deseo que podamos tratarnos con cariño, escucharnos y seguir construyendo recuerdos bonitos.\n\n" +
-  "Gracias por ser parte de mi vida y por inspirarme a crear este pequeño regalo. Cada detalle de esta página lo preparé pensando en ti.\n\n" +
-  "Si pudiera pedir algo, sería seguir sumando momentos contigo, aprendiendo juntos y encontrando razones para sonreír.\n\n" +
-  "Te mando un abrazo lleno de cariño y un beso enorme.\n\n" +
-  "Con todo mi amor. ❤️";
-
-let cartaAbierta = false;
-let temporizadorCarta;
-
-function abrirLaCarta() {
-  const texto = document.getElementById("textoCarta");
-  const botonSobre = document.getElementById("abrirCarta");
-  const repetir = document.getElementById("volverCarta");
-
-  clearInterval(temporizadorCarta);
-  texto.classList.remove("oculto");
-  repetir.classList.add("oculto");
-  botonSobre.textContent = "💗";
-  botonSobre.disabled = true;
-  texto.textContent = "";
-  cartaAbierta = true;
-
-  let indice = 0;
-  temporizadorCarta = setInterval(() => {
-    texto.textContent += carta.charAt(indice);
-    indice++;
-    if (indice >= carta.length) {
-      clearInterval(temporizadorCarta);
-      botonSobre.disabled = false;
-      repetir.classList.remove("oculto");
-      crearLluvia(12);
+    for (let p = 0; p < 6; p++) {
+      const angle = p * Math.PI / 3;
+      const petal = new THREE.Mesh(
+        new THREE.SphereGeometry(0.105, 10, 8),
+        petalMaterial
+      );
+      petal.position.set(Math.cos(angle) * 0.12, 0.12, Math.sin(angle) * 0.12);
+      petal.scale.set(1, 0.65, 1.45);
+      petal.rotation.y = -angle;
+      flower.add(petal);
     }
-  }, 28);
-}
 
-document.getElementById("abrirCarta").addEventListener("click", abrirLaCarta);
-document.getElementById("volverCarta").addEventListener("click", () => {
-  document.getElementById("textoCarta").classList.add("oculto");
-  document.getElementById("textoCarta").textContent = "";
-  document.getElementById("volverCarta").classList.add("oculto");
-  document.getElementById("abrirCarta").textContent = "💌";
-  abrirLaCarta();
-});
+    const centerFlower = new THREE.Mesh(
+      new THREE.SphereGeometry(0.09, 12, 10),
+      new THREE.MeshStandardMaterial({
+        color: 0xffe7a0,
+        emissive: 0xffbb39,
+        emissiveIntensity: 1.2
+      })
+    );
+    centerFlower.position.y = 0.12;
+    flower.add(centerFlower);
 
-/* PROMESAS Y SECRETOS */
-document.querySelectorAll("[data-secreto]").forEach(boton => {
-  boton.addEventListener("click", () => {
-    document.getElementById("revelacion").textContent = boton.dataset.secreto;
-    crearLluvia(5);
-  });
-});
-
-/* MÚSICA: SE CARGA SOLO CUANDO SE PULSA EL BOTÓN */
-document.getElementById("cargarMusica").addEventListener("click", () => {
-  const reproductor = document.getElementById("reproductor");
-
-  if (reproductor.querySelector("iframe")) {
-    reproductor.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
+    flower.scale.setScalar(scale);
+    world.add(flower);
+    flowers.push(flower);
   }
 
-  const iframe = document.createElement("iframe");
-  iframe.title = "Tutu, de Camilo y Pedro Capó";
-  iframe.src = "https://www.youtube-nocookie.com/embed/5AkDqm-cEgg?playsinline=1&rel=0";
-  iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-  iframe.allowFullscreen = true;
-  iframe.referrerPolicy = "strict-origin-when-cross-origin";
-  reproductor.appendChild(iframe);
-  document.getElementById("cargarMusica").textContent = "🎵 Reproductor cargado";
-});
+  for (let i = 0; i < 36; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const b = 0.4 + Math.random() * 2.3;
+    crearFlor(
+      Math.sin(b) * Math.cos(a),
+      Math.cos(b),
+      Math.sin(b) * Math.sin(a),
+      0.55 + Math.random() * 0.6
+    );
+  }
 
-/* VOLVER A EXPLORAR */
-document.getElementById("otraVez").addEventListener("click", () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  document.getElementById("portada").classList.remove("oculta");
-  crearLluvia(25);
-});
+  // Lugares secretos flotantes y clicables.
+  const clickable = [];
+
+  function crearPortal(nombre, tipo, color, x, y, z, size) {
+    const group = new THREE.Group();
+    group.position.set(x, y, z);
+
+    const orb = new THREE.Mesh(
+      new THREE.SphereGeometry(size, 32, 32),
+      new THREE.MeshStandardMaterial({
+        color,
+        emissive: color,
+        emissiveIntensity: 0.9,
+        metalness: 0.15,
+        roughness: 0.25
+      })
+    );
+    orb.userData.secret = tipo;
+    orb.userData.secretName = nombre;
+    group.add(orb);
+
+    const glow = new THREE.Mesh(
+      new THREE.SphereGeometry(size * 1.45, 24, 24),
+      new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.13
+      })
+    );
+    group.add(glow);
+
+    const orbit = new THREE.Mesh(
+      new THREE.TorusGeometry(size * 1.45, 0.025, 8, 48),
+      new THREE.MeshBasicMaterial({ color: 0xffd6fa })
+    );
+    orbit.rotation.x = Math.PI / 2.5;
+    group.add(orbit);
+
+    world.add(group);
+    clickable.push(orb);
+    return group;
+  }
+
+  const portals = [
+    crearPortal("Recuerdos", "recuerdos", 0xff6ec7, -5.2, 1.2, 1.2, 0.55),
+    crearPortal("Carta de amor", "carta", 0xa78bff, 5.0, 1.8, -0.6, 0.58),
+    crearPortal("Jardín secreto", "jardin", 0x64eac5, -4.2, -2.3, -1.2, 0.5),
+    crearPortal("Sorpresa", "secreto", 0xffca75, 4.1, -2.1, 1.3, 0.48)
+  ];
+
+  // Pequeñas luces que orbitan el mundo.
+  const orbs = [];
+  for (let i = 0; i < 50; i++) {
+    const orb = new THREE.Mesh(
+      new THREE.SphereGeometry(0.025 + Math.random() * 0.035, 8, 8),
+      new THREE.MeshBasicMaterial({
+        color: [0xff9ee5, 0x9caaff, 0xffe6a8][i % 3]
+      })
+    );
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 4 + Math.random() * 4;
+    orb.userData.angle = angle;
+    orb.userData.radius = radius;
+    orb.userData.speed = 0.08 + Math.random() * 0.2;
+    orb.userData.height = (Math.random() - 0.5) * 8;
+    world.add(orb);
+    orbs.push(orb);
+  }
+
+  // Controles sencillos: arrastra para girar; haz clic en un portal para abrirlo.
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  let isDragging = false;
+  let downX = 0;
+  let downY = 0;
+  let lastX = 0;
+  let lastY = 0;
+  let dragDistance = 0;
+
+  renderer.domElement.addEventListener("pointerdown", event => {
+    isDragging = true;
+    downX = lastX = event.clientX;
+    downY = lastY = event.clientY;
+    dragDistance = 0;
+    renderer.domElement.setPointerCapture?.(event.pointerId);
+  });
+
+  renderer.domElement.addEventListener("pointermove", event => {
+    if (!isDragging) return;
+    const dx = event.clientX - lastX;
+    const dy = event.clientY - lastY;
+    dragDistance += Math.abs(dx) + Math.abs(dy);
+    world.rotation.y += dx * 0.005;
+    world.rotation.x += dy * 0.003;
+    world.rotation.x = Math.max(-0.65, Math.min(0.65, world.rotation.x));
+    lastX = event.clientX;
+    lastY = event.clientY;
+  });
+
+  function pointerUp(event) {
+    if (!isDragging) return;
+    isDragging = false;
+
+    if (dragDistance < 8) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(pointer, camera);
+      const hits = raycaster.intersectObjects(clickable, false);
+      if (hits.length) {
+        abrirPanel(hits[0].object.userData.secret);
+      } else {
+        mostrarToast("Explora las esferas brillantes para descubrir secretos ✨");
+      }
+    }
+  }
+
+  renderer.domElement.addEventListener("pointerup", pointerUp);
+  renderer.domElement.addEventListener("pointercancel", () => {
+    isDragging = false;
+  });
+
+  renderer.domElement.addEventListener("wheel", event => {
+    camera.position.z += event.deltaY * 0.006;
+    camera.position.z = Math.max(8, Math.min(20, camera.position.z));
+  }, { passive: true });
+
+  // Animación continua.
+  const clock = new THREE.Clock();
+
+  function animar() {
+    requestAnimationFrame(animar);
+    const t = clock.getElapsedTime();
+
+    planet.rotation.y += 0.0008;
+    atmosphere.rotation.y -= 0.0004;
+    ring.rotation.z += 0.0004;
+
+    floatingHearts.forEach((heart, i) => {
+      heart.position.y += Math.sin(t * 1.2 + i) * 0.0008;
+      heart.rotation.y += 0.008;
+    });
+
+    flowers.forEach((flower, i) => {
+      flower.rotation.z = Math.sin(t * 0.6 + i) * 0.05;
+    });
+
+    portals.forEach((portal, i) => {
+      portal.rotation.y += 0.004 + i * 0.0005;
+      portal.position.y += Math.sin(t * 1.1 + i * 2) * 0.0015;
+    });
+
+    orbs.forEach(orb => {
+      orb.userData.angle += orb.userData.speed * 0.006;
+      orb.position.x = Math.cos(orb.userData.angle) * orb.userData.radius;
+      orb.position.z = Math.sin(orb.userData.angle) * orb.userData.radius;
+      orb.position.y = orb.userData.height + Math.sin(t + orb.userData.angle) * 0.25;
+    });
+
+    stars.rotation.y += 0.00004;
+    renderer.render(scene, camera);
+  }
+  animar();
+
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+})();
 </script>
 </body>
 </html>
