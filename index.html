@@ -1,11 +1,12 @@
+
 <!-- Música de fondo de Hectomi -->
 <video
   id="musicaTutu"
-  src="tutu.mp4"
+  src="Tutu.mp4.mp4"
   loop
   playsinline
   preload="auto"
-  style="display:none;"
+  style="display: none;"
 ></video>
 
 <button id="botonMusica" aria-label="Activar música">
@@ -19,9 +20,9 @@
     right: 14px;
     z-index: 9999;
     padding: 10px 14px;
-    border: 1px solid rgba(255,255,255,.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 25px;
-    background: rgba(35, 15, 45, .8);
+    background: rgba(35, 15, 45, 0.8);
     color: white;
     font-size: 13px;
     cursor: pointer;
@@ -44,6 +45,7 @@
       }
     } catch (error) {
       boton.textContent = "🎵 Toca para reproducir";
+      console.error("No se pudo reproducir Tutu:", error);
     }
   });
 
