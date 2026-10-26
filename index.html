@@ -216,7 +216,12 @@ onAuthStateChanged(auth,async u=>{
  $('login').classList.add('hidden');
  ['top','controls','hint','pad'].forEach(x=>$(x).classList.remove('hidden'));
  $('who').textContent=u.email||'';
- startWorld();startMessages();startPresence();startInvites();
+ startWorld();
+startMessages();
+startPresence();
+startInvites();
+startPlayerSync();
+publishMyPosition(true);
  try{await $('music').play();$('musicBtn').textContent='♫ Pausar'}
  catch{$('musicBtn').textContent='♫ Reproducir';toast('Pulsa Música para escuchar Tutu.')}
 });
@@ -235,6 +240,63 @@ counter();setInterval(counter,1000);
 
 /* Mundo abierto */
 let scene,camera,renderer,orbit,player,partner,started=false;
+ let lastPositionSent = 0;
+
+function startPlayerSync() {
+  if (!user || !player || !partner) return;
+
+  const otherUid = allowed.find(uid => uid !== user.uid);
+  if (!otherUid) return;
+
+  const unsubscribe = onSnapshot(
+    doc(db, 'players', otherUid),
+    snapshot => {
+      if (!snapshot.exists() || !partner) return;
+
+      const p = snapshot.data();
+
+      if (
+        typeof p.x !== 'number' ||
+        typeof p.y !== 'number' ||
+        typeof p.z !== 'number'
+      ) return;
+
+      partner.position.set(p.x, p.y, p.z);
+
+      if (typeof p.rotationY === 'number') {
+        partner.rotation.y = p.rotationY;
+      }
+    },
+    error => {
+      console.error('Error sincronizando personaje:', error);
+      toast('No se pudo sincronizar el personaje. Revisa Firebase.');
+    }
+  );
+
+  unsubs.push(unsubscribe);
+}
+
+async function publishMyPosition(force = false) {
+  if (!user || !player) return;
+
+  const now = Date.now();
+  if (!force && now - lastPositionSent < 250) return;
+
+  lastPositionSent = now;
+
+  try {
+    await setDoc(doc(db, 'players', user.uid), {
+      x: player.position.x,
+      y: player.position.y,
+      z: player.position.z,
+      rotationY: player.rotation.y,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+  } catch (error) {
+    console.error('Error publicando posición:', error);
+    toast('No se pudo guardar tu posición en Firebase.');
+  }
+}
 function startWorld(){
  if(started)return;started=true;
  renderer=new THREE.WebGLRenderer({canvas:$('world'),antialias:true});
@@ -403,14 +465,17 @@ function startWorld(){
    player.rotation.y=Math.atan2(dir.x,dir.z);
    orbit.target.lerp(new THREE.Vector3(player.position.x,1,player.position.z),.12);
   }
-  orbit.update();renderer.render(scene,camera);
+
+  publishMyPosition();
+
+  orbit.update();
+  renderer.render(scene,camera);
  }
  animate();
  addEventListener('resize',()=>{
   camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);
  });
 }
-
 /* Controles de movimiento */
 addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
 addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
