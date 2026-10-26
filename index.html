@@ -5,332 +5,408 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hectomi ❤️ Nuestro mundo</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;overflow:hidden;background:#07101b;color:white;font-family:Arial,sans-serif}
+body{margin:0;overflow:hidden;background:#081323;color:white;font-family:Arial,sans-serif}
 #world{position:fixed;inset:0}
-#ui{position:fixed;inset:0;pointer-events:none}
-.panel{background:#101827d9;border:1px solid #ffffff25;border-radius:16px;padding:14px;backdrop-filter:blur(10px)}
-#title{position:absolute;top:14px;left:14px;max-width:calc(100% - 28px)}
-#title h1{margin:0 0 5px;color:#ff9fbf;font-size:22px}
-#title p{margin:0;font-size:12px;color:#e2dce5}
-#help{position:absolute;right:14px;top:14px;width:220px;font-size:12px;line-height:1.7}
-#actions{position:absolute;left:14px;bottom:14px;display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto}
-button{border:0;border-radius:12px;padding:11px 14px;background:#ed5d94;color:white;font-weight:bold;cursor:pointer}
-button.secondary{background:#26354b}
-#chat{position:absolute;bottom:14px;right:14px;width:min(320px,calc(100% - 28px));pointer-events:auto}
-#chat form{display:flex;gap:6px;margin-top:8px}
-#message{min-width:0;width:100%;padding:10px;border-radius:9px;border:1px solid #ffffff35;background:#080f1b;color:white}
-#feed{font-size:13px;max-height:90px;overflow:auto}
-#bubble{position:absolute;display:none;transform:translate(-50%,-100%);background:#fff;color:#392234;padding:9px 13px;border-radius:14px;font-size:13px;max-width:220px;box-shadow:0 3px 20px #0008}
-#status{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;color:#ffd6e5;text-align:center}
+.panel{background:#111a2be8;border:1px solid #ffffff30;border-radius:14px;padding:12px}
+#brand{position:fixed;top:12px;left:12px;z-index:2;pointer-events:none}
+#brand h1{margin:0;color:#ff9fc4;font-size:23px}
+#help{position:fixed;top:12px;right:12px;width:190px;font-size:12px;line-height:1.7;z-index:2;pointer-events:none}
+#buttons{position:fixed;bottom:12px;left:12px;display:flex;flex-wrap:wrap;gap:7px;z-index:3}
+button{border:0;border-radius:10px;padding:10px 12px;background:#df568d;color:white;font-weight:bold;cursor:pointer}
+button.secondary{background:#30405a}
+#chat{position:fixed;right:12px;bottom:12px;width:min(300px,calc(100% - 24px));z-index:2}
+#feed{font-size:12px;margin-top:8px;overflow-wrap:anywhere}
+#chat form{display:flex;gap:5px;margin-top:8px}
+#msg{width:100%;min-width:0;padding:9px;border-radius:8px;border:1px solid #ffffff40;background:#09111f;color:white}
+#status{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;background:#111a2b;padding:16px;border-radius:12px;text-align:center;max-width:90%}
+#modal{position:fixed;display:none;inset:0;background:#0009;z-index:10;align-items:center;justify-content:center;padding:16px}
+#modal>div{max-width:400px;background:#171c30;border-radius:18px;padding:22px;text-align:center}
+#modal p{line-height:1.5}
+#modal button{margin:4px}
 @media(max-width:650px){
- #help{top:auto;bottom:160px;right:12px;width:155px;font-size:11px}
- #title h1{font-size:18px}
- #title p{max-width:200px}
- #chat{bottom:75px}
- #actions{bottom:12px}
- #actions button{padding:10px;font-size:12px}
+ #brand h1{font-size:18px}
+ #help{top:72px;width:145px;font-size:10px}
+ #chat{bottom:78px;width:230px}
+ #buttons{bottom:10px;left:10px;max-width:calc(100% - 20px)}
+ #buttons button{font-size:11px;padding:9px}
 }
 </style>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 </head>
+
 <body>
 <div id="world"></div>
-<div id="ui">
-  <div id="title" class="panel">
-    <h1>Hectomi ❤️</h1>
-    <p>Un lugar especial para nosotros · Explora libremente</p>
+
+<header id="brand" class="panel">
+  <h1>Hectomi ❤️</h1>
+  <div>Nuestro mundo · Un lugar para compartir</div>
+</header>
+
+<div id="help" class="panel">
+  <b>🎮 Controles</b><br>
+  W A S D: caminar<br>
+  Ratón: girar la cámara<br>
+  Rueda: acercar o alejar<br>
+  En celular: desliza para mirar
+</div>
+
+<div id="buttons">
+  <button id="house">🏡 Casa</button>
+  <button id="garden" class="secondary">🌹 Jardín</button>
+  <button id="lake" class="secondary">🌙 Lago</button>
+  <button id="bed" class="secondary">🛏️ Habitación</button>
+  <button id="invite">💗 Invitar</button>
+  <button id="stop" class="secondary">✋ Detener</button>
+</div>
+
+<div id="chat" class="panel">
+  <b>💌 Mensaje</b>
+  <div id="feed">Escribe un mensaje bonito.</div>
+  <form id="chatForm">
+    <input id="msg" maxlength="180" placeholder="Te quiero porque…" autocomplete="off">
+    <button>Enviar</button>
+  </form>
+</div>
+
+<div id="status">Preparando nuestro mundo…</div>
+
+<div id="modal">
+  <div>
+    <h2 style="color:#ff9fc4">💗 Una invitación</h2>
+    <p id="modalText">¿Quieres compartir un momento romántico conmigo?</p>
+    <button id="accept">❤️ Aceptar</button>
+    <button id="decline" class="secondary">Ahora no</button>
   </div>
-  <div id="help" class="panel">
-    <b>Cómo explorar</b><br>
-    W A S D o flechas: caminar<br>
-    Arrastra el ratón: girar cámara<br>
-    Rueda del ratón: acercar o alejar<br>
-    En celular: arrastra para mirar
-  </div>
-  <div id="actions">
-    <button id="home">🏡 Casa</button>
-    <button id="flowers" class="secondary">🌹 Jardín</button>
-    <button id="night" class="secondary">🌙 Noche</button>
-  </div>
-  <div id="chat" class="panel">
-    <b>💌 Mensaje de este momento</b>
-    <div id="feed">Aquí puedes escribir un mensaje en esta sesión.</div>
-    <form id="form">
-      <input id="message" maxlength="180" placeholder="Escribe algo bonito…" autocomplete="off">
-      <button>Enviar</button>
-    </form>
-  </div>
-  <div id="bubble"></div>
-  <div id="status">Preparando nuestro mundo…</div>
 </div>
 
 <script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-const root = document.getElementById('world');
-const status = document.getElementById('status');
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x081323);
-scene.fog = new THREE.Fog(0x081323, 28, 100);
+const $ = id => document.getElementById(id);
+const status = $('status');
 
-const camera = new THREE.PerspectiveCamera(65, innerWidth/innerHeight, 0.1, 300);
-camera.position.set(0, 5, 11);
+try {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x081323);
+  scene.fog = new THREE.Fog(0x081323, 35, 110);
 
-const renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
-renderer.setSize(innerWidth, innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-root.appendChild(renderer.domElement);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.target.set(0, 1, 0);
-controls.minDistance = 3;
-controls.maxDistance = 20;
-controls.maxPolarAngle = Math.PI * 0.48;
-controls.enablePan = false;
-
-scene.add(new THREE.HemisphereLight(0xb8d9ff, 0x20351e, 2));
-const moon = new THREE.DirectionalLight(0xffd8e7, 2.4);
-moon.position.set(-8, 14, 7);
-moon.castShadow = true;
-scene.add(moon);
-
-const mat = (color, roughness=0.9) =>
-  new THREE.MeshStandardMaterial({color, roughness});
-
-const ground = new THREE.Mesh(
-  new THREE.PlaneGeometry(180,180),
-  mat(0x173b2d)
-);
-ground.rotation.x = -Math.PI/2;
-ground.receiveShadow = true;
-scene.add(ground);
-
-// Camino
-const path = new THREE.Mesh(
-  new THREE.PlaneGeometry(4,70),
-  mat(0x79604e)
-);
-path.rotation.x = -Math.PI/2;
-path.position.set(0,0.025,-17);
-scene.add(path);
-
-// Luces del jardín
-for(let i=0;i<34;i++){
-  const side = i%2===0 ? -1 : 1;
-  const z = 8 - Math.floor(i/2)*3.5;
-  const light = new THREE.PointLight(0xffa4c8, 2, 5);
-  light.position.set(side*(2.5+Math.random()*1.2),1,z);
-  scene.add(light);
-  const orb = new THREE.Mesh(
-    new THREE.SphereGeometry(0.09,12,12),
-    new THREE.MeshBasicMaterial({color:0xffa8d1})
+  const camera = new THREE.PerspectiveCamera(
+    65, innerWidth / innerHeight, 0.1, 250
   );
-  orb.position.copy(light.position);
-  scene.add(orb);
-}
+  camera.position.set(0, 5, 10);
 
-// Árboles
-function tree(x,z,scale=1){
-  const trunk = new THREE.Mesh(
-    new THREE.CylinderGeometry(.16*scale,.24*scale,2.1*scale,7),
-    mat(0x563a2a)
+  const renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.shadowMap.enabled = true;
+  $('world').appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.target.set(0, 1, 0);
+  controls.minDistance = 3;
+  controls.maxDistance = 22;
+  controls.maxPolarAngle = Math.PI * 0.48;
+  controls.enablePan = false;
+
+  scene.add(new THREE.HemisphereLight(0xc8ddff, 0x26351f, 2));
+
+  const moon = new THREE.DirectionalLight(0xffd8e9, 2);
+  moon.position.set(-8, 15, 8);
+  moon.castShadow = true;
+  scene.add(moon);
+
+  const mat = color => new THREE.MeshStandardMaterial({color});
+
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(200, 200), mat(0x17402e)
   );
-  trunk.position.set(x,1.05*scale,z);
-  trunk.castShadow=true;
-  scene.add(trunk);
-  for(let i=0;i<3;i++){
-    const crown = new THREE.Mesh(
-      new THREE.IcosahedronGeometry((1.0-i*.12)*scale,1),
-      mat(i===1?0x235b42:0x2e704d)
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  // Caminos
+  function path(x,z,w,d) {
+    const p = new THREE.Mesh(
+      new THREE.PlaneGeometry(w,d), mat(0x78604e)
     );
-    crown.position.set(x,(2.1+i*.5)*scale,z);
-    crown.castShadow=true;
-    scene.add(crown);
+    p.rotation.x = -Math.PI/2;
+    p.position.set(x,0.025,z);
+    scene.add(p);
   }
-}
-for(let i=0;i<55;i++){
-  const z = 13-Math.random()*85;
-  const x = (5+Math.random()*16)*(Math.random()<.5?-1:1);
-  tree(x,z,.7+Math.random()*.8);
-}
+  path(0,-12,4,50);
+  path(12,-23,3,24);
 
-// Casa romántica
-const house = new THREE.Group();
-const wall = new THREE.Mesh(
-  new THREE.BoxGeometry(7,3.4,5),
-  mat(0xe2c8bb)
-);
-wall.position.y=1.7;
-wall.castShadow=true;
-wall.receiveShadow=true;
-house.add(wall);
-
-const roof = new THREE.Mesh(
-  new THREE.ConeGeometry(5.5,2.5,4),
-  mat(0x5c293c)
-);
-roof.position.set(0,4.5,0);
-roof.rotation.y=Math.PI/4;
-roof.scale.set(1,1,0.8);
-roof.castShadow=true;
-house.add(roof);
-
-const door = new THREE.Mesh(
-  new THREE.BoxGeometry(1.1,2.2,.15),
-  mat(0x57372d)
-);
-door.position.set(0,1.1,2.56);
-house.add(door);
-
-for(const x of [-2.2,2.2]){
-  const window = new THREE.Mesh(
-    new THREE.BoxGeometry(1.1,1.1,.12),
-    new THREE.MeshBasicMaterial({color:0xffd78a})
+  // Lago
+  const water = new THREE.Mesh(
+    new THREE.CircleGeometry(7,48),
+    new THREE.MeshStandardMaterial({
+      color:0x17627a,roughness:.25,metalness:.2
+    })
   );
-  window.position.set(x,2,2.57);
-  house.add(window);
-}
-house.position.set(0,0,-15);
-scene.add(house);
+  water.rotation.x=-Math.PI/2;
+  water.position.set(12,.04,-31);
+  scene.add(water);
 
-// Personaje provisional: silueta 3D para probar el movimiento
-const player = new THREE.Group();
-const skin = mat(0xe8b89a);
-const clothes = mat(0x42283f);
-const body = new THREE.Mesh(
-  new THREE.CapsuleGeometry(.38,.85,5,10), clothes
-);
-body.position.y=1.05;
-body.castShadow=true;
-player.add(body);
+  // Casa
+  const house = new THREE.Group();
 
-const head = new THREE.Mesh(
-  new THREE.SphereGeometry(.28,20,16),skin
-);
-head.position.y=1.9;
-head.castShadow=true;
-player.add(head);
-
-const hair = new THREE.Mesh(
-  new THREE.SphereGeometry(.29,16,12),
-  mat(0x30201e)
-);
-hair.scale.set(1,.65,1);
-hair.position.set(0,2.04,0);
-player.add(hair);
-
-const legs = [];
-for(const x of [-.17,.17]){
-  const leg = new THREE.Mesh(
-    new THREE.CapsuleGeometry(.12,.55,4,8),mat(0x202b43)
+  const walls = new THREE.Mesh(
+    new THREE.BoxGeometry(7,3.4,5),mat(0xe5cdbf)
   );
-  leg.position.set(x,.37,0);
-  player.add(leg);
-  legs.push(leg);
-}
-scene.add(player);
-player.position.set(0,0,5);
+  walls.position.y=1.7;
+  house.add(walls);
 
-// Corazones flotantes decorativos
-const hearts=[];
-for(let i=0;i<18;i++){
-  const heart = new THREE.Mesh(
-    new THREE.SphereGeometry(.12,10,8),
-    new THREE.MeshBasicMaterial({color:0xff679d})
+  const roof = new THREE.Mesh(
+    new THREE.ConeGeometry(5.5,2.5,4),mat(0x682b48)
   );
-  heart.position.set((Math.random()-.5)*16,1+Math.random()*5,-Math.random()*30);
-  scene.add(heart);
-  hearts.push(heart);
-}
+  roof.position.y=4.4;
+  roof.rotation.y=Math.PI/4;
+  house.add(roof);
 
-// Controles: dirección del personaje relativa a la cámara
-const keys={};
-addEventListener('keydown',e=>{
-  keys[e.key.toLowerCase()]=true;
-  if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase())) e.preventDefault();
-},{passive:false});
-addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+  const door = new THREE.Mesh(
+    new THREE.BoxGeometry(1.1,2.2,.15),mat(0x54352c)
+  );
+  door.position.set(0,1.1,2.55);
+  house.add(door);
 
-let last=performance.now();
-function animate(now){
-  requestAnimationFrame(animate);
-  const dt=Math.min((now-last)/1000,.05);
-  last=now;
+  for (const x of [-2,2]) {
+    const windowMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(1,1,.12),
+      new THREE.MeshBasicMaterial({color:0xffd78a})
+    );
+    windowMesh.position.set(x,2,2.57);
+    house.add(windowMesh);
+  }
+  house.position.set(0,0,-14);
+  scene.add(house);
 
-  const forward = new THREE.Vector3();
-  camera.getWorldDirection(forward);
-  forward.y=0;
-  forward.normalize();
-  const right = new THREE.Vector3(forward.z,0,-forward.x);
-  const move = new THREE.Vector3();
+  // Habitación con cama
+  const room = new THREE.Group();
+  const floor = new THREE.Mesh(
+    new THREE.BoxGeometry(8,.2,7),mat(0x694653)
+  );
+  floor.position.y=.1;
+  room.add(floor);
 
-  if(keys.w||keys.arrowup) move.add(forward);
-  if(keys.s||keys.arrowdown) move.sub(forward);
-  if(keys.d||keys.arrowright) move.add(right);
-  if(keys.a||keys.arrowleft) move.sub(right);
+  const bedBase = new THREE.Mesh(
+    new THREE.BoxGeometry(3.2,.45,4.2),mat(0x583348)
+  );
+  bedBase.position.set(0,.42,0);
+  room.add(bedBase);
 
-  if(move.lengthSq()>0){
-    move.normalize();
-    player.position.addScaledVector(move,dt*4);
-    player.rotation.y=Math.atan2(move.x,move.z);
-    legs.forEach((leg,i)=>leg.rotation.x=Math.sin(now*.012+i*Math.PI)*.6);
-    controls.target.x += move.x*dt*4;
-    controls.target.z += move.z*dt*4;
-  } else {
-    legs.forEach(leg=>leg.rotation.x*=.8);
+  const mattress = new THREE.Mesh(
+    new THREE.BoxGeometry(3.05,.3,4.05),mat(0xf4dce7)
+  );
+  mattress.position.set(0,.8,0);
+  room.add(mattress);
+
+  const headboard = new THREE.Mesh(
+    new THREE.BoxGeometry(3.3,1.3,.2),mat(0x573047)
+  );
+  headboard.position.set(0,1,-2.05);
+  room.add(headboard);
+
+  for (const x of [-.8,.8]) {
+    const pillow = new THREE.Mesh(
+      new THREE.BoxGeometry(1,.15,.65),mat(0xffffff)
+    );
+    pillow.position.set(x,1,-1.4);
+    room.add(pillow);
+  }
+  room.position.set(24,0,-13);
+  scene.add(room);
+
+  // Árboles
+  function tree(x,z,s=1) {
+    const trunk = new THREE.Mesh(
+      new THREE.CylinderGeometry(.14*s,.23*s,1.8*s,8),
+      mat(0x583b2b)
+    );
+    trunk.position.set(x,.9*s,z);
+    scene.add(trunk);
+
+    for (let i=0;i<3;i++) {
+      const crown = new THREE.Mesh(
+        new THREE.IcosahedronGeometry((.9-i*.1)*s,1),
+        mat(i===1?0x245b41:0x2c704b)
+      );
+      crown.position.set(x,(1.9+i*.45)*s,z);
+      scene.add(crown);
+    }
   }
 
-  hearts.forEach((h,i)=>{
-    h.position.y += Math.sin(now*.001+i)*dt*.12;
-    h.rotation.y += dt*.5;
+  for (let i=0;i<65;i++) {
+    const x=(6+Math.random()*16)*(Math.random()<.5?-1:1);
+    const z=12-Math.random()*80;
+    tree(x,z,.7+Math.random()*.6);
+  }
+
+  // Luces y corazones
+  for (let i=0;i<22;i++) {
+    const light=new THREE.PointLight(0xff9ec8,1.6,5);
+    light.position.set(i%2?3:-3,1,8-i*2.8);
+    scene.add(light);
+  }
+
+  const hearts=[];
+  for (let i=0;i<20;i++) {
+    const h=new THREE.Mesh(
+      new THREE.SphereGeometry(.12,10,8),
+      new THREE.MeshBasicMaterial({color:0xff679d})
+    );
+    h.position.set((Math.random()-.5)*20,1+Math.random()*5,-Math.random()*40);
+    scene.add(h);
+    hearts.push(h);
+  }
+
+  // Personaje provisional para probar el mundo
+  const player=new THREE.Group();
+  const body=new THREE.Mesh(
+    new THREE.CapsuleGeometry(.34,.75,5,10),mat(0x472b45)
+  );
+  body.position.y=1.1;
+  player.add(body);
+
+  const head=new THREE.Mesh(
+    new THREE.SphereGeometry(.26,18,14),mat(0xe8b89a)
+  );
+  head.position.y=1.9;
+  player.add(head);
+
+  const hair=new THREE.Mesh(
+    new THREE.SphereGeometry(.28,16,12),mat(0x30201e)
+  );
+  hair.scale.y=.7;
+  hair.position.y=2.04;
+  player.add(hair);
+
+  const legs=[];
+  for (const x of [-.15,.15]) {
+    const leg=new THREE.Mesh(
+      new THREE.CapsuleGeometry(.11,.55,4,8),mat(0x263149)
+    );
+    leg.position.set(x,.38,0);
+    player.add(leg);
+    legs.push(leg);
+  }
+  player.position.set(0,0,5);
+  scene.add(player);
+
+  const keys={};
+  addEventListener('keydown',e=>{
+    keys[e.key.toLowerCase()]=true;
+  });
+  addEventListener('keyup',e=>{
+    keys[e.key.toLowerCase()]=false;
   });
 
-  controls.update();
-  renderer.render(scene,camera);
+  let last=performance.now();
+  function animate(now) {
+    requestAnimationFrame(animate);
+    const dt=Math.min((now-last)/1000,.05);
+    last=now;
+
+    const forward=new THREE.Vector3();
+    camera.getWorldDirection(forward);
+    forward.y=0;
+    forward.normalize();
+
+    const right=new THREE.Vector3(forward.z,0,-forward.x);
+    const move=new THREE.Vector3();
+
+    if(keys.w||keys.arrowup) move.add(forward);
+    if(keys.s||keys.arrowdown) move.sub(forward);
+    if(keys.d||keys.arrowright) move.add(right);
+    if(keys.a||keys.arrowleft) move.sub(right);
+
+    if(move.lengthSq()>0) {
+      move.normalize();
+      player.position.addScaledVector(move,dt*4);
+      player.rotation.y=Math.atan2(move.x,move.z);
+      controls.target.addScaledVector(move,dt*4);
+      legs.forEach((leg,i)=>{
+        leg.rotation.x=Math.sin(now*.012+i*Math.PI)*.5;
+      });
+    } else {
+      legs.forEach(leg=>leg.rotation.x*=.8);
+    }
+
+    hearts.forEach((h,i)=>{
+      h.position.y+=Math.sin(now*.001+i)*dt*.1;
+      h.rotation.y+=dt*.5;
+    });
+
+    controls.update();
+    renderer.render(scene,camera);
+  }
+
+  requestAnimationFrame(animate);
+
+  addEventListener('resize',()=>{
+    camera.aspect=innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+  });
+
+  function teleport(x,z,tx,tz) {
+    player.position.set(x,0,z);
+    controls.target.set(tx,1,tz);
+  }
+
+  $('house').onclick=()=>teleport(0,0,0,-14);
+  $('garden').onclick=()=>teleport(0,0,0,0);
+  $('lake').onclick=()=>teleport(12,0,12,-31);
+  $('bed').onclick=()=>teleport(24,0,24,-13);
+
+  $('chatForm').onsubmit=e=>{
+    e.preventDefault();
+    const input=$('msg');
+    if(!input.value.trim()) return;
+    $('feed').textContent='Tú: '+input.value.trim();
+    input.value='';
+  };
+
+  $('invite').onclick=()=>{
+    $('modal').style.display='flex';
+    $('modalText').textContent=
+      '¿Quieres compartir un momento romántico? En esta demo, la invitación no se envía a otro dispositivo.';
+  };
+
+  $('accept').onclick=()=>{
+    $('modal').style.display='none';
+    $('feed').textContent='❤️ Invitación aceptada en esta demostración.';
+  };
+
+  $('decline').onclick=()=>{
+    $('modal').style.display='none';
+    $('feed').textContent='No pasa nada. Podemos seguir explorando ❤️';
+  };
+
+  $('stop').onclick=()=>{
+    $('modal').style.display='none';
+    $('feed').textContent='Interacción detenida. ❤️';
+  };
+
+  status.textContent='¡Nuestro mundo está listo! ❤️';
+  setTimeout(()=>status.style.display='none',2500);
+
+} catch (error) {
+  console.error('Error cargando Hectomi:',error);
+  status.textContent='No se pudo cargar el mundo. Abre F12 → Console y comparte el error rojo.';
 }
-requestAnimationFrame(animate);
-
-addEventListener('resize',()=>{
-  camera.aspect=innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth,innerHeight);
-});
-
-document.getElementById('home').onclick=()=>{
-  player.position.set(0,0,-9);
-  controls.target.set(0,1,-12);
-};
-document.getElementById('flowers').onclick=()=>{
-  player.position.set(6,0,1);
-  controls.target.set(6,1,0);
-};
-document.getElementById('night').onclick=()=>{
-  const dark=scene.background.getHex()===0x081323;
-  scene.background.setHex(dark?0x21172d:0x081323);
-  scene.fog.color.copy(scene.background);
-};
-
-document.getElementById('form').addEventListener('submit',e=>{
-  e.preventDefault();
-  const input=document.getElementById('message');
-  const value=input.value.trim();
-  if(!value)return;
-  document.getElementById('feed').textContent='Tú: '+value;
-  const bubble=document.getElementById('bubble');
-  bubble.textContent=value;
-  bubble.style.display='block';
-  input.value='';
-  setTimeout(()=>bubble.style.display='none',5000);
-});
-
-status.textContent='¡Bienvenido a nuestro mundo! ❤️';
-setTimeout(()=>status.style.display='none',3500);
 </script>
 </body>
 </html>
