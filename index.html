@@ -1,54 +1,1267 @@
-<!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><meta name="theme-color" content="#101b2b"><title>Hectomi ❤️ — Nuestro mundo</title>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#170d27">
+<title>Hectomi ❤️ Nuestro universo</title>
+
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101b2b;color:#fff;font-family:system-ui,sans-serif;touch-action:none}#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%}
-#top{position:fixed;z-index:3;top:env(safe-area-inset-top,10px);left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}.glass{background:#101727d9;border:1px solid #ffffff30;border-radius:15px;padding:9px 12px;backdrop-filter:blur(8px)}#title{font-weight:800}#title span{color:#ffb6d0}#status{font-size:11px;color:#e9d9e8}#tools{display:flex;gap:6px;pointer-events:auto}button{color:#fff;background:#20233bd9;border:1px solid #ffffff35;border-radius:12px;padding:10px;font:600 13px system-ui;touch-action:manipulation}button:active{transform:scale(.97)}
-#help{position:fixed;z-index:3;top:78px;left:50%;transform:translateX(-50%);max-width:calc(100% - 24px);white-space:nowrap;font-size:11px;text-align:center}
-#joy{position:fixed;z-index:4;left:20px;bottom:max(22px,env(safe-area-inset-bottom));width:116px;height:116px;border:1px solid #ffffff50;border-radius:50%;background:#10172785;display:none;touch-action:none}#stick{position:absolute;left:31px;top:31px;width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#ffd5e4,#d96c9b);border:2px solid #fff8;pointer-events:none}
-#actions{position:fixed;z-index:4;right:15px;bottom:max(22px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:9px;align-items:flex-end}.action{min-width:108px;min-height:46px;background:#24172fe8;border-color:#ffc4db80}#sit{display:none;background:linear-gradient(120deg,#ffd0e1,#e775a6);color:#351328;border:0}
-#msg{position:fixed;z-index:5;display:none;bottom:150px;left:50%;transform:translateX(-50%);max-width:calc(100% - 28px);width:max-content;text-align:center;background:#101727ed;border:1px solid #ffffff35;border-radius:14px;padding:11px 14px;font-size:13px}
-#intro{position:fixed;z-index:9;inset:0;display:grid;place-items:center;padding:20px;background:#101b2be8}#card{max-width:440px;text-align:center;padding:26px 22px;background:#11182beF;border:1px solid #ffffff30;border-radius:24px}h1{font-size:clamp(34px,9vw,48px);margin:0}h1 span{color:#ffb6d0}#card p{font-size:14px;line-height:1.65;color:#e8dce9}#start{background:linear-gradient(120deg,#ffd0e1,#e775a6);color:#351328;border:0;padding:13px 20px;font-size:14px}
-#footer{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);z-index:2;font-size:10px;color:#ffffff9b;white-space:nowrap;pointer-events:none}
-@media(pointer:coarse){#joy{display:block}}@media(max-width:420px){#title{font-size:14px}#tools button{font-size:11px;padding:8px}#help{top:74px}}
-</style></head><body>
-<div id="game"></div><div id="top"><div class="glass"><div id="title">Hectomi <span>♥</span></div><div id="status">Nuestro pequeño mundo</div></div><div id="tools"><button id="cam">📷 Cámara</button><button id="quality">⚡ Gráficos: bajos</button></div></div>
-<div id="help" class="glass">Explora el jardín · Acércate a la banca para sentarte</div><div id="joy"><div id="stick"></div></div><div id="actions"><button id="sit" class="action">🪑 Sentarse</button><button id="wave" class="action">💗 Saludar</button></div><div id="msg" role="status"></div><div id="footer">WASD / flechas para caminar · Arrastra para mirar</div>
-<div id="intro"><div id="card"><h1>Hectomi <span>♥</span></h1><p>Un pequeño rincón para explorar, caminar entre árboles, flores y senderos, visitar el lago y descansar en la banca.</p><p><b>Computador:</b> WASD o flechas. <b>Celular:</b> mueve el joystick y arrastra la pantalla para girar la cámara.</p><p>Esta versión es una prueba de exploración individual. La conexión en vivo con Nohemí se añadirá después.</p><button id="start">Entrar a nuestro mundo ✨</button></div></div>
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-const root=document.querySelector('#game'),mobile=matchMedia('(pointer:coarse)').matches||/Android|iPhone|iPad/i.test(navigator.userAgent);
-const scene=new THREE.Scene();scene.background=new THREE.Color(0x91b9d4);scene.fog=new THREE.Fog(0x91b9d4,38,100);
-const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,150);
-const renderer=new THREE.WebGLRenderer({antialias:!mobile,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,mobile?.9:1.3));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;root.appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xd9efff,0x4d624a,2));const sun=new THREE.DirectionalLight(0xffe0b8,1.8);sun.position.set(-18,30,12);scene.add(sun);
-const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.95});
-const M={grass:mat(0x497a5a),path:mat(0xb6a084),water:mat(0x428da8),trunk:mat(0x674631),leaf:mat(0x2c684e),leaf2:mat(0x47815c),pink:mat(0xffa6c8),yellow:mat(0xffe6a0),wood:mat(0x86583c),stone:mat(0xb6b3ac),shirt:mat(0xf0a2bd),skin:mat(0xf0c5a9),pants:mat(0x344663),hair:mat(0x3c2630),shoe:mat(0xf6e8e4)};
-function add(g,m,x,y,z,parent=scene){const o=new THREE.Mesh(g,m);o.position.set(x,y,z);parent.add(o);return o}
-add(new THREE.PlaneGeometry(150,150),M.grass,0,-.12,0).rotation.x=-Math.PI/2;
-add(new THREE.PlaneGeometry(5,68),M.path,0,-.09,-17).rotation.x=-Math.PI/2;add(new THREE.PlaneGeometry(24,3.3),M.path,0,-.08,-9).rotation.x=-Math.PI/2;
-add(new THREE.CircleGeometry(8,32),M.stone,15,-.08,-17).rotation.x=-Math.PI/2;add(new THREE.CircleGeometry(7.5,32),M.water,15,-.035,-17).rotation.x=-Math.PI/2;
-const moon=add(new THREE.SphereGeometry(2.4,14,10),new THREE.MeshBasicMaterial({color:0xffe6bd}),-25,28,-48);
-const bench=new THREE.Group();scene.add(bench);bench.position.set(0,0,-5);
-add(new THREE.BoxGeometry(1.9,.13,.48),M.wood,0,.65,0,bench);add(new THREE.BoxGeometry(1.9,.7,.12),M.wood,0,1.05,-.22,bench);for(const x of [-.72,.72]){add(new THREE.BoxGeometry(.12,.55,.4),M.wood,x,.32,0,bench);add(new THREE.BoxGeometry(.12,.55,.4),M.wood,x,.88,-.22,bench)}
-const lampMat=mat(0x413a46),glow=new THREE.MeshBasicMaterial({color:0xffd89b});for(const [x,z] of [[-4,-2],[4,-13],[-5,-22],[9,-10],[20,-16]]){add(new THREE.CylinderGeometry(.06,.09,2.6,6),lampMat,x,1.3,z);add(new THREE.SphereGeometry(.18,7,5),glow,x,2.7,z)}
-const player=new THREE.Group();scene.add(player);player.position.set(0,0,3);
-add(new THREE.CapsuleGeometry(.31,.62,3,7),M.shirt,0,1.05,0,player);add(new THREE.SphereGeometry(.29,9,7),M.skin,0,1.68,0,player);add(new THREE.SphereGeometry(.31,9,7),M.hair,0,1.83,-.055,player);add(new THREE.BoxGeometry(.48,.38,.15),M.hair,0,1.57,.23,player);
-for(const x of [-.15,.15]){add(new THREE.CapsuleGeometry(.105,.62,2,5),M.pants,x,.48,0,player);add(new THREE.BoxGeometry(.2,.12,.34),M.shoe,x,.1,.07,player)}for(const x of [-.39,.39])add(new THREE.CapsuleGeometry(.09,.48,2,5),M.shirt,x,1.03,0,player);
-const trunkG=new THREE.CylinderGeometry(.22,.32,2.1,7),coneG=new THREE.ConeGeometry(1.45,3,7),coneG2=new THREE.ConeGeometry(1.12,2.4,7);
-for(let i=0;i<68;i++){let x,z,n=0;do{x=(Math.random()-.5)*72;z=(Math.random()-.5)*72;n++}while(n<35&&((Math.abs(x)<5.5&&z<7&&z>-36)||((x-15)**2+(z+17)**2<100)));const t=new THREE.Group();t.position.set(x,0,z);t.scale.setScalar(.72+Math.random()*.6);scene.add(t);add(trunkG,M.trunk,0,1.05,0,t);add(coneG,M.leaf,0,2.75,0,t);add(coneG2,M.leaf2,.1,3.65,0,t)}
-for(let i=0;i<105;i++){const x=(Math.random()-.5)*62,z=(Math.random()-.5)*62;if(Math.abs(x)<3.2&&z<4&&z>-34)continue;if((x-15)**2+(z+17)**2<78)continue;add(new THREE.CylinderGeometry(.02,.03,.32,4),M.leaf,x,.15,z);const fm=Math.random()>.5?M.pink:M.yellow;for(let j=0;j<4;j++){const a=j*Math.PI/2;add(new THREE.SphereGeometry(.1,5,4),fm,x+Math.cos(a)*.11,.31,z+Math.sin(a)*.11)}}
-const sign=new THREE.Group();scene.add(sign);sign.position.set(-4,0,-8);add(new THREE.BoxGeometry(.12,1.5,.12),M.trunk,0,.75,0,sign);add(new THREE.BoxGeometry(1.7,.65,.12),M.wood,0,1.4,0,sign);
-const c=document.createElement('canvas');c.width=512;c.height=180;const cx=c.getContext('2d');cx.fillStyle='#fce0eb';cx.font='bold 48px Georgia';cx.textAlign='center';cx.fillText('Tú + Yo ♥',256,100);const tex=new THREE.CanvasTexture(c);const face=add(new THREE.PlaneGeometry(1.5,.5),new THREE.MeshBasicMaterial({map:tex,transparent:true}),0,1.4,.071,sign);
-const keys=new Set();addEventListener('keydown',e=>{if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase()))e.preventDefault();keys.add(e.key.toLowerCase())});addEventListener('keyup',e=>keys.delete(e.key.toLowerCase()));
-const joy=document.querySelector('#joy'),stick=document.querySelector('#stick');let jx=0,jy=0,jdown=false;function moveJoy(e){const r=joy.getBoundingClientRect();let dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),d=Math.hypot(dx,dy),max=36;if(d>max){dx=dx/d*max;dy=dy/d*max}jx=dx/max;jy=dy/max;stick.style.transform=`translate(${dx}px,${dy}px)`}joy.addEventListener('pointerdown',e=>{jdown=true;joy.setPointerCapture(e.pointerId);moveJoy(e)});joy.addEventListener('pointermove',e=>{if(jdown)moveJoy(e)});function endJoy(){jdown=false;jx=jy=0;stick.style.transform='translate(0,0)'}joy.addEventListener('pointerup',endJoy);joy.addEventListener('pointercancel',endJoy);
-let yaw=0,pitch=.2,drag=false,lx=0,ly=0;renderer.domElement.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;ly=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});renderer.domElement.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lx,dy=e.clientY-ly;lx=e.clientX;ly=e.clientY;yaw-=dx*.005;pitch=THREE.MathUtils.clamp(pitch+dy*.003,-.1,.7)});renderer.domElement.addEventListener('pointerup',()=>drag=false);renderer.domElement.addEventListener('pointercancel',()=>drag=false);
-let seated=false,near=false,camFar=false,qualityLow=true;const msg=document.querySelector('#msg');let timer;function say(s){msg.textContent=s;msg.style.display='block';clearTimeout(timer);timer=setTimeout(()=>msg.style.display='none',3000)}
-const sit=document.querySelector('#sit');sit.addEventListener('click',()=>{if(!near&&!seated){say('Acércate un poco más a la banca ❤️');return}seated=!seated;if(seated){player.position.set(bench.position.x,0,bench.position.z+.72);player.rotation.y=Math.PI;say('Un descanso en nuestra banca… ❤️')}else{player.position.z=bench.position.z+1.8;say('Vamos a seguir explorando ✨')}});
-document.querySelector('#wave').addEventListener('click',()=>say('Un saludo para Nohemí: te guardé este rinconcito en mi mundo. 💗'));
-document.querySelector('#cam').addEventListener('click',()=>{camFar=!camFar;document.querySelector('#cam').textContent=camFar?'📷 Cámara lejos':'📷 Cámara cerca'});
-document.querySelector('#quality').addEventListener('click',()=>{qualityLow=!qualityLow;renderer.setPixelRatio(Math.min(devicePixelRatio||1,mobile?(qualityLow?.75:1):qualityLow?1:1.4));renderer.setSize(innerWidth,innerHeight);document.querySelector('#quality').textContent='⚡ Gráficos: '+(qualityLow?'bajos':'normales');say(qualityLow?'Gráficos bajos: mejor rendimiento.':'Gráficos normales: más detalle.')});
-document.querySelector('#start').addEventListener('click',()=>{document.querySelector('#intro').style.display='none';say('Bienvenido a Hectomi ❤️ ¡Explora a tu ritmo!')});
-const clock=new THREE.Clock();let walk=0;function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.035);let f=(keys.has('w')||keys.has('arrowup')?1:0)-(keys.has('s')||keys.has('arrowdown')?1:0)-jy,r=(keys.has('d')||keys.has('arrowright')?1:0)-(keys.has('a')||keys.has('arrowleft')?1:0)+jx;const l=Math.hypot(f,r);if(l>1){f/=l;r/=l}if(!seated&&l>.08){const dir=new THREE.Vector3(Math.sin(yaw)*f+Math.cos(yaw)*r,0,Math.cos(yaw)*f-Math.sin(yaw)*r);player.position.addScaledVector(dir,dt*5);player.position.x=THREE.MathUtils.clamp(player.position.x,-35,35);player.position.z=THREE.MathUtils.clamp(player.position.z,-35,35);player.rotation.y=Math.atan2(dir.x,dir.z);walk+=dt*10;player.position.y=Math.abs(Math.sin(walk))*.04}else if(!seated)player.position.y=0;
-near=Math.hypot(player.position.x,player.position.z-bench.position.z)<2.6;sit.style.display=(near||seated)?'block':'none';sit.textContent=seated?'🚶 Levantarse':'🪑 Sentarse';const target=new THREE.Vector3(player.position.x,player.position.y+1.1,player.position.z),back=camFar?11:7.5;const desired=new THREE.Vector3(target.x-Math.sin(yaw)*back,target.y+3.3+pitch*5,target.z+Math.cos(yaw)*back);camera.position.lerp(desired,1-Math.exp(-dt*5));camera.lookAt(target.x,target.y+.4,target.z);renderer.render(scene,camera)}
-animate();addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio||1,mobile?(qualityLow?.75:1):qualityLow?1:1.4));renderer.setSize(innerWidth,innerHeight)});
-</script></body></html>
+:root {
+  --pink: #ff8fbd;
+  --light: #ffd5e6;
+  --purple: #a88aff;
+  --glass: rgba(25, 15, 39, .88);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: white;
+  font-family: system-ui, Arial, sans-serif;
+  background:
+    radial-gradient(ellipse at top, #492653, #170d27 60%, #080610);
+  min-height: 100vh;
+}
+
+button, a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  background: #100919e8;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #ffffff22;
+}
+
+.brand {
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--light);
+}
+
+.brand span {
+  color: var(--pink);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nav a {
+  color: #f7dcec;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.hero {
+  position: relative;
+  min-height: 78vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 65px 20px;
+  overflow: hidden;
+}
+
+.planet {
+  position: absolute;
+  width: min(68vw, 370px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 25%,
+    #ffd4ed,
+    #d675c4 18%,
+    #6a399c 48%,
+    #1b123d 75%
+  );
+  box-shadow: 0 0 90px #ca67e355;
+  z-index: 0;
+  opacity: .72;
+  animation: float 7s ease-in-out infinite;
+}
+
+@keyframes float {
+  50% { transform: translateY(-12px); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 8px 14px;
+  border: 1px solid #ffc5df55;
+  border-radius: 99px;
+  background: #180e2bbb;
+  color: var(--light);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-size: clamp(43px, 9vw, 82px);
+  line-height: 1;
+  margin: 22px 0;
+}
+
+h1 em {
+  font-style: normal;
+  color: var(--pink);
+}
+
+.hero p {
+  max-width: 560px;
+  margin: 0 auto 25px;
+  color: #f0e3f4;
+  line-height: 1.8;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn {
+  border: 1px solid #ffffff40;
+  border-radius: 99px;
+  padding: 12px 19px;
+  color: white;
+  background: #ffffff10;
+  text-decoration: none;
+}
+
+.btn.primary {
+  color: #37162d;
+  background: linear-gradient(100deg, #ffd1e2, #e879ad);
+  border: 0;
+  font-weight: 750;
+}
+
+section.content {
+  padding: 55px 18px;
+  scroll-margin-top: 75px;
+}
+
+.wrap {
+  width: min(100%, 950px);
+  margin: auto;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.section-head h2 {
+  font-size: clamp(27px, 5vw, 42px);
+  margin-bottom: 8px;
+}
+
+.section-head p {
+  color: #d9cce4;
+  line-height: 1.7;
+}
+
+.glass {
+  background: var(--glass);
+  border: 1px solid #ffffff24;
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 15px 45px #0003;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.photo {
+  margin: 0;
+  padding: 7px;
+  border-radius: 17px;
+  background: #ffffff0d;
+  border: 1px solid #ffffff22;
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #291632;
+}
+
+.photo figcaption {
+  text-align: center;
+  padding: 10px 2px 5px;
+  color: #ffd8e8;
+  font-size: 12px;
+}
+
+.letter {
+  max-width: 750px;
+  margin: auto;
+  line-height: 1.9;
+  white-space: pre-line;
+  color: #f4e9f5;
+}
+
+.letter strong {
+  color: var(--light);
+}
+
+.counter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.unit {
+  min-width: 85px;
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #ff9bc933;
+  background: #ffffff08;
+  border-radius: 16px;
+}
+
+.unit strong {
+  display: block;
+  color: var(--pink);
+  font-size: 30px;
+}
+
+.unit span {
+  color: #d9c9e3;
+  font-size: 12px;
+}
+
+.footer {
+  text-align: center;
+  padding: 30px 15px;
+  color: #c5b3d0;
+}
+
+#musicButton {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 11;
+  border: 1px solid #ffffff40;
+  border-radius: 99px;
+  padding: 11px 14px;
+  color: white;
+  background: #291635ee;
+}
+
+/* MUNDO 3D */
+
+#world {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: #101b2b;
+  overflow: hidden;
+  touch-action: none;
+}
+
+#game {
+  position: absolute;
+  inset: 0;
+}
+
+#game canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#worldTop {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  left: 10px;
+  right: 10px;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.worldTitle {
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.worldTitle span {
+  color: var(--pink);
+}
+
+.worldTools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 5px;
+  pointer-events: auto;
+}
+
+#world button {
+  border: 1px solid #ffffff45;
+  border-radius: 12px;
+  padding: 9px;
+  color: white;
+  background: #19182ce8;
+  font-size: 12px;
+}
+
+#world .worldTitleBox {
+  background: #111727dc;
+  padding: 10px 12px;
+  border-radius: 13px;
+  border: 1px solid #ffffff2c;
+}
+
+#worldHelp {
+  position: absolute;
+  z-index: 4;
+  top: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  border-radius: 99px;
+  background: #111727dc;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+#joystick {
+  display: none;
+  position: absolute;
+  z-index: 5;
+  left: 17px;
+  bottom: max(22px, env(safe-area-inset-bottom));
+  width: 115px;
+  height: 115px;
+  border: 1px solid #ffffff66;
+  border-radius: 50%;
+  background: #10172780;
+  touch-action: none;
+}
+
+#stick {
+  position: absolute;
+  left: 30px;
+  top: 30px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffd5e4, #d96c9b);
+  border: 2px solid #ffffffbb;
+  pointer-events: none;
+}
+
+#worldActions {
+  position: absolute;
+  z-index: 5;
+  right: 8px;
+  bottom: max(15px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-end;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 3px;
+}
+
+#worldActions button {
+  min-width: 105px;
+  background: #29152feF;
+  border-color: #ffc4db90;
+}
+
+#worldActions button.romantic {
+  color: #39152e;
+  background: linear-gradient(120deg, #ffd0e1, #e775a6);
+  border: 0;
+  font-weight: 700;
+}
+
+#worldMessage {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: 215px;
+  transform: translateX(-50%);
+  display: none;
+  width: max-content;
+  max-width: calc(100% - 25px);
+  padding: 12px 15px;
+  border: 1px solid #ffffff40;
+  border-radius: 14px;
+  background: #111727f5;
+  text-align: center;
+  font-size: 13px;
+}
+
+#intro, #consent {
+  position: absolute;
+  z-index: 9;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: #101b2beF;
+  overflow-y: auto;
+}
+
+#consent {
+  z-index: 12;
+  display: none;
+  background: #080711eF;
+}
+
+.worldCard {
+  width: min(100%, 430px);
+  padding: 24px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #35172f, #15172b);
+  border: 1px solid #ffc4db70;
+  text-align: center;
+}
+
+.worldCard h2 {
+  color: #ffd0e1;
+}
+
+.worldCard p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #f3e4ed;
+}
+
+.worldCard button {
+  margin: 4px;
+}
+
+#startWorld {
+  color: #351328 !important;
+  background: linear-gradient(120deg, #ffd0e1, #e775a6) !important;
+  border: 0 !important;
+  padding: 13px 20px !important;
+}
+
+#closeWorld {
+  background: #39233c !important;
+}
+
+@media(pointer:coarse) {
+  #joystick { display: block; }
+}
+
+@media(max-width: 620px) {
+  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nav { gap: 8px; }
+  .nav a { font-size: 11px; }
+  .topbar { padding: 12px; }
+}
+
+@media(max-width: 420px) {
+  #world .worldTitleBox { padding: 7px; }
+  #worldTop { left: 6px; right: 6px; }
+  #world .worldTools button { padding: 7px 5px; font-size: 10px; }
+  #worldHelp { top: 74px; font-size: 10px; }
+  #worldActions { right: 4px; gap: 4px; }
+  #worldActions button { min-width: 92px; padding: 7px 5px; font-size: 11px; }
+  #worldMessage { bottom: 225px; }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="brand">HECTO<span>MI</span> ❤️</div>
+  <nav class="nav">
+    <a href="#fotos">Recuerdos</a>
+    <a href="#carta">Mi carta</a>
+    <a href="#tiempo">Nuestro tiempo</a>
+  </nav>
+</header>
+
+<main id="romanticPage">
+  <section class="hero" id="inicio">
+    <div class="planet"></div>
+    <div class="hero-content">
+      <span class="eyebrow">Un pequeño universo para ti</span>
+      <h1>Para mi preciosa<br><em>Nohemí</em> ❤️</h1>
+      <p>
+        Si pudiera regalarte una estrella por cada vez que me haces feliz,
+        este universo no tendría fin.
+      </p>
+      <div class="buttons">
+        <button class="btn primary" id="enterWorld">🌹 Entrar a nuestro mundo 3D</button>
+        <a class="btn" href="#fotos">💗 Ver nuestros recuerdos</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="content" id="fotos">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Nuestros recuerdos ✨</h2>
+        <p>Cada foto es una pequeña parte de nuestra historia.</p>
+      </div>
+      <div class="gallery">
+        <figure class="photo">
+          <img src="foto1.jpeg" alt="Nuestro recuerdo uno">
+          <figcaption>Un momento contigo 💕</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="foto2.jpeg" alt="Nuestro recuerdo dos">
+          <figcaption>Mi lugar favorito</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="foto3.jpeg" alt="Nuestro recuerdo tres">
+          <figcaption>Una sonrisa tuya ✨</figcaption>
+        </figure>
+        <figure class="photo">
+          <img src="foto4.jpeg" alt="Nuestro recuerdo cuatro">
+          <figcaption>Y muchos más por vivir</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="content" id="carta">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Una carta para mi Nohemí 💌</h2>
+      </div>
+      <article class="glass letter">
+        Mi preciosa <strong>Nohemí</strong>,
+
+        Quiero que esta pequeña página te recuerde lo especial que eres para mí.
+        Gracias por cada sonrisa, cada abrazo, cada conversación y por todos
+        esos momentos que se vuelven inolvidables simplemente porque los
+        comparto contigo.
+
+        No necesito que todo sea perfecto para ser feliz contigo. Quiero seguir
+        aprendiendo de ti, apoyarte en tus días difíciles, celebrar tus alegrías
+        y construir muchos recuerdos más a tu lado.
+
+        Si este universo tuviera un centro, serías tú. Y si pudiera elegir de
+        nuevo, volvería a elegirte a ti.
+
+        <strong>Te quiero muchísimo. ❤️</strong>
+      </article>
+    </div>
+  </section>
+
+  <section class="content" id="tiempo">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Nuestro tiempo juntos ⏳</h2>
+        <p>Cada segundo suma a nuestra historia.</p>
+      </div>
+      <div class="glass" style="text-align:center">
+        <div class="counter">
+          <div class="unit"><strong id="days">0</strong><span>días</span></div>
+          <div class="unit"><strong id="hours">00</strong><span>horas</span></div>
+          <div class="unit"><strong id="minutes">00</strong><span>minutos</span></div>
+          <div class="unit"><strong id="seconds">00</strong><span>segundos</span></div>
+        </div>
+        <p>Desde el 11 de septiembre de 2026, y ojalá por muchos capítulos más. 💞</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">Hecho con amor para Nohemí ❤️ · Hectomi</footer>
+
+<video id="music" src="Tutu.mp4.mp4" loop playsinline preload="metadata" style="display:none"></video>
+<button id="musicButton">🎵 Activar música</button>
+
+<!-- MUNDO 3D -->
+<div id="world">
+  <div id="game"></div>
+
+  <div id="worldTop">
+    <div class="worldTitleBox">
+      <div class="worldTitle">Hectomi <span>♥</span></div>
+      <div style="font-size:10px;color:#eadce9">Nuestro pequeño mundo</div>
+    </div>
+    <div class="worldTools">
+      <button id="cameraButton">📷 Cámara</button>
+      <button id="qualityButton">⚡ Gráficos: bajos</button>
+      <button id="backHome">↩ Volver</button>
+    </div>
+  </div>
+
+  <div id="worldHelp">Explora el jardín y acércate a la banca 🌷</div>
+
+  <div id="joystick"><div id="stick"></div></div>
+
+  <div id="worldActions">
+    <button id="sitButton">🪑 Sentarse</button>
+    <button id="flirtButton" class="romantic">💌 Coquetear</button>
+    <button id="hugButton" class="romantic">🫂 Abrazo</button>
+    <button id="kissButton" class="romantic">💋 Beso</button>
+    <button id="caressButton" class="romantic">💕 Caricia</button>
+    <button id="intimateButton" class="romantic">🌹 Momento íntimo</button>
+  </div>
+
+  <div id="worldMessage" role="status"></div>
+
+  <div id="intro">
+    <div class="worldCard">
+      <h2>Bienvenidos a Hectomi ❤️</h2>
+      <p>
+        Un jardín para caminar, sentarse junto al lago y compartir
+        momentos románticos con Nohemí.
+      </p>
+      <p>
+        <b>Computador:</b> usa WASD o las flechas.<br>
+        <b>Celular:</b> usa el joystick y arrastra el fondo para mirar.
+      </p>
+      <p>Este mundo funciona como una demostración individual. Todavía no conecta a los dos jugadores en vivo.</p>
+      <button id="startWorld">Entrar a nuestro mundo ✨</button>
+    </div>
+  </div>
+
+  <div id="consent">
+    <div class="worldCard">
+      <h2>Un momento solo nuestro 🌹</h2>
+      <p>
+        Esta escena es romántica y sugerida, sin contenido sexual explícito.
+        Ambos deben aceptar libremente. Cualquiera puede cancelar.
+      </p>
+      <p>
+        Esta versión solo registra las dos respuestas en este dispositivo.
+        No confirma la aceptación desde otro teléfono.
+      </p>
+      <button id="acceptH">Héctor acepta 💗</button>
+      <button id="acceptN">Nohemí acepta 💗</button>
+      <p id="consentStatus">Falta la aceptación de los dos.</p>
+      <button id="cancelConsent">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Página romántica */
+(() => {
+  const music = document.getElementById('music');
+  const musicButton = document.getElementById('musicButton');
+
+  async function toggleMusic() {
+    try {
+      if (music.paused) {
+        await music.play();
+        musicButton.textContent = '⏸️ Pausar música';
+      } else {
+        music.pause();
+        musicButton.textContent = '🎵 Activar música';
+      }
+    } catch {
+      musicButton.textContent = '🎵 Toca para activar';
+    }
+  }
+
+  musicButton.addEventListener('click', toggleMusic);
+
+  const startDate = new Date(2026, 8, 11, 0, 0, 0);
+
+  function updateCounter() {
+    let diff = Math.max(0, Date.now() - startDate.getTime());
+    const second = 1000;
+    const minute = 60 * second;
+    const hour = 60 * minute;
+    const day = 24 * hour;
+
+    document.getElementById('days').textContent =
+      Math.floor(diff / day).toLocaleString('es-CO');
+    diff %= day;
+
+    document.getElementById('hours').textContent =
+      String(Math.floor(diff / hour)).padStart(2, '0');
+    diff %= hour;
+
+    document.getElementById('minutes').textContent =
+      String(Math.floor(diff / minute)).padStart(2, '0');
+    diff %= minute;
+
+    document.getElementById('seconds').textContent =
+      String(Math.floor(diff / second)).padStart(2, '0');
+  }
+
+  updateCounter();
+  setInterval(updateCounter, 1000);
+
+  for (let i = 0; i < 12; i++) {
+    const heart = document.createElement('span');
+    heart.textContent = i % 2 ? '♡' : '♥';
+    heart.style.cssText = `
+      position:fixed;
+      left:${Math.random() * 100}vw;
+      bottom:-30px;
+      z-index:0;
+      pointer-events:none;
+      color:#ff8fbd;
+      opacity:0;
+      font-size:${12 + Math.random() * 18}px;
+      animation:heartRise ${7 + Math.random() * 6}s
+      ${Math.random() * 8}s linear infinite;
+    `;
+    document.body.appendChild(heart);
+  }
+
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes heartRise {
+      10% { opacity:.4; }
+      100% { transform:translateY(-115vh) rotate(35deg); opacity:0; }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+/* Mundo 3D */
+document.getElementById('enterWorld').addEventListener('click', () => {
+  document.getElementById('world').style.display = 'block';
+  document.getElementById('intro').style.display = 'grid';
+  document.body.style.overflow = 'hidden';
+  if (!window.worldStarted) start3DWorld();
+});
+
+document.getElementById('backHome').addEventListener('click', () => {
+  document.getElementById('world').style.display = 'none';
+  document.body.style.overflow = '';
+});
+
+let start3DWorld = null;
+
+async function loadThree() {
+  if (window.THREE) return window.THREE;
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
+    script.onload = () => resolve(window.THREE);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+start3DWorld = async function() {
+  if (window.worldStarted) return;
+  window.worldStarted = true;
+
+  const intro = document.getElementById('intro');
+  const message = document.getElementById('worldMessage');
+
+  function say(text) {
+    message.textContent = text;
+    message.style.display = 'block';
+    clearTimeout(say.timer);
+    say.timer = setTimeout(() => message.style.display = 'none', 3500);
+  }
+
+  let THREE;
+
+  try {
+    THREE = await loadThree();
+  } catch {
+    intro.querySelector('p').textContent =
+      'No se pudo cargar el motor 3D. Revisa tu conexión a internet e inténtalo de nuevo.';
+    window.worldStarted = false;
+    return;
+  }
+
+  const root = document.getElementById('game');
+  const mobile = matchMedia('(pointer:coarse)').matches ||
+    /Android|iPhone|iPad/i.test(navigator.userAgent);
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x91b9d4);
+  scene.fog = new THREE.Fog(0x91b9d4, 38, 100);
+
+  const camera = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, .1, 150);
+  const renderer = new THREE.WebGLRenderer({
+    antialias: !mobile,
+    powerPreference: 'low-power'
+  });
+
+  let qualityLow = true;
+
+  function setQuality() {
+    renderer.setPixelRatio(Math.min(
+      devicePixelRatio || 1,
+      mobile ? (qualityLow ? .65 : .9) : (qualityLow ? .8 : 1.3)
+    ));
+    renderer.setSize(innerWidth, innerHeight);
+  }
+
+  setQuality();
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  root.appendChild(renderer.domElement);
+
+  scene.add(new THREE.HemisphereLight(0xd9efff, 0x4d624a, 2));
+
+  const sun = new THREE.DirectionalLight(0xffe0b8, 1.8);
+  sun.position.set(-18, 30, 12);
+  scene.add(sun);
+
+  function material(color) {
+    return new THREE.MeshStandardMaterial({ color, roughness: .95 });
+  }
+
+  const M = {
+    grass: material(0x497a5a),
+    path: material(0xb6a084),
+    water: material(0x428da8),
+    trunk: material(0x674631),
+    leaf: material(0x2c684e),
+    leaf2: material(0x47815c),
+    pink: material(0xffa6c8),
+    yellow: material(0xffe6a0),
+    wood: material(0x86583c),
+    stone: material(0xb6b3ac),
+    shirt: material(0xf0a2bd),
+    skin: material(0xf0c5a9),
+    pants: material(0x344663),
+    hair: material(0x3c2630),
+    shoe: material(0xf6e8e4),
+    eye: material(0x251b28)
+  };
+
+  function add(geometry, mat, x, y, z, parent = scene) {
+    const object = new THREE.Mesh(geometry, mat);
+    object.position.set(x, y, z);
+    parent.add(object);
+    return object;
+  }
+
+  add(new THREE.PlaneGeometry(150, 150), M.grass, 0, -.12, 0).rotation.x = -Math.PI / 2;
+  add(new THREE.PlaneGeometry(5, 68), M.path, 0, -.09, -17).rotation.x = -Math.PI / 2;
+  add(new THREE.PlaneGeometry(24, 3.3), M.path, 0, -.08, -9).rotation.x = -Math.PI / 2;
+  add(new THREE.CircleGeometry(8, 32), M.stone, 15, -.08, -17).rotation.x = -Math.PI / 2;
+  add(new THREE.CircleGeometry(7.5, 32), M.water, 15, -.035, -17).rotation.x = -Math.PI / 2;
+
+  add(
+    new THREE.SphereGeometry(2.4, 14, 10),
+    new THREE.MeshBasicMaterial({ color: 0xffe6bd }),
+    -25, 28, -48
+  );
+
+  const bench = new THREE.Group();
+  scene.add(bench);
+  bench.position.set(0, 0, -5);
+
+  add(new THREE.BoxGeometry(1.9, .13, .48), M.wood, 0, .65, 0, bench);
+  add(new THREE.BoxGeometry(1.9, .7, .12), M.wood, 0, 1.05, -.22, bench);
+
+  for (const x of [-.72, .72]) {
+    add(new THREE.BoxGeometry(.12, .55, .4), M.wood, x, .32, 0, bench);
+    add(new THREE.BoxGeometry(.12, .55, .4), M.wood, x, .88, -.22, bench);
+  }
+
+  const lampMat = material(0x413a46);
+  const glow = new THREE.MeshBasicMaterial({ color: 0xffd89b });
+
+  for (const [x, z] of [[-4,-2], [4,-13], [-5,-22], [9,-10], [20,-16]]) {
+    add(new THREE.CylinderGeometry(.06, .09, 2.6, 6), lampMat, x, 1.3, z);
+    add(new THREE.SphereGeometry(.18, 7, 5), glow, x, 2.7, z);
+  }
+
+  const player = new THREE.Group();
+  scene.add(player);
+  player.position.set(0, 0, 3);
+
+  add(new THREE.CapsuleGeometry(.31, .62, 3, 7), M.shirt, 0, 1.05, 0, player);
+  add(new THREE.SphereGeometry(.29, 12, 10), M.skin, 0, 1.68, 0, player);
+  add(new THREE.SphereGeometry(.31, 12, 10), M.hair, 0, 1.83, -.055, player);
+  add(new THREE.BoxGeometry(.48, .25, .15), M.hair, 0, 1.62, .23, player);
+
+  // Rasgos faciales sencillos: ojos y sonrisa geométrica.
+  for (const x of [-.105, .105]) {
+    add(new THREE.SphereGeometry(.035, 6, 5), M.eye, x, 1.69, .265, player);
+  }
+
+  add(new THREE.TorusGeometry(.065, .012, 4, 12, Math.PI), M.eye, 0, 1.58, .274, player);
+
+  for (const x of [-.15, .15]) {
+    add(new THREE.CapsuleGeometry(.105, .62, 2, 5), M.pants, x, .48, 0, player);
+    add(new THREE.BoxGeometry(.2, .12, .34), M.shoe, x, .1, .07, player);
+  }
+
+  for (const x of [-.39, .39]) {
+    add(new THREE.CapsuleGeometry(.09, .48, 2, 5), M.shirt, x, 1.03, 0, player);
+  }
+
+  const trunkGeometry = new THREE.CylinderGeometry(.22, .32, 2.1, 7);
+  const coneGeometry = new THREE.ConeGeometry(1.45, 3, 7);
+  const coneGeometry2 = new THREE.ConeGeometry(1.12, 2.4, 7);
+
+  for (let i = 0; i < 68; i++) {
+    let x, z, n = 0;
+
+    do {
+      x = (Math.random() - .5) * 72;
+      z = (Math.random() - .5) * 72;
+      n++;
+    } while (n < 35 &&
+      ((Math.abs(x) < 5.5 && z < 7 && z > -36) ||
+      ((x - 15) ** 2 + (z + 17) ** 2 < 100)));
+
+    const tree = new THREE.Group();
+    tree.position.set(x, 0, z);
+    tree.scale.setScalar(.72 + Math.random() * .6);
+    scene.add(tree);
+
+    add(trunkGeometry, M.trunk, 0, 1.05, 0, tree);
+    add(coneGeometry, M.leaf, 0, 2.75, 0, tree);
+    add(coneGeometry2, M.leaf2, .1, 3.65, 0, tree);
+  }
+
+  for (let i = 0; i < 105; i++) {
+    const x = (Math.random() - .5) * 62;
+    const z = (Math.random() - .5) * 62;
+
+    if (Math.abs(x) < 3.2 && z < 4 && z > -34) continue;
+    if ((x - 15) ** 2 + (z + 17) ** 2 < 78) continue;
+
+    add(new THREE.CylinderGeometry(.02, .03, .32, 4), M.leaf, x, .15, z);
+
+    const flowerMaterial = Math.random() > .5 ? M.pink : M.yellow;
+
+    for (let j = 0; j < 4; j++) {
+      const angle = j * Math.PI / 2;
+      add(
+        new THREE.SphereGeometry(.1, 5, 4),
+        flowerMaterial,
+        x + Math.cos(angle) * .11,
+        .31,
+        z + Math.sin(angle) * .11
+      );
+    }
+  }
+
+  const keys = new Set();
+
+  addEventListener('keydown', event => {
+    if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(event.key.toLowerCase())) {
+      event.preventDefault();
+    }
+    keys.add(event.key.toLowerCase());
+  });
+
+  addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
+
+  const joystick = document.getElementById('joystick');
+  const stick = document.getElementById('stick');
+
+  let jx = 0, jy = 0, joystickDown = false;
+
+  function moveJoystick(event) {
+    const rect = joystick.getBoundingClientRect();
+    let dx = event.clientX - (rect.left + rect.width / 2);
+    let dy = event.clientY - (rect.top + rect.height / 2);
+    const distance = Math.hypot(dx, dy);
+    const max = 36;
+
+    if (distance > max) {
+      dx = dx / distance * max;
+      dy = dy / distance * max;
+    }
+
+    jx = dx / max;
+    jy = dy / max;
+    stick.style.transform = `translate(${dx}px,${dy}px)`;
+  }
+
+  joystick.addEventListener('pointerdown', event => {
+    joystickDown = true;
+    joystick.setPointerCapture(event.pointerId);
+    moveJoystick(event);
+  });
+
+  joystick.addEventListener('pointermove', event => {
+    if (joystickDown) moveJoystick(event);
+  });
+
+  function stopJoystick() {
+    joystickDown = false;
+    jx = jy = 0;
+    stick.style.transform = 'translate(0,0)';
+  }
+
+  joystick.addEventListener('pointerup', stopJoystick);
+  joystick.addEventListener('pointercancel', stopJoystick);
+
+  let yaw = 0;
+  let pitch = .2;
+  let dragging = false;
+  let lastX = 0;
+  let lastY = 0;
+
+  renderer.domElement.addEventListener('pointerdown', event => {
+    dragging = true;
+    lastX = event.clientX;
+    lastY = event.clientY;
+    renderer.domElement.setPointerCapture(event.pointerId);
+  });
+
+  renderer.domElement.addEventListener('pointermove', event => {
+    if (!dragging) return;
+
+    const dx = event.clientX - lastX;
+    const dy = event.clientY - lastY;
+
+    lastX = event.clientX;
+    lastY = event.clientY;
+
+    yaw -= dx * .005;
+    pitch = THREE.MathUtils.clamp(pitch - dy * .003, -.1, .7);
+  });
+
+  renderer.domElement.addEventListener('pointerup', () => dragging = false);
+  renderer.domElement.addEventListener('pointercancel', () => dragging = false);
+
+  let seated = false;
+  let nearBench = false;
+  let cameraFar = false;
+
+  const sitButton = document.getElementById('sitButton');
+
+  sitButton.addEventListener('click', () => {
+    if (!nearBench && !seated) {
+      say('Acércate un poco más a la banca ❤️');
+      return;
+    }
+
+    seated = !seated;
+
+    if (seated) {
+      player.position.set(bench.position.x, 0, bench.position.z + .72);
+      player.rotation.y = Math.PI;
+      say('Un descanso en nuestra banca… ❤️');
+    } else {
+      player.position.z = bench.position.z + 1.8;
+      say('Vamos a seguir explorando ✨');
+    }
+  });
+
+  document.getElementById('cameraButton').addEventListener('click', () => {
+    cameraFar = !cameraFar;
+    document.getElementById('cameraButton').textContent =
+      cameraFar ? '📷 Cámara lejos' : '📷 Cámara cerca';
+  });
+
+  document.getElementById('qualityButton').addEventListener('click', () => {
+    qualityLow = !qualityLow;
+    setQuality();
+
+    document.getElementById('qualityButton').textContent =
+      '⚡ Gráficos: ' + (qualityLow ? 'bajos' : 'normales');
+
+    say(qualityLow
+      ? 'Gráficos bajos: mejor rendimiento para el celular.'
+      : 'Gráficos normales: más detalle.');
+  });
+
+  document.getElementById('flirtButton').addEventListener('click', () => {
+    const lines = [
+      'Nohemí, ¿me regalas una sonrisa y un besito? 💋',
+      'Mi lugar favorito siempre será cerquita de ti. 💗',
+      'Ven, preciosa, quiero decirte algo bonito al oído. 🌹',
+      'Si pudiera detener el tiempo, sería en un abrazo contigo. 🫂'
+    ];
+
+    say(lines[Math.floor(Math.random() * lines.length)]);
+  });
+
+  document.getElementById('hugButton').addEventListener('click', () => {
+    say('Un abrazo largo, suave y lleno de cariño. 🫂');
+  });
+
+  document.getElementById('kissButton').addEventListener('click', () => {
+    say('Se miran, se acercan despacio y comparten un beso tierno. 💋');
+  });
+
+  document.getElementById('caressButton').addEventListener('click', () => {
+    say('Le tomas la mano con ternura y acaricias suavemente sus dedos. 💕');
+  });
+
+  const consent = document.getElementById('consent');
+  let acceptedH = false;
+  let acceptedN = false;
+
+  function resetConsent() {
+    acceptedH = false;
+    acceptedN = false;
+    document.getElementById('consentStatus').textContent =
+      'Falta la aceptación de los dos.';
+    consent.style.display = 'none';
+  }
+
+  function updateConsent() {
+    const status = document.getElementById('consentStatus');
+
+    if (acceptedH && acceptedN) {
+      status.textContent = 'Ambos aceptaron esta demostración local. 💗';
+
+      setTimeout(() => {
+        consent.style.display = 'none';
+        say('Las luces se suavizan y comienza un momento romántico sugerido. 🌹');
+      }, 1200);
+    } else {
+      status.textContent = 'Falta la aceptación de los dos.';
+    }
+  }
+
+  document.getElementById('acceptH').addEventListener('click', () => {
+    acceptedH = true;
+    updateConsent();
+  });
+
+  document.getElementById('acceptN').addEventListener('click', () => {
+    acceptedN = true;
+    updateConsent();
+  });
+
+  document.getElementById('cancelConsent').addEventListener('click', resetConsent);
+
+  document.getElementById('intimateButton').addEventListener('click', () => {
+    acceptedH = false;
+    acceptedN = false;
+    document.getElementById('consentStatus').textContent =
+      'Falta la aceptación de los dos.';
+    consent.style.display = 'grid';
+  });
+
+  document.getElementById('startWorld').addEventListener('click', () => {
+    intro.style.display = 'none';
+    say('Bienvenido a Hectomi ❤️ ¡Explora a tu ritmo!');
+  });
+
+  const clock = new THREE.Clock();
+  let walk = 0;
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    const dt = Math.min(clock.getDelta(), .035);
+
+    let forward =
+      (keys.has('w') || keys.has('arrowup') ? 1 : 0) -
+      (keys.has('s') || keys.has('arrowdown') ? 1 : 0) - jy;
+
+    let right =
+      (keys.has('d') || keys.has('arrowright') ? 1 : 0) -
+      (keys.has('a') || keys.has('arrowleft') ? 1 : 0) + jx;
+
+    const length = Math.hypot(forward, right);
+
+    if (length > 1) {
+      forward /= length;
+      right /= length;
+    }
+
+    if (!seated && length > .08) {
+      const direction = new THREE.Vector3(
+        Math.sin(yaw) * forward + Math.cos(yaw) * right,
+        0,
+        -Math.cos(yaw) * forward + Math.sin(yaw) * right
+      );
+
+      player.position.addScaledVector(direction, dt * 5);
+      player.position.x = THREE.MathUtils.clamp(player.position.x, -35, 35);
+      player.position.z = THREE.MathUtils.clamp(player.position.z, -35, 35);
+      player.rotation.y = Math.atan2(direction.x, direction.z);
+
+      walk += dt * 10;
+      player.position.y = Math.abs(Math.sin(walk)) * .04;
+    } else if (!seated) {
+      player.position.y = 0;
+    }
+
+    nearBench = Math.hypot(
+      player.position.x,
+      player.position.z - bench.position.z
+    ) < 2.6;
+
+    sitButton.style.display = (nearBench || seated) ? 'block' : 'none';
+    sitButton.textContent = seated ? '🚶 Levantarse' : '🪑 Sentarse';
+
+    const target = new THREE.Vector3(
+      player.position.x,
+      player.position.y + 1.1,
+      player.position.z
+    );
+
+    const distance = cameraFar ? 11 : 7.5;
+
+    const desired = new THREE.Vector3(
+      target.x - Math.sin(yaw) * distance,
+      target.y + 3.3 + pitch * 5,
+      target.z + Math.cos(yaw) * distance
+    );
+
+    camera.position.lerp(desired, 1 - Math.exp(-dt * 5));
+    camera.lookAt(target.x, target.y + .4, target.z);
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight;
+    camera.updateProjectionMatrix();
+    setQuality();
+  });
+};
+</script>
+</body>
+</html>
