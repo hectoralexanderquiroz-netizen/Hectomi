@@ -1,1267 +1,229 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#170d27">
-<title>Hectomi ❤️ Nuestro universo</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100816">
+<title>Hectomi ❤️ Un universo para Nohemi</title>
 <style>
-:root {
-  --pink: #ff8fbd;
-  --light: #ffd5e6;
-  --purple: #a88aff;
-  --glass: rgba(25, 15, 39, .88);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  color: white;
-  font-family: system-ui, Arial, sans-serif;
-  background:
-    radial-gradient(ellipse at top, #492653, #170d27 60%, #080610);
-  min-height: 100vh;
-}
-
-button, a {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid white;
-  outline-offset: 3px;
-}
-
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 18px;
-  background: #100919e8;
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid #ffffff22;
-}
-
-.brand {
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: var(--light);
-}
-
-.brand span {
-  color: var(--pink);
-}
-
-.nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.nav a {
-  color: #f7dcec;
-  text-decoration: none;
-  font-size: 13px;
-}
-
-.hero {
-  position: relative;
-  min-height: 78vh;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  padding: 65px 20px;
-  overflow: hidden;
-}
-
-.planet {
-  position: absolute;
-  width: min(68vw, 370px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 25%,
-    #ffd4ed,
-    #d675c4 18%,
-    #6a399c 48%,
-    #1b123d 75%
-  );
-  box-shadow: 0 0 90px #ca67e355;
-  z-index: 0;
-  opacity: .72;
-  animation: float 7s ease-in-out infinite;
-}
-
-@keyframes float {
-  50% { transform: translateY(-12px); }
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 700px;
-}
-
-.eyebrow {
-  display: inline-block;
-  padding: 8px 14px;
-  border: 1px solid #ffc5df55;
-  border-radius: 99px;
-  background: #180e2bbb;
-  color: var(--light);
-  font-size: 12px;
-  letter-spacing: 2px;
-}
-
-h1 {
-  font-size: clamp(43px, 9vw, 82px);
-  line-height: 1;
-  margin: 22px 0;
-}
-
-h1 em {
-  font-style: normal;
-  color: var(--pink);
-}
-
-.hero p {
-  max-width: 560px;
-  margin: 0 auto 25px;
-  color: #f0e3f4;
-  line-height: 1.8;
-}
-
-.buttons {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.btn {
-  border: 1px solid #ffffff40;
-  border-radius: 99px;
-  padding: 12px 19px;
-  color: white;
-  background: #ffffff10;
-  text-decoration: none;
-}
-
-.btn.primary {
-  color: #37162d;
-  background: linear-gradient(100deg, #ffd1e2, #e879ad);
-  border: 0;
-  font-weight: 750;
-}
-
-section.content {
-  padding: 55px 18px;
-  scroll-margin-top: 75px;
-}
-
-.wrap {
-  width: min(100%, 950px);
-  margin: auto;
-}
-
-.section-head {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.section-head h2 {
-  font-size: clamp(27px, 5vw, 42px);
-  margin-bottom: 8px;
-}
-
-.section-head p {
-  color: #d9cce4;
-  line-height: 1.7;
-}
-
-.glass {
-  background: var(--glass);
-  border: 1px solid #ffffff24;
-  border-radius: 22px;
-  padding: 24px;
-  box-shadow: 0 15px 45px #0003;
-}
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.photo {
-  margin: 0;
-  padding: 7px;
-  border-radius: 17px;
-  background: #ffffff0d;
-  border: 1px solid #ffffff22;
-}
-
-.photo img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  border-radius: 12px;
-  background: #291632;
-}
-
-.photo figcaption {
-  text-align: center;
-  padding: 10px 2px 5px;
-  color: #ffd8e8;
-  font-size: 12px;
-}
-
-.letter {
-  max-width: 750px;
-  margin: auto;
-  line-height: 1.9;
-  white-space: pre-line;
-  color: #f4e9f5;
-}
-
-.letter strong {
-  color: var(--light);
-}
-
-.counter {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin: 24px 0;
-}
-
-.unit {
-  min-width: 85px;
-  padding: 15px;
-  text-align: center;
-  border: 1px solid #ff9bc933;
-  background: #ffffff08;
-  border-radius: 16px;
-}
-
-.unit strong {
-  display: block;
-  color: var(--pink);
-  font-size: 30px;
-}
-
-.unit span {
-  color: #d9c9e3;
-  font-size: 12px;
-}
-
-.footer {
-  text-align: center;
-  padding: 30px 15px;
-  color: #c5b3d0;
-}
-
-#musicButton {
-  position: fixed;
-  right: 12px;
-  bottom: 12px;
-  z-index: 11;
-  border: 1px solid #ffffff40;
-  border-radius: 99px;
-  padding: 11px 14px;
-  color: white;
-  background: #291635ee;
-}
-
-/* MUNDO 3D */
-
-#world {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  background: #101b2b;
-  overflow: hidden;
-  touch-action: none;
-}
-
-#game {
-  position: absolute;
-  inset: 0;
-}
-
-#game canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-#worldTop {
-  position: absolute;
-  top: max(10px, env(safe-area-inset-top));
-  left: 10px;
-  right: 10px;
-  z-index: 4;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 8px;
-  pointer-events: none;
-}
-
-.worldTitle {
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.worldTitle span {
-  color: var(--pink);
-}
-
-.worldTools {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 5px;
-  pointer-events: auto;
-}
-
-#world button {
-  border: 1px solid #ffffff45;
-  border-radius: 12px;
-  padding: 9px;
-  color: white;
-  background: #19182ce8;
-  font-size: 12px;
-}
-
-#world .worldTitleBox {
-  background: #111727dc;
-  padding: 10px 12px;
-  border-radius: 13px;
-  border: 1px solid #ffffff2c;
-}
-
-#worldHelp {
-  position: absolute;
-  z-index: 4;
-  top: 68px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 8px 12px;
-  border-radius: 99px;
-  background: #111727dc;
-  white-space: nowrap;
-  font-size: 11px;
-}
-
-#joystick {
-  display: none;
-  position: absolute;
-  z-index: 5;
-  left: 17px;
-  bottom: max(22px, env(safe-area-inset-bottom));
-  width: 115px;
-  height: 115px;
-  border: 1px solid #ffffff66;
-  border-radius: 50%;
-  background: #10172780;
-  touch-action: none;
-}
-
-#stick {
-  position: absolute;
-  left: 30px;
-  top: 30px;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: linear-gradient(145deg, #ffd5e4, #d96c9b);
-  border: 2px solid #ffffffbb;
-  pointer-events: none;
-}
-
-#worldActions {
-  position: absolute;
-  z-index: 5;
-  right: 8px;
-  bottom: max(15px, env(safe-area-inset-bottom));
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: flex-end;
-  max-height: 60vh;
-  overflow-y: auto;
-  padding: 3px;
-}
-
-#worldActions button {
-  min-width: 105px;
-  background: #29152feF;
-  border-color: #ffc4db90;
-}
-
-#worldActions button.romantic {
-  color: #39152e;
-  background: linear-gradient(120deg, #ffd0e1, #e775a6);
-  border: 0;
-  font-weight: 700;
-}
-
-#worldMessage {
-  position: absolute;
-  z-index: 6;
-  left: 50%;
-  bottom: 215px;
-  transform: translateX(-50%);
-  display: none;
-  width: max-content;
-  max-width: calc(100% - 25px);
-  padding: 12px 15px;
-  border: 1px solid #ffffff40;
-  border-radius: 14px;
-  background: #111727f5;
-  text-align: center;
-  font-size: 13px;
-}
-
-#intro, #consent {
-  position: absolute;
-  z-index: 9;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 18px;
-  background: #101b2beF;
-  overflow-y: auto;
-}
-
-#consent {
-  z-index: 12;
-  display: none;
-  background: #080711eF;
-}
-
-.worldCard {
-  width: min(100%, 430px);
-  padding: 24px;
-  border-radius: 22px;
-  background: linear-gradient(145deg, #35172f, #15172b);
-  border: 1px solid #ffc4db70;
-  text-align: center;
-}
-
-.worldCard h2 {
-  color: #ffd0e1;
-}
-
-.worldCard p {
-  font-size: 13px;
-  line-height: 1.65;
-  color: #f3e4ed;
-}
-
-.worldCard button {
-  margin: 4px;
-}
-
-#startWorld {
-  color: #351328 !important;
-  background: linear-gradient(120deg, #ffd0e1, #e775a6) !important;
-  border: 0 !important;
-  padding: 13px 20px !important;
-}
-
-#closeWorld {
-  background: #39233c !important;
-}
-
-@media(pointer:coarse) {
-  #joystick { display: block; }
-}
-
-@media(max-width: 620px) {
-  .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .nav { gap: 8px; }
-  .nav a { font-size: 11px; }
-  .topbar { padding: 12px; }
-}
-
-@media(max-width: 420px) {
-  #world .worldTitleBox { padding: 7px; }
-  #worldTop { left: 6px; right: 6px; }
-  #world .worldTools button { padding: 7px 5px; font-size: 10px; }
-  #worldHelp { top: 74px; font-size: 10px; }
-  #worldActions { right: 4px; gap: 4px; }
-  #worldActions button { min-width: 92px; padding: 7px 5px; font-size: 11px; }
-  #worldMessage { bottom: 225px; }
-}
+:root{--pink:#ff7eb6;--red:#ff4d75;--violet:#b18cff;--glass:rgba(22,12,35,.76);--line:rgba(255,255,255,.16)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(ellipse at 50% 0%,#46204e 0%,#1b102c 38%,#080711 78%);min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background-image:radial-gradient(2px 2px at 12% 22%,#fff 40%,transparent 60%),radial-gradient(1px 1px at 80% 18%,#ffd8ee 40%,transparent 60%),radial-gradient(2px 2px at 64% 68%,#fff 40%,transparent 60%),radial-gradient(1px 1px at 27% 77%,#fff 40%,transparent 60%),radial-gradient(1px 1px at 91% 48%,#e5ccff 40%,transparent 60%);background-size:260px 230px;opacity:.7}
+a{color:inherit}
+button{font:inherit}
+.topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px clamp(14px,4vw,36px);background:rgba(10,7,20,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{font-weight:850;letter-spacing:.08em;color:#ffd6e8}.brand span{color:var(--pink)}
+.nav{display:flex;gap:15px;flex-wrap:wrap;font-size:.9rem}.nav a{text-decoration:none;opacity:.85}.nav a:hover{color:var(--pink)}
+.hero{min-height:83vh;display:grid;place-items:center;text-align:center;padding:65px 18px 80px;position:relative;isolation:isolate}
+.planet{position:absolute;width:min(62vw,420px);aspect-ratio:1;border-radius:50%;z-index:-1;top:12%;left:50%;transform:translateX(-50%);background:radial-gradient(circle at 32% 25%,#ffc4df 0%,#db72bc 12%,#7a3c9e 38%,#301c5d 64%,#100c28 76%);box-shadow:inset -35px -24px 60px #05040f,0 0 70px #a94bbd55,0 0 150px #a94bbd22;animation:float 8s ease-in-out infinite}
+.planet:after{content:"";position:absolute;inset:32% -18%;height:30%;border:2px solid #f4b7ee88;border-radius:50%;transform:rotate(-18deg);box-shadow:0 0 16px #e6a7ff66}
+@keyframes float{50%{transform:translate(-50%,-12px)}}
+.hero-content{max-width:780px}
+.eyebrow{display:inline-block;padding:7px 13px;border:1px solid #ffc3df55;background:#170e29aa;border-radius:999px;color:#ffd5e8;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+h1{font-size:clamp(2.6rem,8vw,5.7rem);line-height:.98;margin:22px 0 16px;letter-spacing:-.05em;text-shadow:0 0 34px #ff7eb655}
+h1 em{font-style:normal;background:linear-gradient(90deg,#fff,#ff9bc9,#c8a5ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:590px;margin:0 auto 26px;color:#e8dced;font-size:clamp(1rem,2.6vw,1.2rem);line-height:1.7}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{border:1px solid #ffffff30;border-radius:999px;padding:12px 19px;cursor:pointer;color:white;background:#ffffff0d;text-decoration:none;transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px);background:#ffffff18}
+.btn.primary{background:linear-gradient(100deg,#e94f91,#9857d8);border-color:transparent;box-shadow:0 8px 30px #a7358250}
+section{padding:62px 18px;scroll-margin-top:72px}
+.wrap{width:min(100%,1000px);margin:auto}
+.section-head{text-align:center;margin-bottom:28px}
+.kicker{color:var(--pink);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase}
+h2{font-size:clamp(1.8rem,5vw,3rem);margin:8px 0 10px;letter-spacing:-.03em}
+.section-head p{color:#d7c8df;margin:0 auto;max-width:600px;line-height:1.65}
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.photo{margin:0;padding:9px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#ffffff13,#ffffff05);box-shadow:0 14px 38px #0003;overflow:hidden;transition:transform .25s}
+.photo:hover{transform:translateY(-5px) rotate(-.5deg)}
+.photo img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:13px;display:block;background:#24142e}
+.photo figcaption{text-align:center;padding:11px 4px 5px;color:#f9d7e8;font-size:.9rem}
+.glass{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(14px);border-radius:24px;padding:clamp(20px,4vw,36px);box-shadow:0 18px 55px #0003}
+.letter{max-width:760px;margin:auto;line-height:1.9;color:#f2e8f4;font-size:1.04rem;white-space:pre-line}
+.letter strong{color:#ffc3df}
+.counter-card{max-width:760px;margin:auto;text-align:center}
+.counter{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:24px 0}
+.unit{min-width:100px;padding:16px 14px;border:1px solid #ff9bc933;background:#ffffff08;border-radius:18px}
+.unit strong{display:block;font-size:clamp(1.8rem,5vw,2.7rem);color:#ffb8d9;line-height:1.1}
+.unit span{font-size:.8rem;color:#d9c9e3}
+.counter-note{color:#d8c6e2}
+.footer{text-align:center;padding:35px 16px 45px;color:#bbaac8;font-size:.9rem}
+#botonMusica{position:fixed;right:14px;bottom:14px;z-index:30;border:1px solid #ffffff3d;border-radius:999px;padding:11px 15px;background:rgba(36,17,49,.9);color:white;box-shadow:0 8px 28px #0005;backdrop-filter:blur(12px);cursor:pointer}
+#botonMusica:focus-visible,.btn:focus-visible{outline:2px solid white;outline-offset:3px}
+.heart{position:fixed;bottom:-30px;z-index:-1;pointer-events:none;opacity:0;color:#ff8fbd;animation:rise 9s linear infinite}
+@keyframes rise{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.45}90%{opacity:.25}100%{transform:translateY(-115vh) rotate(30deg);opacity:0}}
+@media(max-width:760px){.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.nav{gap:9px;font-size:.8rem}.topbar{align-items:flex-start}.planet{top:18%;width:min(78vw,350px)}.hero{min-height:78vh}}
+@media(max-width:420px){.nav a:nth-child(2){display:none}.photo{padding:6px}.unit{min-width:75px;flex:1}.unit strong{font-size:1.8rem}}
 </style>
 </head>
-
 <body>
 <header class="topbar">
   <div class="brand">HECTO<span>MI</span> ❤️</div>
-  <nav class="nav">
-    <a href="#fotos">Recuerdos</a>
+  <nav class="nav" aria-label="Navegación">
+    <a href="#fotos">Nuestros recuerdos</a>
     <a href="#carta">Mi carta</a>
     <a href="#tiempo">Nuestro tiempo</a>
   </nav>
 </header>
 
-<main id="romanticPage">
+<main>
   <section class="hero" id="inicio">
-    <div class="planet"></div>
+    <div class="planet" aria-hidden="true"></div>
     <div class="hero-content">
       <span class="eyebrow">Un pequeño universo para ti</span>
-      <h1>Para mi preciosa<br><em>Nohemí</em> ❤️</h1>
-      <p>
-        Si pudiera regalarte una estrella por cada vez que me haces feliz,
-        este universo no tendría fin.
-      </p>
-      <div class="buttons">
-        <button class="btn primary" id="enterWorld">🌹 Entrar a nuestro mundo 3D</button>
+      <h1>Para mi preciosa<br><em>Nohemi</em> ❤️</h1>
+      <p>Si pudiera regalarte una estrella por cada vez que me haces feliz, este universo no tendría fin.</p>
+      <div class="actions">
+        <button class="btn primary" id="botonInicio">✨ Entrar a nuestros recuerdos</button>
+        <button class="btn" id="botonMundo">🌌 Explorar nuestro mundo 3D</button>
         <a class="btn" href="#fotos">💗 Ver nuestros recuerdos</a>
       </div>
     </div>
   </section>
 
-  <section class="content" id="fotos">
+  <section id="fotos">
     <div class="wrap">
       <div class="section-head">
+        <div class="kicker">Momentos que guardo</div>
         <h2>Nuestros recuerdos ✨</h2>
         <p>Cada foto es una pequeña parte de nuestra historia.</p>
       </div>
       <div class="gallery">
-        <figure class="photo">
-          <img src="foto1.jpeg" alt="Nuestro recuerdo uno">
-          <figcaption>Un momento contigo 💕</figcaption>
-        </figure>
-        <figure class="photo">
-          <img src="foto2.jpeg" alt="Nuestro recuerdo dos">
-          <figcaption>Mi lugar favorito</figcaption>
-        </figure>
-        <figure class="photo">
-          <img src="foto3.jpeg" alt="Nuestro recuerdo tres">
-          <figcaption>Una sonrisa tuya ✨</figcaption>
-        </figure>
-        <figure class="photo">
-          <img src="foto4.jpeg" alt="Nuestro recuerdo cuatro">
-          <figcaption>Y muchos más por vivir</figcaption>
-        </figure>
+        <figure class="photo"><img src="foto1.jpeg" alt="Nuestro recuerdo número uno" loading="lazy"><figcaption>Un momento contigo 💕</figcaption></figure>
+        <figure class="photo"><img src="foto2.jpeg" alt="Nuestro recuerdo número dos" loading="lazy"><figcaption>Mi lugar favorito</figcaption></figure>
+        <figure class="photo"><img src="foto3.jpeg" alt="Nuestro recuerdo número tres" loading="lazy"><figcaption>Una sonrisa tuya ✨</figcaption></figure>
+        <figure class="photo"><img src="foto4.jpeg" alt="Nuestro recuerdo número cuatro" loading="lazy"><figcaption>Y muchos más por vivir</figcaption></figure>
       </div>
     </div>
   </section>
 
-  <section class="content" id="carta">
+  <section id="carta">
     <div class="wrap">
       <div class="section-head">
-        <h2>Una carta para mi Nohemí 💌</h2>
+        <div class="kicker">Solo para ti</div>
+        <h2>Una carta para mi Nohemi 💌</h2>
       </div>
-      <article class="glass letter">
-        Mi preciosa <strong>Nohemí</strong>,
+      <article class="glass letter">Mi preciosa <strong>Nohemi</strong>,
 
-        Quiero que esta pequeña página te recuerde lo especial que eres para mí.
-        Gracias por cada sonrisa, cada abrazo, cada conversación y por todos
-        esos momentos que se vuelven inolvidables simplemente porque los
-        comparto contigo.
+Quiero que esta pequeña página te recuerde lo especial que eres para mí. Gracias por cada sonrisa, cada abrazo, cada conversación y por todos esos momentos que se vuelven inolvidables simplemente porque los comparto contigo.
 
-        No necesito que todo sea perfecto para ser feliz contigo. Quiero seguir
-        aprendiendo de ti, apoyarte en tus días difíciles, celebrar tus alegrías
-        y construir muchos recuerdos más a tu lado.
+No necesito que todo sea perfecto para ser feliz contigo. Quiero seguir aprendiendo de ti, apoyarte en tus días difíciles, celebrar tus alegrías y construir muchos recuerdos más a tu lado.
 
-        Si este universo tuviera un centro, serías tú. Y si pudiera elegir de
-        nuevo, volvería a elegirte a ti.
+Si este universo tuviera un centro, serías tú. Y si pudiera elegir de nuevo, volvería a elegirte a ti.
 
-        <strong>Te quiero muchísimo. ❤️</strong>
-      </article>
+<strong>Te quiero muchísimo. ❤️</strong></article>
     </div>
   </section>
 
-  <section class="content" id="tiempo">
+  <section id="tiempo">
     <div class="wrap">
       <div class="section-head">
+        <div class="kicker">Cada segundo cuenta</div>
         <h2>Nuestro tiempo juntos ⏳</h2>
-        <p>Cada segundo suma a nuestra historia.</p>
       </div>
-      <div class="glass" style="text-align:center">
-        <div class="counter">
-          <div class="unit"><strong id="days">0</strong><span>días</span></div>
-          <div class="unit"><strong id="hours">00</strong><span>horas</span></div>
-          <div class="unit"><strong id="minutes">00</strong><span>minutos</span></div>
-          <div class="unit"><strong id="seconds">00</strong><span>segundos</span></div>
+      <div class="glass counter-card">
+        <p class="counter-note">Desde el 11 de septiembre de 2026, cada instante suma a nuestra historia.</p>
+        <div class="counter" aria-live="polite">
+          <div class="unit"><strong id="dias">0</strong><span>días</span></div>
+          <div class="unit"><strong id="horas">00</strong><span>horas</span></div>
+          <div class="unit"><strong id="minutos">00</strong><span>minutos</span></div>
+          <div class="unit"><strong id="segundos">00</strong><span>segundos</span></div>
         </div>
-        <p>Desde el 11 de septiembre de 2026, y ojalá por muchos capítulos más. 💞</p>
+        <p class="counter-note">Y ojalá nos queden muchísimos capítulos por escribir. 💞</p>
       </div>
     </div>
   </section>
 </main>
 
-<footer class="footer">Hecho con amor para Nohemí ❤️ · Hectomi</footer>
-
-<video id="music" src="Tutu.mp4.mp4" loop playsinline preload="metadata" style="display:none"></video>
-<button id="musicButton">🎵 Activar música</button>
-
-<!-- MUNDO 3D -->
-<div id="world">
-  <div id="game"></div>
-
-  <div id="worldTop">
-    <div class="worldTitleBox">
-      <div class="worldTitle">Hectomi <span>♥</span></div>
-      <div style="font-size:10px;color:#eadce9">Nuestro pequeño mundo</div>
-    </div>
-    <div class="worldTools">
-      <button id="cameraButton">📷 Cámara</button>
-      <button id="qualityButton">⚡ Gráficos: bajos</button>
-      <button id="backHome">↩ Volver</button>
-    </div>
-  </div>
-
-  <div id="worldHelp">Explora el jardín y acércate a la banca 🌷</div>
-
-  <div id="joystick"><div id="stick"></div></div>
-
-  <div id="worldActions">
-    <button id="sitButton">🪑 Sentarse</button>
-    <button id="flirtButton" class="romantic">💌 Coquetear</button>
-    <button id="hugButton" class="romantic">🫂 Abrazo</button>
-    <button id="kissButton" class="romantic">💋 Beso</button>
-    <button id="caressButton" class="romantic">💕 Caricia</button>
-    <button id="intimateButton" class="romantic">🌹 Momento íntimo</button>
-  </div>
-
-  <div id="worldMessage" role="status"></div>
-
-  <div id="intro">
-    <div class="worldCard">
-      <h2>Bienvenidos a Hectomi ❤️</h2>
-      <p>
-        Un jardín para caminar, sentarse junto al lago y compartir
-        momentos románticos con Nohemí.
-      </p>
-      <p>
-        <b>Computador:</b> usa WASD o las flechas.<br>
-        <b>Celular:</b> usa el joystick y arrastra el fondo para mirar.
-      </p>
-      <p>Este mundo funciona como una demostración individual. Todavía no conecta a los dos jugadores en vivo.</p>
-      <button id="startWorld">Entrar a nuestro mundo ✨</button>
-    </div>
-  </div>
-
-  <div id="consent">
-    <div class="worldCard">
-      <h2>Un momento solo nuestro 🌹</h2>
-      <p>
-        Esta escena es romántica y sugerida, sin contenido sexual explícito.
-        Ambos deben aceptar libremente. Cualquiera puede cancelar.
-      </p>
-      <p>
-        Esta versión solo registra las dos respuestas en este dispositivo.
-        No confirma la aceptación desde otro teléfono.
-      </p>
-      <button id="acceptH">Héctor acepta 💗</button>
-      <button id="acceptN">Nohemí acepta 💗</button>
-      <p id="consentStatus">Falta la aceptación de los dos.</p>
-      <button id="cancelConsent">Cancelar</button>
-    </div>
-  </div>
+<div id="mundoOverlay" style="display:none;position:fixed;inset:0;z-index:100;background:#080711">
+  <button id="cerrarMundo" style="position:absolute;top:12px;right:12px;z-index:102;border:1px solid #ffffff55;border-radius:999px;padding:10px 14px;background:#21142d;color:white;font-weight:700">✕ Volver a Hectomi</button>
+  <iframe id="mundoFrame" title="Nuestro mundo 3D Hectomi" style="display:block;width:100%;height:100%;border:0;background:#101b2b"></iframe>
 </div>
 
-<script>
-/* Página romántica */
-(() => {
-  const music = document.getElementById('music');
-  const musicButton = document.getElementById('musicButton');
+<footer class="footer">Hecho con amor, para Nohemi ❤️ · Hectomi</footer>
 
-  async function toggleMusic() {
+<video id="musicaTutu" src="Tutu.mp4.mp4" loop playsinline preload="metadata" style="display:none"></video>
+<button id="botonMusica" aria-label="Reproducir o pausar música">🎵 Activar música</button>
+
+<script>
+(() => {
+  const musica = document.getElementById('musicaTutu');
+  const boton = document.getElementById('botonMusica');
+  const inicio = document.getElementById('botonInicio');
+
+  async function alternarMusica() {
     try {
-      if (music.paused) {
-        await music.play();
-        musicButton.textContent = '⏸️ Pausar música';
+      if (musica.paused) {
+        await musica.play();
+        boton.textContent = '⏸️ Pausar música';
       } else {
-        music.pause();
-        musicButton.textContent = '🎵 Activar música';
+        musica.pause();
+        boton.textContent = '🎵 Activar música';
       }
-    } catch {
-      musicButton.textContent = '🎵 Toca para activar';
+    } catch (error) {
+      boton.textContent = '🎵 Toca para intentar';
+      console.error('No se pudo reproducir el video de Tutu:', error);
     }
   }
+  boton.addEventListener('click', alternarMusica);
+  inicio.addEventListener('click', async () => {
+    document.getElementById('fotos').scrollIntoView({behavior:'smooth'});
+    if (musica.paused) {
+      try {
+        await musica.play();
+        boton.textContent = '⏸️ Pausar música';
+      } catch (error) {
+        boton.textContent = '🎵 Activar música';
+      }
+    }
+  });
+  musica.addEventListener('play', () => boton.textContent = '⏸️ Pausar música');
+  musica.addEventListener('pause', () => boton.textContent = '🎵 Activar música');
 
-  musicButton.addEventListener('click', toggleMusic);
-
-  const startDate = new Date(2026, 8, 11, 0, 0, 0);
-
-  function updateCounter() {
-    let diff = Math.max(0, Date.now() - startDate.getTime());
-    const second = 1000;
-    const minute = 60 * second;
-    const hour = 60 * minute;
-    const day = 24 * hour;
-
-    document.getElementById('days').textContent =
-      Math.floor(diff / day).toLocaleString('es-CO');
-    diff %= day;
-
-    document.getElementById('hours').textContent =
-      String(Math.floor(diff / hour)).padStart(2, '0');
-    diff %= hour;
-
-    document.getElementById('minutes').textContent =
-      String(Math.floor(diff / minute)).padStart(2, '0');
-    diff %= minute;
-
-    document.getElementById('seconds').textContent =
-      String(Math.floor(diff / second)).padStart(2, '0');
+  // Fecha de inicio de la relación: 11 de septiembre de 2026.
+  const fechaInicio = new Date(2026, 8, 11, 0, 0, 0);
+  const el = id => document.getElementById(id);
+  function actualizarContador() {
+    let diferencia = Math.max(0, Date.now() - fechaInicio.getTime());
+    const segundo = 1000, minuto = 60 * segundo, hora = 60 * minuto, dia = 24 * hora;
+    el('dias').textContent = Math.floor(diferencia / dia).toLocaleString('es-CO');
+    diferencia %= dia;
+    el('horas').textContent = String(Math.floor(diferencia / hora)).padStart(2, '0');
+    diferencia %= hora;
+    el('minutos').textContent = String(Math.floor(diferencia / minuto)).padStart(2, '0');
+    diferencia %= minuto;
+    el('segundos').textContent = String(Math.floor(diferencia / segundo)).padStart(2, '0');
   }
+  actualizarContador();
+  setInterval(actualizarContador, 1000);
 
-  updateCounter();
-  setInterval(updateCounter, 1000);
-
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 10; i++) {
     const heart = document.createElement('span');
-    heart.textContent = i % 2 ? '♡' : '♥';
-    heart.style.cssText = `
-      position:fixed;
-      left:${Math.random() * 100}vw;
-      bottom:-30px;
-      z-index:0;
-      pointer-events:none;
-      color:#ff8fbd;
-      opacity:0;
-      font-size:${12 + Math.random() * 18}px;
-      animation:heartRise ${7 + Math.random() * 6}s
-      ${Math.random() * 8}s linear infinite;
-    `;
+    heart.className = 'heart';
+    heart.textContent = ['♥','♡','✦'][i % 3];
+    heart.style.left = (5 + Math.random() * 90) + 'vw';
+    heart.style.animationDelay = (Math.random() * 9) + 's';
+    heart.style.animationDuration = (7 + Math.random() * 6) + 's';
+    heart.style.fontSize = (12 + Math.random() * 16) + 'px';
     document.body.appendChild(heart);
   }
 
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes heartRise {
-      10% { opacity:.4; }
-      100% { transform:translateY(-115vh) rotate(35deg); opacity:0; }
-    }
-  `;
-  document.head.appendChild(style);
+  // El mundo 3D está incluido dentro de este mismo archivo HTML.
+  const mundoHTML = decodeURIComponent(escape(atob('PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVzIj48aGVhZD48bWV0YSBjaGFyc2V0PSJ1dGYtOCI+PG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCxpbml0aWFsLXNjYWxlPTEsbWF4aW11bS1zY2FsZT0xLHVzZXItc2NhbGFibGU9bm8sdmlld3BvcnQtZml0PWNvdmVyIj48bWV0YSBuYW1lPSJ0aGVtZS1jb2xvciIgY29udGVudD0iIzEwMWIyYiI+PHRpdGxlPkhlY3RvbWkg4p2k77iPIOKAlCBOdWVzdHJvIG11bmRvPC90aXRsZT4KPHN0eWxlPgoqe2JveC1zaXppbmc6Ym9yZGVyLWJveH1odG1sLGJvZHl7bWFyZ2luOjA7d2lkdGg6MTAwJTtoZWlnaHQ6MTAwJTtvdmVyZmxvdzpoaWRkZW47YmFja2dyb3VuZDojMTAxYjJiO2NvbG9yOiNmZmY7Zm9udC1mYW1pbHk6c3lzdGVtLXVpLHNhbnMtc2VyaWY7dG91Y2gtYWN0aW9uOm5vbmV9I2dhbWV7cG9zaXRpb246Zml4ZWQ7aW5zZXQ6MH1jYW52YXN7ZGlzcGxheTpibG9jazt3aWR0aDoxMDAlO2hlaWdodDoxMDAlfQojdG9we3Bvc2l0aW9uOmZpeGVkO3otaW5kZXg6Mzt0b3A6ZW52KHNhZmUtYXJlYS1pbnNldC10b3AsMTBweCk7bGVmdDoxMHB4O3JpZ2h0OjEwcHg7ZGlzcGxheTpmbGV4O2p1c3RpZnktY29udGVudDpzcGFjZS1iZXR3ZWVuO2dhcDo4cHg7cG9pbnRlci1ldmVudHM6bm9uZX0uZ2xhc3N7YmFja2dyb3VuZDojMTAxNzI3ZDk7Ym9yZGVyOjFweCBzb2xpZCAjZmZmZmZmMzA7Ym9yZGVyLXJhZGl1czoxNXB4O3BhZGRpbmc6OXB4IDEycHg7YmFja2Ryb3AtZmlsdGVyOmJsdXIoOHB4KX0jdGl0bGV7Zm9udC13ZWlnaHQ6ODAwfSN0aXRsZSBzcGFue2NvbG9yOiNmZmI2ZDB9I3N0YXR1c3tmb250LXNpemU6MTFweDtjb2xvcjojZTlkOWU4fSN0b29sc3tkaXNwbGF5OmZsZXg7Z2FwOjZweDtwb2ludGVyLWV2ZW50czphdXRvfWJ1dHRvbntjb2xvcjojZmZmO2JhY2tncm91bmQ6IzIwMjMzYmQ5O2JvcmRlcjoxcHggc29saWQgI2ZmZmZmZjM1O2JvcmRlci1yYWRpdXM6MTJweDtwYWRkaW5nOjEwcHg7Zm9udDo2MDAgMTNweCBzeXN0ZW0tdWk7dG91Y2gtYWN0aW9uOm1hbmlwdWxhdGlvbn1idXR0b246YWN0aXZle3RyYW5zZm9ybTpzY2FsZSguOTcpfQojaGVscHtwb3NpdGlvbjpmaXhlZDt6LWluZGV4OjM7dG9wOjc4cHg7bGVmdDo1MCU7dHJhbnNmb3JtOnRyYW5zbGF0ZVgoLTUwJSk7bWF4LXdpZHRoOmNhbGMoMTAwJSAtIDI0cHgpO3doaXRlLXNwYWNlOm5vd3JhcDtmb250LXNpemU6MTFweDt0ZXh0LWFsaWduOmNlbnRlcn0KI2pveXtwb3NpdGlvbjpmaXhlZDt6LWluZGV4OjQ7bGVmdDoyMHB4O2JvdHRvbTptYXgoMjJweCxlbnYoc2FmZS1hcmVhLWluc2V0LWJvdHRvbSkpO3dpZHRoOjExNnB4O2hlaWdodDoxMTZweDtib3JkZXI6MXB4IHNvbGlkICNmZmZmZmY1MDtib3JkZXItcmFkaXVzOjUwJTtiYWNrZ3JvdW5kOiMxMDE3Mjc4NTtkaXNwbGF5Om5vbmU7dG91Y2gtYWN0aW9uOm5vbmV9I3N0aWNre3Bvc2l0aW9uOmFic29sdXRlO2xlZnQ6MzFweDt0b3A6MzFweDt3aWR0aDo1NHB4O2hlaWdodDo1NHB4O2JvcmRlci1yYWRpdXM6NTAlO2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDE0NWRlZywjZmZkNWU0LCNkOTZjOWIpO2JvcmRlcjoycHggc29saWQgI2ZmZjg7cG9pbnRlci1ldmVudHM6bm9uZX0KI2FjdGlvbnN7cG9zaXRpb246Zml4ZWQ7ei1pbmRleDo0O3JpZ2h0OjE1cHg7Ym90dG9tOm1heCgyMnB4LGVudihzYWZlLWFyZWEtaW5zZXQtYm90dG9tKSk7ZGlzcGxheTpmbGV4O2ZsZXgtZGlyZWN0aW9uOmNvbHVtbjtnYXA6OXB4O2FsaWduLWl0ZW1zOmZsZXgtZW5kfS5hY3Rpb257bWluLXdpZHRoOjEwOHB4O21pbi1oZWlnaHQ6NDZweDtiYWNrZ3JvdW5kOmxpbmVhci1ncmFkaWVudCgxMjBkZWcsI2ZmZDBlMSwjZTc3NWE2KTtjb2xvcjojMzUxMzI4O2JvcmRlcjowO2JvcmRlci1jb2xvcjojZmZjNGRiODB9I3Njb3Jle3Bvc2l0aW9uOmZpeGVkO3otaW5kZXg6Mzt0b3A6MTMwcHg7bGVmdDoxMHB4O2ZvbnQtc2l6ZToxMnB4fQojbXNne3Bvc2l0aW9uOmZpeGVkO3otaW5kZXg6NTtkaXNwbGF5Om5vbmU7Ym90dG9tOjE1MHB4O2xlZnQ6NTAlO3RyYW5zZm9ybTp0cmFuc2xhdGVYKC01MCUpO21heC13aWR0aDpjYWxjKDEwMCUgLSAyOHB4KTt3aWR0aDptYXgtY29udGVudDt0ZXh0LWFsaWduOmNlbnRlcjtiYWNrZ3JvdW5kOiMxMDE3MjdlZDtib3JkZXI6MXB4IHNvbGlkICNmZmZmZmYzNTtib3JkZXItcmFkaXVzOjE0cHg7cGFkZGluZzoxMXB4IDE0cHg7Zm9udC1zaXplOjEzcHh9CiNpbnRyb3twb3NpdGlvbjpmaXhlZDt6LWluZGV4Ojk7aW5zZXQ6MDtkaXNwbGF5OmdyaWQ7cGxhY2UtaXRlbXM6Y2VudGVyO3BhZGRpbmc6MjBweDtiYWNrZ3JvdW5kOiMxMDFiMmJlOH0jY2FyZHttYXgtd2lkdGg6NDQwcHg7dGV4dC1hbGlnbjpjZW50ZXI7cGFkZGluZzoyNnB4IDIycHg7YmFja2dyb3VuZDojMTExODJiZUY7Ym9yZGVyOjFweCBzb2xpZCAjZmZmZmZmMzA7Ym9yZGVyLXJhZGl1czoyNHB4fWgxe2ZvbnQtc2l6ZTpjbGFtcCgzNHB4LDl2dyw0OHB4KTttYXJnaW46MH1oMSBzcGFue2NvbG9yOiNmZmI2ZDB9I2NhcmQgcHtmb250LXNpemU6MTRweDtsaW5lLWhlaWdodDoxLjY1O2NvbG9yOiNlOGRjZTl9I3N0YXJ0e2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KDEyMGRlZywjZmZkMGUxLCNlNzc1YTYpO2NvbG9yOiMzNTEzMjg7Ym9yZGVyOjA7cGFkZGluZzoxM3B4IDIwcHg7Zm9udC1zaXplOjE0cHh9CiNmb290ZXJ7cG9zaXRpb246Zml4ZWQ7Ym90dG9tOjZweDtsZWZ0OjUwJTt0cmFuc2Zvcm06dHJhbnNsYXRlWCgtNTAlKTt6LWluZGV4OjI7Zm9udC1zaXplOjEwcHg7Y29sb3I6I2ZmZmZmZjliO3doaXRlLXNwYWNlOm5vd3JhcDtwb2ludGVyLWV2ZW50czpub25lfQpAbWVkaWEocG9pbnRlcjpjb2Fyc2UpeyNqb3l7ZGlzcGxheTpibG9ja319QG1lZGlhKG1heC13aWR0aDo0MjBweCl7I3RpdGxle2ZvbnQtc2l6ZToxNHB4fSN0b29scyBidXR0b257Zm9udC1zaXplOjExcHg7cGFkZGluZzo4cHh9I2hlbHB7dG9wOjc0cHh9fQo8L3N0eWxlPjwvaGVhZD48Ym9keT4KPGRpdiBpZD0iZ2FtZSI+PC9kaXY+PGRpdiBpZD0idG9wIj48ZGl2IGNsYXNzPSJnbGFzcyI+PGRpdiBpZD0idGl0bGUiPkhlY3RvbWkgPHNwYW4+4pmlPC9zcGFuPjwvZGl2PjxkaXYgaWQ9InN0YXR1cyI+TnVlc3RybyBwZXF1ZcOxbyBtdW5kbzwvZGl2PjwvZGl2PjxkaXYgaWQ9InRvb2xzIj48YnV0dG9uIGlkPSJjYW0iPvCfk7cgQ8OhbWFyYTwvYnV0dG9uPjxidXR0b24gaWQ9InF1YWxpdHkiPuKaoSBHcsOhZmljb3M6IGJham9zPC9idXR0b24+PC9kaXY+PC9kaXY+CjxkaXYgaWQ9ImhlbHAiIGNsYXNzPSJnbGFzcyI+RXhwbG9yYSBlbCBqYXJkw61uIHkgZW5jdWVudHJhIGxvcyA4IGNvcmF6b25lcyBlc2NvbmRpZG9zIPCfkpc8L2Rpdj48ZGl2IGlkPSJzY29yZSIgY2xhc3M9ImdsYXNzIj7wn5KXIENvcmF6b25lczogPGIgaWQ9ImNvdW50Ij4wPC9iPi84PC9kaXY+PGRpdiBpZD0iam95Ij48ZGl2IGlkPSJzdGljayI+PC9kaXY+PC9kaXY+PGRpdiBpZD0iYWN0aW9ucyI+PGJ1dHRvbiBpZD0icG9zZSIgY2xhc3M9ImFjdGlvbiI+8J+qkSBTZW50YXJzZTwvYnV0dG9uPjxidXR0b24gaWQ9IndhdmUiIGNsYXNzPSJhY3Rpb24iPvCfkYsgU2FsdWRhcjwvYnV0dG9uPjxidXR0b24gaWQ9ImhpbnQiIGNsYXNzPSJhY3Rpb24iPvCfp60gUGlzdGE8L2J1dHRvbj48L2Rpdj48ZGl2IGlkPSJtc2ciIHJvbGU9InN0YXR1cyI+PC9kaXY+PGRpdiBpZD0iZm9vdGVyIj5XQVNEIC8gZmxlY2hhcyBwYXJhIGNhbWluYXIgwrcgQXJyYXN0cmEgcGFyYSBtaXJhcjwvZGl2Pgo8ZGl2IGlkPSJpbnRybyI+PGRpdiBpZD0iY2FyZCI+PGgxPkhlY3RvbWkgPHNwYW4+4pmlPC9zcGFuPjwvaDE+PHA+VW4gcGVxdWXDsW8gbXVuZG8gcGFyYSBleHBsb3JhciBjb24gw6FyYm9sZXMsIGZsb3JlcywgdW4gbGFnbyB5IHNlY3JldG9zIHJvbcOhbnRpY29zLiBFbmN1ZW50cmEgbG9zIDggY29yYXpvbmVzIGVzY29uZGlkb3MuPC9wPjxwPjxiPkNvbXB1dGFkb3I6PC9iPiBXL0EvUy9EIG8gZmxlY2hhcyBwYXJhIGNhbWluYXIuIDxiPkNlbHVsYXI6PC9iPiBqb3lzdGljayBwYXJhIGNhbWluYXIgeSBhcnJhc3RyYSBsYSBwYW50YWxsYSBwYXJhIG1pcmFyLjwvcD48cD5FbCBtdW5kbyB0aWVuZSBncsOhZmljb3MgYmFqb3MgcGFyYSBmdW5jaW9uYXIgbWVqb3IgZW4gY2VsdWxhcmVzIHNlbmNpbGxvcy4gRWwgY2hhdCB5IGVsIG1vZG8gZGUganVnYXIganVudG9zIHNlIGNvbmVjdGFyw6FuIGRlc3B1w6lzLjwvcD48YnV0dG9uIGlkPSJzdGFydCI+RW50cmFyIGEgbnVlc3RybyBtdW5kbyDinKg8L2J1dHRvbj48L2Rpdj48L2Rpdj4KPHNjcmlwdCB0eXBlPSJtb2R1bGUiPgppbXBvcnQgKiBhcyBUSFJFRSBmcm9tICdodHRwczovL2Nkbi5qc2RlbGl2ci5uZXQvbnBtL3RocmVlQDAuMTYwLjAvYnVpbGQvdGhyZWUubW9kdWxlLmpzJzsKY29uc3Qgcm9vdD1kb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjZ2FtZScpLG1vYmlsZT1tYXRjaE1lZGlhKCcocG9pbnRlcjpjb2Fyc2UpJykubWF0Y2hlc3x8L0FuZHJvaWR8aVBob25lfGlQYWQvaS50ZXN0KG5hdmlnYXRvci51c2VyQWdlbnQpOwpjb25zdCBzY2VuZT1uZXcgVEhSRUUuU2NlbmUoKTtzY2VuZS5iYWNrZ3JvdW5kPW5ldyBUSFJFRS5Db2xvcigweDkxYjlkNCk7c2NlbmUuZm9nPW5ldyBUSFJFRS5Gb2coMHg5MWI5ZDQsMzgsMTAwKTsKY29uc3QgY2FtZXJhPW5ldyBUSFJFRS5QZXJzcGVjdGl2ZUNhbWVyYSg2Mixpbm5lcldpZHRoL2lubmVySGVpZ2h0LC4xLDE1MCk7CmNvbnN0IHJlbmRlcmVyPW5ldyBUSFJFRS5XZWJHTFJlbmRlcmVyKHthbnRpYWxpYXM6IW1vYmlsZSxwb3dlclByZWZlcmVuY2U6J2xvdy1wb3dlcid9KTtyZW5kZXJlci5zZXRQaXhlbFJhdGlvKE1hdGgubWluKGRldmljZVBpeGVsUmF0aW98fDEsbW9iaWxlPy45OjEuMykpO3JlbmRlcmVyLnNldFNpemUoaW5uZXJXaWR0aCxpbm5lckhlaWdodCk7cmVuZGVyZXIub3V0cHV0Q29sb3JTcGFjZT1USFJFRS5TUkdCQ29sb3JTcGFjZTtyZW5kZXJlci50b25lTWFwcGluZz1USFJFRS5BQ0VTRmlsbWljVG9uZU1hcHBpbmc7cm9vdC5hcHBlbmRDaGlsZChyZW5kZXJlci5kb21FbGVtZW50KTsKc2NlbmUuYWRkKG5ldyBUSFJFRS5IZW1pc3BoZXJlTGlnaHQoMHhkOWVmZmYsMHg0ZDYyNGEsMikpO2NvbnN0IHN1bj1uZXcgVEhSRUUuRGlyZWN0aW9uYWxMaWdodCgweGZmZTBiOCwxLjgpO3N1bi5wb3NpdGlvbi5zZXQoLTE4LDMwLDEyKTtzY2VuZS5hZGQoc3VuKTsKY29uc3QgbWF0PWM9Pm5ldyBUSFJFRS5NZXNoU3RhbmRhcmRNYXRlcmlhbCh7Y29sb3I6Yyxyb3VnaG5lc3M6Ljk1fSk7CmNvbnN0IE09e2dyYXNzOm1hdCgweDQ5N2E1YSkscGF0aDptYXQoMHhiNmEwODQpLHdhdGVyOm1hdCgweDQyOGRhOCksdHJ1bms6bWF0KDB4Njc0NjMxKSxsZWFmOm1hdCgweDJjNjg0ZSksbGVhZjI6bWF0KDB4NDc4MTVjKSxwaW5rOm1hdCgweGZmYTZjOCkseWVsbG93Om1hdCgweGZmZTZhMCksd29vZDptYXQoMHg4NjU4M2MpLHN0b25lOm1hdCgweGI2YjNhYyksc2hpcnQ6bWF0KDB4ZjBhMmJkKSxza2luOm1hdCgweGYwYzVhOSkscGFudHM6bWF0KDB4MzQ0NjYzKSxoYWlyOm1hdCgweDNjMjYzMCksc2hvZTptYXQoMHhmNmU4ZTQpfTsKZnVuY3Rpb24gYWRkKGcsbSx4LHkseixwYXJlbnQ9c2NlbmUpe2NvbnN0IG89bmV3IFRIUkVFLk1lc2goZyxtKTtvLnBvc2l0aW9uLnNldCh4LHkseik7cGFyZW50LmFkZChvKTtyZXR1cm4gb30KYWRkKG5ldyBUSFJFRS5QbGFuZUdlb21ldHJ5KDE1MCwxNTApLE0uZ3Jhc3MsMCwtLjEyLDApLnJvdGF0aW9uLng9LU1hdGguUEkvMjsKYWRkKG5ldyBUSFJFRS5QbGFuZUdlb21ldHJ5KDUsNjgpLE0ucGF0aCwwLC0uMDksLTE3KS5yb3RhdGlvbi54PS1NYXRoLlBJLzI7YWRkKG5ldyBUSFJFRS5QbGFuZUdlb21ldHJ5KDI0LDMuMyksTS5wYXRoLDAsLS4wOCwtOSkucm90YXRpb24ueD0tTWF0aC5QSS8yOwphZGQobmV3IFRIUkVFLkNpcmNsZUdlb21ldHJ5KDgsMzIpLE0uc3RvbmUsMTUsLS4wOCwtMTcpLnJvdGF0aW9uLng9LU1hdGguUEkvMjthZGQobmV3IFRIUkVFLkNpcmNsZUdlb21ldHJ5KDcuNSwzMiksTS53YXRlciwxNSwtLjAzNSwtMTcpLnJvdGF0aW9uLng9LU1hdGguUEkvMjsKY29uc3QgbW9vbj1hZGQobmV3IFRIUkVFLlNwaGVyZUdlb21ldHJ5KDIuNCwxNCwxMCksbmV3IFRIUkVFLk1lc2hCYXNpY01hdGVyaWFsKHtjb2xvcjoweGZmZTZiZH0pLC0yNSwyOCwtNDgpOwpjb25zdCBiZW5jaD1uZXcgVEhSRUUuR3JvdXAoKTtzY2VuZS5hZGQoYmVuY2gpO2JlbmNoLnBvc2l0aW9uLnNldCgwLDAsLTUpOwphZGQobmV3IFRIUkVFLkJveEdlb21ldHJ5KDEuOSwuMTMsLjQ4KSxNLndvb2QsMCwuNjUsMCxiZW5jaCk7YWRkKG5ldyBUSFJFRS5Cb3hHZW9tZXRyeSgxLjksLjcsLjEyKSxNLndvb2QsMCwxLjA1LC0uMjIsYmVuY2gpO2Zvcihjb25zdCB4IG9mIFstLjcyLC43Ml0pe2FkZChuZXcgVEhSRUUuQm94R2VvbWV0cnkoLjEyLC41NSwuNCksTS53b29kLHgsLjMyLDAsYmVuY2gpO2FkZChuZXcgVEhSRUUuQm94R2VvbWV0cnkoLjEyLC41NSwuNCksTS53b29kLHgsLjg4LC0uMjIsYmVuY2gpfQpjb25zdCBsYW1wTWF0PW1hdCgweDQxM2E0NiksZ2xvdz1uZXcgVEhSRUUuTWVzaEJhc2ljTWF0ZXJpYWwoe2NvbG9yOjB4ZmZkODlifSk7Zm9yKGNvbnN0IFt4LHpdIG9mIFtbLTQsLTJdLFs0LC0xM10sWy01LC0yMl0sWzksLTEwXSxbMjAsLTE2XV0pe2FkZChuZXcgVEhSRUUuQ3lsaW5kZXJHZW9tZXRyeSguMDYsLjA5LDIuNiw2KSxsYW1wTWF0LHgsMS4zLHopO2FkZChuZXcgVEhSRUUuU3BoZXJlR2VvbWV0cnkoLjE4LDcsNSksZ2xvdyx4LDIuNyx6KX0KY29uc3QgcGxheWVyPW5ldyBUSFJFRS5Hcm91cCgpO3NjZW5lLmFkZChwbGF5ZXIpO3BsYXllci5wb3NpdGlvbi5zZXQoMCwwLDMpOwovLyBDdWVycG8gYXJ0aWN1bGFkbzogbG9zIGJyYXpvcyB5IGxhcyBwaWVybmFzIHRpZW5lbiBwaXZvdGVzIHByb3Bpb3MgcGFyYSBhbmltYXJzZS4KY29uc3QgdG9yc289bmV3IFRIUkVFLkdyb3VwKCk7dG9yc28ucG9zaXRpb24uc2V0KDAsMS4wNSwwKTtwbGF5ZXIuYWRkKHRvcnNvKTsKYWRkKG5ldyBUSFJFRS5DYXBzdWxlR2VvbWV0cnkoLjMxLC42MiwzLDcpLE0uc2hpcnQsMCwwLDAsdG9yc28pOwpjb25zdCBoZWFkPW5ldyBUSFJFRS5Hcm91cCgpO2hlYWQucG9zaXRpb24uc2V0KDAsLjYzLDApO3RvcnNvLmFkZChoZWFkKTsKYWRkKG5ldyBUSFJFRS5TcGhlcmVHZW9tZXRyeSguMjksMTAsOCksTS5za2luLDAsLjAyLDAsaGVhZCk7YWRkKG5ldyBUSFJFRS5TcGhlcmVHZW9tZXRyeSguMzEsMTAsOCksTS5oYWlyLDAsLjE3LC0uMDU1LGhlYWQpO2FkZChuZXcgVEhSRUUuQm94R2VvbWV0cnkoLjQ4LC4zOCwuMTUpLE0uaGFpciwwLC0uMDksLjIzLGhlYWQpOwpjb25zdCBhcm1zPVtdLGxlZ3M9W107CmZvcihjb25zdCBzaWRlIG9mIFstMSwxXSl7CiAgY29uc3QgbGVnPW5ldyBUSFJFRS5Hcm91cCgpO2xlZy5wb3NpdGlvbi5zZXQoc2lkZSouMTUsLS4zNCwwKTtwbGF5ZXIuYWRkKGxlZyk7bGVncy5wdXNoKGxlZyk7CiAgYWRkKG5ldyBUSFJFRS5DYXBzdWxlR2VvbWV0cnkoLjEwNSwuNjIsMiw2KSxNLnBhbnRzLDAsLS4yNSwwLGxlZyk7YWRkKG5ldyBUSFJFRS5Cb3hHZW9tZXRyeSguMiwuMTIsLjM0KSxNLnNob2UsMCwtLjU2LC4wNyxsZWcpOwogIGNvbnN0IGFybT1uZXcgVEhSRUUuR3JvdXAoKTthcm0ucG9zaXRpb24uc2V0KHNpZGUqLjM0LC4yMiwwKTt0b3Jzby5hZGQoYXJtKTthcm1zLnB1c2goYXJtKTsKICBhZGQobmV3IFRIUkVFLkNhcHN1bGVHZW9tZXRyeSguMDksLjQ4LDIsNiksTS5zaGlydCxzaWRlKi4wMzUsLS4yNSwwLGFybSk7Cn0KbGV0IHdhdmluZz1mYWxzZSx3YXZlVW50aWw9MCxzaXR0aW5nPWZhbHNlLHNpdFVudGlsPTA7CmNvbnN0IHRydW5rRz1uZXcgVEhSRUUuQ3lsaW5kZXJHZW9tZXRyeSguMjIsLjMyLDIuMSw3KSxjb25lRz1uZXcgVEhSRUUuQ29uZUdlb21ldHJ5KDEuNDUsMyw3KSxjb25lRzI9bmV3IFRIUkVFLkNvbmVHZW9tZXRyeSgxLjEyLDIuNCw3KTsKZm9yKGxldCBpPTA7aTw2ODtpKyspe2xldCB4LHosbj0wO2Rve3g9KE1hdGgucmFuZG9tKCktLjUpKjcyO3o9KE1hdGgucmFuZG9tKCktLjUpKjcyO24rK313aGlsZShuPDM1JiYoKE1hdGguYWJzKHgpPDUuNSYmejw3JiZ6Pi0zNil8fCgoeC0xNSkqKjIrKHorMTcpKioyPDEwMCkpKTtjb25zdCB0PW5ldyBUSFJFRS5Hcm91cCgpO3QucG9zaXRpb24uc2V0KHgsMCx6KTt0LnNjYWxlLnNldFNjYWxhciguNzIrTWF0aC5yYW5kb20oKSouNik7c2NlbmUuYWRkKHQpO2FkZCh0cnVua0csTS50cnVuaywwLDEuMDUsMCx0KTthZGQoY29uZUcsTS5sZWFmLDAsMi43NSwwLHQpO2FkZChjb25lRzIsTS5sZWFmMiwuMSwzLjY1LDAsdCl9CmZvcihsZXQgaT0wO2k8MTA1O2krKyl7Y29uc3QgeD0oTWF0aC5yYW5kb20oKS0uNSkqNjIsej0oTWF0aC5yYW5kb20oKS0uNSkqNjI7aWYoTWF0aC5hYnMoeCk8My4yJiZ6PDQmJno+LTM0KWNvbnRpbnVlO2lmKCh4LTE1KSoqMisoeisxNykqKjI8NzgpY29udGludWU7YWRkKG5ldyBUSFJFRS5DeWxpbmRlckdlb21ldHJ5KC4wMiwuMDMsLjMyLDQpLE0ubGVhZix4LC4xNSx6KTtjb25zdCBmbT1NYXRoLnJhbmRvbSgpPi41P00ucGluazpNLnllbGxvdztmb3IobGV0IGo9MDtqPDQ7aisrKXtjb25zdCBhPWoqTWF0aC5QSS8yO2FkZChuZXcgVEhSRUUuU3BoZXJlR2VvbWV0cnkoLjEsNSw0KSxmbSx4K01hdGguY29zKGEpKi4xMSwuMzEseitNYXRoLnNpbihhKSouMTEpfX0KY29uc3Qgc2lnbj1uZXcgVEhSRUUuR3JvdXAoKTtzY2VuZS5hZGQoc2lnbik7c2lnbi5wb3NpdGlvbi5zZXQoLTQsMCwtOCk7YWRkKG5ldyBUSFJFRS5Cb3hHZW9tZXRyeSguMTIsMS41LC4xMiksTS50cnVuaywwLC43NSwwLHNpZ24pO2FkZChuZXcgVEhSRUUuQm94R2VvbWV0cnkoMS43LC42NSwuMTIpLE0ud29vZCwwLDEuNCwwLHNpZ24pOwpjb25zdCBjPWRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2NhbnZhcycpO2Mud2lkdGg9NTEyO2MuaGVpZ2h0PTE4MDtjb25zdCBjeD1jLmdldENvbnRleHQoJzJkJyk7Y3guZmlsbFN0eWxlPScjZmNlMGViJztjeC5mb250PSdib2xkIDQ4cHggR2VvcmdpYSc7Y3gudGV4dEFsaWduPSdjZW50ZXInO2N4LmZpbGxUZXh0KCdUw7ogKyBZbyDimaUnLDI1NiwxMDApO2NvbnN0IHRleD1uZXcgVEhSRUUuQ2FudmFzVGV4dHVyZShjKTtjb25zdCBmYWNlPWFkZChuZXcgVEhSRUUuUGxhbmVHZW9tZXRyeSgxLjUsLjUpLG5ldyBUSFJFRS5NZXNoQmFzaWNNYXRlcmlhbCh7bWFwOnRleCx0cmFuc3BhcmVudDp0cnVlfSksMCwxLjQsLjA3MSxzaWduKTsKY29uc3Qga2V5cz1uZXcgU2V0KCk7YWRkRXZlbnRMaXN0ZW5lcigna2V5ZG93bicsZT0+e2lmKFsnYXJyb3d1cCcsJ2Fycm93ZG93bicsJ2Fycm93bGVmdCcsJ2Fycm93cmlnaHQnLCcgJ10uaW5jbHVkZXMoZS5rZXkudG9Mb3dlckNhc2UoKSkpZS5wcmV2ZW50RGVmYXVsdCgpO2tleXMuYWRkKGUua2V5LnRvTG93ZXJDYXNlKCkpfSk7YWRkRXZlbnRMaXN0ZW5lcigna2V5dXAnLGU9PmtleXMuZGVsZXRlKGUua2V5LnRvTG93ZXJDYXNlKCkpKTsKY29uc3Qgam95PWRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyNqb3knKSxzdGljaz1kb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjc3RpY2snKTtsZXQgang9MCxqeT0wLGpkb3duPWZhbHNlO2Z1bmN0aW9uIG1vdmVKb3koZSl7Y29uc3Qgcj1qb3kuZ2V0Qm91bmRpbmdDbGllbnRSZWN0KCk7bGV0IGR4PWUuY2xpZW50WC0oci5sZWZ0K3Iud2lkdGgvMiksZHk9ZS5jbGllbnRZLShyLnRvcCtyLmhlaWdodC8yKSxkPU1hdGguaHlwb3QoZHgsZHkpLG1heD0zNjtpZihkPm1heCl7ZHg9ZHgvZCptYXg7ZHk9ZHkvZCptYXh9ang9ZHgvbWF4O2p5PWR5L21heDtzdGljay5zdHlsZS50cmFuc2Zvcm09YHRyYW5zbGF0ZSgke2R4fXB4LCR7ZHl9cHgpYH1qb3kuYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcmRvd24nLGU9PntqZG93bj10cnVlO2pveS5zZXRQb2ludGVyQ2FwdHVyZShlLnBvaW50ZXJJZCk7bW92ZUpveShlKX0pO2pveS5hZGRFdmVudExpc3RlbmVyKCdwb2ludGVybW92ZScsZT0+e2lmKGpkb3duKW1vdmVKb3koZSl9KTtmdW5jdGlvbiBlbmRKb3koKXtqZG93bj1mYWxzZTtqeD1qeT0wO3N0aWNrLnN0eWxlLnRyYW5zZm9ybT0ndHJhbnNsYXRlKDAsMCknfWpveS5hZGRFdmVudExpc3RlbmVyKCdwb2ludGVydXAnLGVuZEpveSk7am95LmFkZEV2ZW50TGlzdGVuZXIoJ3BvaW50ZXJjYW5jZWwnLGVuZEpveSk7CmxldCB5YXc9MCxwaXRjaD0uMixkcmFnPWZhbHNlLGx4PTAsbHk9MDtyZW5kZXJlci5kb21FbGVtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ3BvaW50ZXJkb3duJyxlPT57ZHJhZz10cnVlO2x4PWUuY2xpZW50WDtseT1lLmNsaWVudFk7cmVuZGVyZXIuZG9tRWxlbWVudC5zZXRQb2ludGVyQ2FwdHVyZShlLnBvaW50ZXJJZCl9KTtyZW5kZXJlci5kb21FbGVtZW50LmFkZEV2ZW50TGlzdGVuZXIoJ3BvaW50ZXJtb3ZlJyxlPT57aWYoIWRyYWcpcmV0dXJuO2NvbnN0IGR4PWUuY2xpZW50WC1seCxkeT1lLmNsaWVudFktbHk7bHg9ZS5jbGllbnRYO2x5PWUuY2xpZW50WTt5YXctPWR4Ki4wMDU7cGl0Y2g9VEhSRUUuTWF0aFV0aWxzLmNsYW1wKHBpdGNoLWR5Ki4wMDMsLS4xLC43KX0pO3JlbmRlcmVyLmRvbUVsZW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigncG9pbnRlcnVwJywoKT0+ZHJhZz1mYWxzZSk7cmVuZGVyZXIuZG9tRWxlbWVudC5hZGRFdmVudExpc3RlbmVyKCdwb2ludGVyY2FuY2VsJywoKT0+ZHJhZz1mYWxzZSk7CmxldCBjYW1GYXI9ZmFsc2UscXVhbGl0eUxvdz10cnVlO2NvbnN0IG1zZz1kb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjbXNnJyk7bGV0IHRpbWVyO2Z1bmN0aW9uIHNheShzKXttc2cudGV4dENvbnRlbnQ9czttc2cuc3R5bGUuZGlzcGxheT0nYmxvY2snO2NsZWFyVGltZW91dCh0aW1lcik7dGltZXI9c2V0VGltZW91dCgoKT0+bXNnLnN0eWxlLmRpc3BsYXk9J25vbmUnLDM2MDApfQovLyBNaXNpw7NuOiBlbmNvbnRyYXIgY29yYXpvbmVzIGVzY29uZGlkb3MgcG9yIGVsIGphcmTDrW4uCmNvbnN0IGhlYXJ0U2hhcGU9bmV3IFRIUkVFLlNoYXBlKCk7aGVhcnRTaGFwZS5tb3ZlVG8oMCwuMTIpO2hlYXJ0U2hhcGUuYmV6aWVyQ3VydmVUbygtLjEyLC4yOCwtLjQyLC4yNCwtLjQyLDApO2hlYXJ0U2hhcGUuYmV6aWVyQ3VydmVUbygtLjQyLC0uMjIsLS4xNiwtLjM0LDAsLS40OCk7aGVhcnRTaGFwZS5iZXppZXJDdXJ2ZVRvKC4xNiwtLjM0LC40MiwtLjIyLC40MiwwKTtoZWFydFNoYXBlLmJlemllckN1cnZlVG8oLjQyLC4yNCwuMTIsLjI4LDAsLjEyKTsKY29uc3QgaGVhcnRHZW89bmV3IFRIUkVFLlNoYXBlR2VvbWV0cnkoaGVhcnRTaGFwZSk7Y29uc3QgaGVhcnRNYXQ9bmV3IFRIUkVFLk1lc2hCYXNpY01hdGVyaWFsKHtjb2xvcjoweGZmNmZhZSxzaWRlOlRIUkVFLkRvdWJsZVNpZGV9KTtjb25zdCBoZWFydFNwb3RzPVtbLTgsMSwtNl0sWzgsMSwtNF0sWy0xMywxLC0xN10sWzYsMSwtMjRdLFsyMCwxLC04XSxbMjIsMSwtMjVdLFstMjAsMSwtMjddLFsxLDEsLTMxXV07Y29uc3QgaGVhcnRzPVtdOwpoZWFydFNwb3RzLmZvckVhY2goKHBvcyxpKT0+e2NvbnN0IGg9bmV3IFRIUkVFLk1lc2goaGVhcnRHZW8saGVhcnRNYXQuY2xvbmUoKSk7aC5wb3NpdGlvbi5zZXQoLi4ucG9zKTtoLnNjYWxlLnNldFNjYWxhcigxLjA1KTtoLnJvdGF0aW9uLnk9KGklMikqLjQ1O3NjZW5lLmFkZChoKTtjb25zdCBoYWxvPW5ldyBUSFJFRS5NZXNoKG5ldyBUSFJFRS5Ub3J1c0dlb21ldHJ5KC40OCwuMDM1LDUsMTYpLG5ldyBUSFJFRS5NZXNoQmFzaWNNYXRlcmlhbCh7Y29sb3I6MHhmZmM4ZTB9KSk7aGFsby5wb3NpdGlvbi5zZXQocG9zWzBdLHBvc1sxXS0uMDQscG9zWzJdKTtzY2VuZS5hZGQoaGFsbyk7aGVhcnRzLnB1c2goe21lc2g6aCxoYWxvLGJhc2VZOnBvc1sxXSxwaGFzZTppKi44LGdvdDpmYWxzZX0pO30pOwpsZXQgZm91bmQ9MDtjb25zdCBjb3VudD1kb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjY291bnQnKTtjb25zdCBoaW50cz1bJ0J1c2NhIGNlcmNhIGRlbCBzZW5kZXJvIHByaW5jaXBhbCDwn4y4JywnTWlyYSBhbHJlZGVkb3IgZGVsIGxhZ28gYXp1bCDwn5KnJywnRXhwbG9yYSBlbnRyZSBsb3Mgw6FyYm9sZXMgZGVsIGZvbmRvIPCfjLInLCdIYXkgdW5vIGNlcmNhIGRlIGxhcyBsdWNlcyBjw6FsaWRhcyDinKgnXTtsZXQgaGludEluZGV4PTA7CmRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyNoaW50JykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCgpPT57c2F5KGhpbnRzW2hpbnRJbmRleCVoaW50cy5sZW5ndGhdKTtoaW50SW5kZXgrK30pOwpkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjd2F2ZScpLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywoKT0+e3dhdmluZz10cnVlO3dhdmVVbnRpbD1wZXJmb3JtYW5jZS5ub3coKSsxODAwO2NvbnN0IG5vdGVzPVsnTm9oZW3DrSwgc2kgZXN0w6FzIGFxdcOtLCBlc3RlIHJpbmNvbmNpdG8gdGFtYmnDqW4gZXMgdHV5by4g8J+SlycsJ1VuIGNvcmF6w7NuIHBvciBjYWRhIHJhesOzbiBwYXJhIHNvbnJlw61yIGNvbnRpZ28uJywnQXVucXVlIGVzdGVtb3MgbGVqb3MsIHBvZGVtb3MgY3JlYXIgcmVjdWVyZG9zIGJvbml0b3MuJywnVGUgbWFuZG8gdW4gYWJyYXpvIGVub3JtZSBkZXNkZSBudWVzdHJvIHBlcXVlw7FvIG11bmRvLiddO3NheShub3Rlc1tNYXRoLmZsb29yKE1hdGgucmFuZG9tKCkqbm90ZXMubGVuZ3RoKV0pfSk7CmRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyNwb3NlJykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCgpPT57c2l0dGluZz0hc2l0dGluZztkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjcG9zZScpLnRleHRDb250ZW50PXNpdHRpbmc/J/CfmrYgTGV2YW50YXJzZSc6J/CfqpEgU2VudGFyc2UnO3NpdFVudGlsPXBlcmZvcm1hbmNlLm5vdygpKzQ1MDtzYXkoc2l0dGluZz8nVHUgcGVyc29uYWplIHNlIGVzdMOhIHNlbnRhbmRvIPCfkpcnOidUdSBwZXJzb25hamUgc2UgZXN0w6EgbGV2YW50YW5kbyDinKgnKX0pOwpkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjY2FtJykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCgpPT57Y2FtRmFyPSFjYW1GYXI7ZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI2NhbScpLnRleHRDb250ZW50PWNhbUZhcj8n8J+TtyBDw6FtYXJhIGxlam9zJzon8J+TtyBDw6FtYXJhIGNlcmNhJ30pOwpkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjcXVhbGl0eScpLmFkZEV2ZW50TGlzdGVuZXIoJ2NsaWNrJywoKT0+e3F1YWxpdHlMb3c9IXF1YWxpdHlMb3c7cmVuZGVyZXIuc2V0UGl4ZWxSYXRpbyhNYXRoLm1pbihkZXZpY2VQaXhlbFJhdGlvfHwxLG1vYmlsZT8ocXVhbGl0eUxvdz8uNjU6MSk6cXVhbGl0eUxvdz8uODU6MS40KSk7cmVuZGVyZXIuc2V0U2l6ZShpbm5lcldpZHRoLGlubmVySGVpZ2h0KTtkb2N1bWVudC5xdWVyeVNlbGVjdG9yKCcjcXVhbGl0eScpLnRleHRDb250ZW50PSfimqEgR3LDoWZpY29zOiAnKyhxdWFsaXR5TG93PydiYWpvcyc6J25vcm1hbGVzJyk7c2F5KHF1YWxpdHlMb3c/J0dyw6FmaWNvcyBiYWpvczogbcOhcyBmbHVpZG8gcGFyYSBtw7N2aWxlcyBzZW5jaWxsb3MuJzonR3LDoWZpY29zIG5vcm1hbGVzOiBtw6FzIGRldGFsbGUsIHB1ZWRlIGNvbnN1bWlyIG3DoXMgYmF0ZXLDrWEuJyl9KTsKZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI3N0YXJ0JykuYWRkRXZlbnRMaXN0ZW5lcignY2xpY2snLCgpPT57ZG9jdW1lbnQucXVlcnlTZWxlY3RvcignI2ludHJvJykuc3R5bGUuZGlzcGxheT0nbm9uZSc7c2F5KCdCaWVudmVuaWRvIGEgSGVjdG9taSDinaTvuI8gwqFFeHBsb3JhIGEgdHUgcml0bW8hJyl9KTsKY29uc3QgY2xvY2s9bmV3IFRIUkVFLkNsb2NrKCk7bGV0IHdhbGs9MDtmdW5jdGlvbiBhbmltYXRlKCl7cmVxdWVzdEFuaW1hdGlvbkZyYW1lKGFuaW1hdGUpO2NvbnN0IGR0PU1hdGgubWluKGNsb2NrLmdldERlbHRhKCksLjAzNSk7bGV0IGY9KGtleXMuaGFzKCd3Jyl8fGtleXMuaGFzKCdhcnJvd3VwJyk/MTowKS0oa2V5cy5oYXMoJ3MnKXx8a2V5cy5oYXMoJ2Fycm93ZG93bicpPzE6MCktankscj0oa2V5cy5oYXMoJ2QnKXx8a2V5cy5oYXMoJ2Fycm93cmlnaHQnKT8xOjApLShrZXlzLmhhcygnYScpfHxrZXlzLmhhcygnYXJyb3dsZWZ0Jyk/MTowKStqeDtjb25zdCBsPU1hdGguaHlwb3QoZixyKTtpZihsPjEpe2YvPWw7ci89bH1jb25zdCBtb3Zpbmc9bD4uMDgmJiFzaXR0aW5nOwppZihtb3Zpbmcpe2NvbnN0IGRpcj1uZXcgVEhSRUUuVmVjdG9yMyhNYXRoLnNpbih5YXcpKmYrTWF0aC5jb3MoeWF3KSpyLDAsLU1hdGguY29zKHlhdykqZitNYXRoLnNpbih5YXcpKnIpO3BsYXllci5wb3NpdGlvbi5hZGRTY2FsZWRWZWN0b3IoZGlyLGR0KjUpO3BsYXllci5wb3NpdGlvbi54PVRIUkVFLk1hdGhVdGlscy5jbGFtcChwbGF5ZXIucG9zaXRpb24ueCwtMzUsMzUpO3BsYXllci5wb3NpdGlvbi56PVRIUkVFLk1hdGhVdGlscy5jbGFtcChwbGF5ZXIucG9zaXRpb24ueiwtMzUsMzUpO3BsYXllci5yb3RhdGlvbi55PU1hdGguYXRhbjIoZGlyLngsZGlyLnopO3dhbGsrPWR0KjEwO3BsYXllci5wb3NpdGlvbi55PU1hdGguYWJzKE1hdGguc2luKHdhbGspKSouMDQ1fWVsc2UgaWYoIXNpdHRpbmcpcGxheWVyLnBvc2l0aW9uLnk9MDsKY29uc3Qgbm93PXBlcmZvcm1hbmNlLm5vdygpO2NvbnN0IGJsZW5kPTEtTWF0aC5leHAoLWR0KjEwKTtjb25zdCBsZWdTd2luZz1tb3Zpbmc/TWF0aC5zaW4od2FsaykqLjU4OjA7CmxlZ3NbMF0ucm90YXRpb24ueD1USFJFRS5NYXRoVXRpbHMubGVycChsZWdzWzBdLnJvdGF0aW9uLngsIHNpdHRpbmc/LS45NTpsZWdTd2luZyxibGVuZCk7bGVnc1sxXS5yb3RhdGlvbi54PVRIUkVFLk1hdGhVdGlscy5sZXJwKGxlZ3NbMV0ucm90YXRpb24ueCxzaXR0aW5nPy0uOTU6LWxlZ1N3aW5nLGJsZW5kKTsKYXJtc1swXS5yb3RhdGlvbi54PVRIUkVFLk1hdGhVdGlscy5sZXJwKGFybXNbMF0ucm90YXRpb24ueCxtb3Zpbmc/LWxlZ1N3aW5nKi43Ok1hdGguc2luKGNsb2NrLmVsYXBzZWRUaW1lKjEuNSkqLjAzNSxibGVuZCk7YXJtc1sxXS5yb3RhdGlvbi54PVRIUkVFLk1hdGhVdGlscy5sZXJwKGFybXNbMV0ucm90YXRpb24ueCxtb3Zpbmc/bGVnU3dpbmcqLjc6TWF0aC5zaW4oY2xvY2suZWxhcHNlZFRpbWUqMS41KzEpKi4wMzUsYmxlbmQpOwphcm1zWzBdLnJvdGF0aW9uLno9VEhSRUUuTWF0aFV0aWxzLmxlcnAoYXJtc1swXS5yb3RhdGlvbi56LHNpdHRpbmc/LjE4Oi4wMixibGVuZCk7Y29uc3Qgd2F2ZVBvc2U9d2F2aW5nJiZub3c8d2F2ZVVudGlsO2FybXNbMV0ucm90YXRpb24uej1USFJFRS5NYXRoVXRpbHMubGVycChhcm1zWzFdLnJvdGF0aW9uLnosd2F2ZVBvc2U/LS45NTouMDIsYmxlbmQpO2lmKHdhdmVQb3NlKWFybXNbMV0ucm90YXRpb24ueD1NYXRoLnNpbihub3cqLjAxOCkqLjM1O2Vsc2UgaWYod2F2aW5nJiZub3c+PXdhdmVVbnRpbCl3YXZpbmc9ZmFsc2U7CnRvcnNvLnBvc2l0aW9uLnk9VEhSRUUuTWF0aFV0aWxzLmxlcnAodG9yc28ucG9zaXRpb24ueSxzaXR0aW5nPy44MjoxLjA1LGJsZW5kKTt0b3Jzby5yb3RhdGlvbi54PVRIUkVFLk1hdGhVdGlscy5sZXJwKHRvcnNvLnJvdGF0aW9uLngsc2l0dGluZz8tLjE2OjAsYmxlbmQpOwpoZWFydHMuZm9yRWFjaChoPT57aWYoaC5nb3QpcmV0dXJuO2gubWVzaC5wb3NpdGlvbi55PWguYmFzZVkrTWF0aC5zaW4oY2xvY2suZWxhcHNlZFRpbWUqMitoLnBoYXNlKSouMTg7aC5tZXNoLnJvdGF0aW9uLnkrPWR0Ki44O2guaGFsby5wb3NpdGlvbi55PWgubWVzaC5wb3NpdGlvbi55LS4wMjtpZihwbGF5ZXIucG9zaXRpb24uZGlzdGFuY2VUbyhoLm1lc2gucG9zaXRpb24pPDEuMjUpe2guZ290PXRydWU7c2NlbmUucmVtb3ZlKGgubWVzaCk7c2NlbmUucmVtb3ZlKGguaGFsbyk7Zm91bmQrKztjb3VudC50ZXh0Q29udGVudD1mb3VuZDtzYXkoZm91bmQ9PT04PyfCoUVuY29udHJhc3RlIGxvcyA4IGNvcmF6b25lcyEgwqFNaXNpw7NuIGNvbXBsZXRhZGEgcGFyYSB0aSB5IE5vaGVtw60hIPCfkpYnOifCoUVuY29udHJhc3RlIHVuIGNvcmF6w7NuISAnK2ZvdW5kKycvOCDwn5KXJyk7aWYoZm91bmQ9PT04KWRvY3VtZW50LnF1ZXJ5U2VsZWN0b3IoJyNoZWxwJykudGV4dENvbnRlbnQ9J8KhTWlzacOzbiBjb21wbGV0YWRhISBFbmN1ZW50cmEgbcOhcyByaW5jb25lcyBib25pdG9zIGp1bnRvcyDwn5KWJ319KTsKY29uc3QgdGFyZ2V0PW5ldyBUSFJFRS5WZWN0b3IzKHBsYXllci5wb3NpdGlvbi54LHBsYXllci5wb3NpdGlvbi55KzEuMSxwbGF5ZXIucG9zaXRpb24ueiksYmFjaz1jYW1GYXI/MTE6Ny41O2NvbnN0IGRlc2lyZWQ9bmV3IFRIUkVFLlZlY3RvcjModGFyZ2V0LngtTWF0aC5zaW4oeWF3KSpiYWNrLHRhcmdldC55KzMuMytwaXRjaCo1LHRhcmdldC56K01hdGguY29zKHlhdykqYmFjayk7Y2FtZXJhLnBvc2l0aW9uLmxlcnAoZGVzaXJlZCwxLU1hdGguZXhwKC1kdCo1KSk7Y2FtZXJhLmxvb2tBdCh0YXJnZXQueCx0YXJnZXQueSsuNCx0YXJnZXQueik7cmVuZGVyZXIucmVuZGVyKHNjZW5lLGNhbWVyYSl9CmFuaW1hdGUoKTthZGRFdmVudExpc3RlbmVyKCdyZXNpemUnLCgpPT57Y2FtZXJhLmFzcGVjdD1pbm5lcldpZHRoL2lubmVySGVpZ2h0O2NhbWVyYS51cGRhdGVQcm9qZWN0aW9uTWF0cml4KCk7cmVuZGVyZXIuc2V0UGl4ZWxSYXRpbyhNYXRoLm1pbihkZXZpY2VQaXhlbFJhdGlvfHwxLG1vYmlsZT8ocXVhbGl0eUxvdz8uNjU6MSk6cXVhbGl0eUxvdz8uODU6MS40KSk7cmVuZGVyZXIuc2V0U2l6ZShpbm5lcldpZHRoLGlubmVySGVpZ2h0KX0pOwo8L3NjcmlwdD48L2JvZHk+PC9odG1sPg==')));
+  const overlay = document.getElementById('mundoOverlay');
+  const frame = document.getElementById('mundoFrame');
+  document.getElementById('botonMundo').addEventListener('click', () => {
+    overlay.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    if (!frame.srcdoc) frame.srcdoc = mundoHTML;
+  });
+  document.getElementById('cerrarMundo').addEventListener('click', () => {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  });
 })();
-
-/* Mundo 3D */
-document.getElementById('enterWorld').addEventListener('click', () => {
-  document.getElementById('world').style.display = 'block';
-  document.getElementById('intro').style.display = 'grid';
-  document.body.style.overflow = 'hidden';
-  if (!window.worldStarted) start3DWorld();
-});
-
-document.getElementById('backHome').addEventListener('click', () => {
-  document.getElementById('world').style.display = 'none';
-  document.body.style.overflow = '';
-});
-
-let start3DWorld = null;
-
-async function loadThree() {
-  if (window.THREE) return window.THREE;
-
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
-    script.onload = () => resolve(window.THREE);
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-start3DWorld = async function() {
-  if (window.worldStarted) return;
-  window.worldStarted = true;
-
-  const intro = document.getElementById('intro');
-  const message = document.getElementById('worldMessage');
-
-  function say(text) {
-    message.textContent = text;
-    message.style.display = 'block';
-    clearTimeout(say.timer);
-    say.timer = setTimeout(() => message.style.display = 'none', 3500);
-  }
-
-  let THREE;
-
-  try {
-    THREE = await loadThree();
-  } catch {
-    intro.querySelector('p').textContent =
-      'No se pudo cargar el motor 3D. Revisa tu conexión a internet e inténtalo de nuevo.';
-    window.worldStarted = false;
-    return;
-  }
-
-  const root = document.getElementById('game');
-  const mobile = matchMedia('(pointer:coarse)').matches ||
-    /Android|iPhone|iPad/i.test(navigator.userAgent);
-
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x91b9d4);
-  scene.fog = new THREE.Fog(0x91b9d4, 38, 100);
-
-  const camera = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, .1, 150);
-  const renderer = new THREE.WebGLRenderer({
-    antialias: !mobile,
-    powerPreference: 'low-power'
-  });
-
-  let qualityLow = true;
-
-  function setQuality() {
-    renderer.setPixelRatio(Math.min(
-      devicePixelRatio || 1,
-      mobile ? (qualityLow ? .65 : .9) : (qualityLow ? .8 : 1.3)
-    ));
-    renderer.setSize(innerWidth, innerHeight);
-  }
-
-  setQuality();
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  root.appendChild(renderer.domElement);
-
-  scene.add(new THREE.HemisphereLight(0xd9efff, 0x4d624a, 2));
-
-  const sun = new THREE.DirectionalLight(0xffe0b8, 1.8);
-  sun.position.set(-18, 30, 12);
-  scene.add(sun);
-
-  function material(color) {
-    return new THREE.MeshStandardMaterial({ color, roughness: .95 });
-  }
-
-  const M = {
-    grass: material(0x497a5a),
-    path: material(0xb6a084),
-    water: material(0x428da8),
-    trunk: material(0x674631),
-    leaf: material(0x2c684e),
-    leaf2: material(0x47815c),
-    pink: material(0xffa6c8),
-    yellow: material(0xffe6a0),
-    wood: material(0x86583c),
-    stone: material(0xb6b3ac),
-    shirt: material(0xf0a2bd),
-    skin: material(0xf0c5a9),
-    pants: material(0x344663),
-    hair: material(0x3c2630),
-    shoe: material(0xf6e8e4),
-    eye: material(0x251b28)
-  };
-
-  function add(geometry, mat, x, y, z, parent = scene) {
-    const object = new THREE.Mesh(geometry, mat);
-    object.position.set(x, y, z);
-    parent.add(object);
-    return object;
-  }
-
-  add(new THREE.PlaneGeometry(150, 150), M.grass, 0, -.12, 0).rotation.x = -Math.PI / 2;
-  add(new THREE.PlaneGeometry(5, 68), M.path, 0, -.09, -17).rotation.x = -Math.PI / 2;
-  add(new THREE.PlaneGeometry(24, 3.3), M.path, 0, -.08, -9).rotation.x = -Math.PI / 2;
-  add(new THREE.CircleGeometry(8, 32), M.stone, 15, -.08, -17).rotation.x = -Math.PI / 2;
-  add(new THREE.CircleGeometry(7.5, 32), M.water, 15, -.035, -17).rotation.x = -Math.PI / 2;
-
-  add(
-    new THREE.SphereGeometry(2.4, 14, 10),
-    new THREE.MeshBasicMaterial({ color: 0xffe6bd }),
-    -25, 28, -48
-  );
-
-  const bench = new THREE.Group();
-  scene.add(bench);
-  bench.position.set(0, 0, -5);
-
-  add(new THREE.BoxGeometry(1.9, .13, .48), M.wood, 0, .65, 0, bench);
-  add(new THREE.BoxGeometry(1.9, .7, .12), M.wood, 0, 1.05, -.22, bench);
-
-  for (const x of [-.72, .72]) {
-    add(new THREE.BoxGeometry(.12, .55, .4), M.wood, x, .32, 0, bench);
-    add(new THREE.BoxGeometry(.12, .55, .4), M.wood, x, .88, -.22, bench);
-  }
-
-  const lampMat = material(0x413a46);
-  const glow = new THREE.MeshBasicMaterial({ color: 0xffd89b });
-
-  for (const [x, z] of [[-4,-2], [4,-13], [-5,-22], [9,-10], [20,-16]]) {
-    add(new THREE.CylinderGeometry(.06, .09, 2.6, 6), lampMat, x, 1.3, z);
-    add(new THREE.SphereGeometry(.18, 7, 5), glow, x, 2.7, z);
-  }
-
-  const player = new THREE.Group();
-  scene.add(player);
-  player.position.set(0, 0, 3);
-
-  add(new THREE.CapsuleGeometry(.31, .62, 3, 7), M.shirt, 0, 1.05, 0, player);
-  add(new THREE.SphereGeometry(.29, 12, 10), M.skin, 0, 1.68, 0, player);
-  add(new THREE.SphereGeometry(.31, 12, 10), M.hair, 0, 1.83, -.055, player);
-  add(new THREE.BoxGeometry(.48, .25, .15), M.hair, 0, 1.62, .23, player);
-
-  // Rasgos faciales sencillos: ojos y sonrisa geométrica.
-  for (const x of [-.105, .105]) {
-    add(new THREE.SphereGeometry(.035, 6, 5), M.eye, x, 1.69, .265, player);
-  }
-
-  add(new THREE.TorusGeometry(.065, .012, 4, 12, Math.PI), M.eye, 0, 1.58, .274, player);
-
-  for (const x of [-.15, .15]) {
-    add(new THREE.CapsuleGeometry(.105, .62, 2, 5), M.pants, x, .48, 0, player);
-    add(new THREE.BoxGeometry(.2, .12, .34), M.shoe, x, .1, .07, player);
-  }
-
-  for (const x of [-.39, .39]) {
-    add(new THREE.CapsuleGeometry(.09, .48, 2, 5), M.shirt, x, 1.03, 0, player);
-  }
-
-  const trunkGeometry = new THREE.CylinderGeometry(.22, .32, 2.1, 7);
-  const coneGeometry = new THREE.ConeGeometry(1.45, 3, 7);
-  const coneGeometry2 = new THREE.ConeGeometry(1.12, 2.4, 7);
-
-  for (let i = 0; i < 68; i++) {
-    let x, z, n = 0;
-
-    do {
-      x = (Math.random() - .5) * 72;
-      z = (Math.random() - .5) * 72;
-      n++;
-    } while (n < 35 &&
-      ((Math.abs(x) < 5.5 && z < 7 && z > -36) ||
-      ((x - 15) ** 2 + (z + 17) ** 2 < 100)));
-
-    const tree = new THREE.Group();
-    tree.position.set(x, 0, z);
-    tree.scale.setScalar(.72 + Math.random() * .6);
-    scene.add(tree);
-
-    add(trunkGeometry, M.trunk, 0, 1.05, 0, tree);
-    add(coneGeometry, M.leaf, 0, 2.75, 0, tree);
-    add(coneGeometry2, M.leaf2, .1, 3.65, 0, tree);
-  }
-
-  for (let i = 0; i < 105; i++) {
-    const x = (Math.random() - .5) * 62;
-    const z = (Math.random() - .5) * 62;
-
-    if (Math.abs(x) < 3.2 && z < 4 && z > -34) continue;
-    if ((x - 15) ** 2 + (z + 17) ** 2 < 78) continue;
-
-    add(new THREE.CylinderGeometry(.02, .03, .32, 4), M.leaf, x, .15, z);
-
-    const flowerMaterial = Math.random() > .5 ? M.pink : M.yellow;
-
-    for (let j = 0; j < 4; j++) {
-      const angle = j * Math.PI / 2;
-      add(
-        new THREE.SphereGeometry(.1, 5, 4),
-        flowerMaterial,
-        x + Math.cos(angle) * .11,
-        .31,
-        z + Math.sin(angle) * .11
-      );
-    }
-  }
-
-  const keys = new Set();
-
-  addEventListener('keydown', event => {
-    if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(event.key.toLowerCase())) {
-      event.preventDefault();
-    }
-    keys.add(event.key.toLowerCase());
-  });
-
-  addEventListener('keyup', event => keys.delete(event.key.toLowerCase()));
-
-  const joystick = document.getElementById('joystick');
-  const stick = document.getElementById('stick');
-
-  let jx = 0, jy = 0, joystickDown = false;
-
-  function moveJoystick(event) {
-    const rect = joystick.getBoundingClientRect();
-    let dx = event.clientX - (rect.left + rect.width / 2);
-    let dy = event.clientY - (rect.top + rect.height / 2);
-    const distance = Math.hypot(dx, dy);
-    const max = 36;
-
-    if (distance > max) {
-      dx = dx / distance * max;
-      dy = dy / distance * max;
-    }
-
-    jx = dx / max;
-    jy = dy / max;
-    stick.style.transform = `translate(${dx}px,${dy}px)`;
-  }
-
-  joystick.addEventListener('pointerdown', event => {
-    joystickDown = true;
-    joystick.setPointerCapture(event.pointerId);
-    moveJoystick(event);
-  });
-
-  joystick.addEventListener('pointermove', event => {
-    if (joystickDown) moveJoystick(event);
-  });
-
-  function stopJoystick() {
-    joystickDown = false;
-    jx = jy = 0;
-    stick.style.transform = 'translate(0,0)';
-  }
-
-  joystick.addEventListener('pointerup', stopJoystick);
-  joystick.addEventListener('pointercancel', stopJoystick);
-
-  let yaw = 0;
-  let pitch = .2;
-  let dragging = false;
-  let lastX = 0;
-  let lastY = 0;
-
-  renderer.domElement.addEventListener('pointerdown', event => {
-    dragging = true;
-    lastX = event.clientX;
-    lastY = event.clientY;
-    renderer.domElement.setPointerCapture(event.pointerId);
-  });
-
-  renderer.domElement.addEventListener('pointermove', event => {
-    if (!dragging) return;
-
-    const dx = event.clientX - lastX;
-    const dy = event.clientY - lastY;
-
-    lastX = event.clientX;
-    lastY = event.clientY;
-
-    yaw -= dx * .005;
-    pitch = THREE.MathUtils.clamp(pitch - dy * .003, -.1, .7);
-  });
-
-  renderer.domElement.addEventListener('pointerup', () => dragging = false);
-  renderer.domElement.addEventListener('pointercancel', () => dragging = false);
-
-  let seated = false;
-  let nearBench = false;
-  let cameraFar = false;
-
-  const sitButton = document.getElementById('sitButton');
-
-  sitButton.addEventListener('click', () => {
-    if (!nearBench && !seated) {
-      say('Acércate un poco más a la banca ❤️');
-      return;
-    }
-
-    seated = !seated;
-
-    if (seated) {
-      player.position.set(bench.position.x, 0, bench.position.z + .72);
-      player.rotation.y = Math.PI;
-      say('Un descanso en nuestra banca… ❤️');
-    } else {
-      player.position.z = bench.position.z + 1.8;
-      say('Vamos a seguir explorando ✨');
-    }
-  });
-
-  document.getElementById('cameraButton').addEventListener('click', () => {
-    cameraFar = !cameraFar;
-    document.getElementById('cameraButton').textContent =
-      cameraFar ? '📷 Cámara lejos' : '📷 Cámara cerca';
-  });
-
-  document.getElementById('qualityButton').addEventListener('click', () => {
-    qualityLow = !qualityLow;
-    setQuality();
-
-    document.getElementById('qualityButton').textContent =
-      '⚡ Gráficos: ' + (qualityLow ? 'bajos' : 'normales');
-
-    say(qualityLow
-      ? 'Gráficos bajos: mejor rendimiento para el celular.'
-      : 'Gráficos normales: más detalle.');
-  });
-
-  document.getElementById('flirtButton').addEventListener('click', () => {
-    const lines = [
-      'Nohemí, ¿me regalas una sonrisa y un besito? 💋',
-      'Mi lugar favorito siempre será cerquita de ti. 💗',
-      'Ven, preciosa, quiero decirte algo bonito al oído. 🌹',
-      'Si pudiera detener el tiempo, sería en un abrazo contigo. 🫂'
-    ];
-
-    say(lines[Math.floor(Math.random() * lines.length)]);
-  });
-
-  document.getElementById('hugButton').addEventListener('click', () => {
-    say('Un abrazo largo, suave y lleno de cariño. 🫂');
-  });
-
-  document.getElementById('kissButton').addEventListener('click', () => {
-    say('Se miran, se acercan despacio y comparten un beso tierno. 💋');
-  });
-
-  document.getElementById('caressButton').addEventListener('click', () => {
-    say('Le tomas la mano con ternura y acaricias suavemente sus dedos. 💕');
-  });
-
-  const consent = document.getElementById('consent');
-  let acceptedH = false;
-  let acceptedN = false;
-
-  function resetConsent() {
-    acceptedH = false;
-    acceptedN = false;
-    document.getElementById('consentStatus').textContent =
-      'Falta la aceptación de los dos.';
-    consent.style.display = 'none';
-  }
-
-  function updateConsent() {
-    const status = document.getElementById('consentStatus');
-
-    if (acceptedH && acceptedN) {
-      status.textContent = 'Ambos aceptaron esta demostración local. 💗';
-
-      setTimeout(() => {
-        consent.style.display = 'none';
-        say('Las luces se suavizan y comienza un momento romántico sugerido. 🌹');
-      }, 1200);
-    } else {
-      status.textContent = 'Falta la aceptación de los dos.';
-    }
-  }
-
-  document.getElementById('acceptH').addEventListener('click', () => {
-    acceptedH = true;
-    updateConsent();
-  });
-
-  document.getElementById('acceptN').addEventListener('click', () => {
-    acceptedN = true;
-    updateConsent();
-  });
-
-  document.getElementById('cancelConsent').addEventListener('click', resetConsent);
-
-  document.getElementById('intimateButton').addEventListener('click', () => {
-    acceptedH = false;
-    acceptedN = false;
-    document.getElementById('consentStatus').textContent =
-      'Falta la aceptación de los dos.';
-    consent.style.display = 'grid';
-  });
-
-  document.getElementById('startWorld').addEventListener('click', () => {
-    intro.style.display = 'none';
-    say('Bienvenido a Hectomi ❤️ ¡Explora a tu ritmo!');
-  });
-
-  const clock = new THREE.Clock();
-  let walk = 0;
-
-  function animate() {
-    requestAnimationFrame(animate);
-
-    const dt = Math.min(clock.getDelta(), .035);
-
-    let forward =
-      (keys.has('w') || keys.has('arrowup') ? 1 : 0) -
-      (keys.has('s') || keys.has('arrowdown') ? 1 : 0) - jy;
-
-    let right =
-      (keys.has('d') || keys.has('arrowright') ? 1 : 0) -
-      (keys.has('a') || keys.has('arrowleft') ? 1 : 0) + jx;
-
-    const length = Math.hypot(forward, right);
-
-    if (length > 1) {
-      forward /= length;
-      right /= length;
-    }
-
-    if (!seated && length > .08) {
-      const direction = new THREE.Vector3(
-        Math.sin(yaw) * forward + Math.cos(yaw) * right,
-        0,
-        -Math.cos(yaw) * forward + Math.sin(yaw) * right
-      );
-
-      player.position.addScaledVector(direction, dt * 5);
-      player.position.x = THREE.MathUtils.clamp(player.position.x, -35, 35);
-      player.position.z = THREE.MathUtils.clamp(player.position.z, -35, 35);
-      player.rotation.y = Math.atan2(direction.x, direction.z);
-
-      walk += dt * 10;
-      player.position.y = Math.abs(Math.sin(walk)) * .04;
-    } else if (!seated) {
-      player.position.y = 0;
-    }
-
-    nearBench = Math.hypot(
-      player.position.x,
-      player.position.z - bench.position.z
-    ) < 2.6;
-
-    sitButton.style.display = (nearBench || seated) ? 'block' : 'none';
-    sitButton.textContent = seated ? '🚶 Levantarse' : '🪑 Sentarse';
-
-    const target = new THREE.Vector3(
-      player.position.x,
-      player.position.y + 1.1,
-      player.position.z
-    );
-
-    const distance = cameraFar ? 11 : 7.5;
-
-    const desired = new THREE.Vector3(
-      target.x - Math.sin(yaw) * distance,
-      target.y + 3.3 + pitch * 5,
-      target.z + Math.cos(yaw) * distance
-    );
-
-    camera.position.lerp(desired, 1 - Math.exp(-dt * 5));
-    camera.lookAt(target.x, target.y + .4, target.z);
-    renderer.render(scene, camera);
-  }
-
-  animate();
-
-  addEventListener('resize', () => {
-    camera.aspect = innerWidth / innerHeight;
-    camera.updateProjectionMatrix();
-    setQuality();
-  });
-};
 </script>
 </body>
 </html>
