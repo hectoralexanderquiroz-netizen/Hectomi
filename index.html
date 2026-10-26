@@ -1,129 +1,336 @@
-```html
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hectomi ❤️</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #160b18, #4a1028);
-      color: white;
-      font-family: Arial, sans-serif;
-    }
-
-    main {
-      width: min(360px, 85%);
-      padding: 28px;
-      text-align: center;
-      background: #24151f;
-      border: 1px solid #ff668b;
-      border-radius: 20px;
-    }
-
-    input, button {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 13px;
-      margin-top: 12px;
-      border-radius: 9px;
-      border: 0;
-      font-size: 16px;
-    }
-
-    button {
-      background: #ff668b;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #mensaje {
-      overflow-wrap: anywhere;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hectomi ❤️ Nuestro mundo</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden;background:#07101b;color:white;font-family:Arial,sans-serif}
+#world{position:fixed;inset:0}
+#ui{position:fixed;inset:0;pointer-events:none}
+.panel{background:#101827d9;border:1px solid #ffffff25;border-radius:16px;padding:14px;backdrop-filter:blur(10px)}
+#title{position:absolute;top:14px;left:14px;max-width:calc(100% - 28px)}
+#title h1{margin:0 0 5px;color:#ff9fbf;font-size:22px}
+#title p{margin:0;font-size:12px;color:#e2dce5}
+#help{position:absolute;right:14px;top:14px;width:220px;font-size:12px;line-height:1.7}
+#actions{position:absolute;left:14px;bottom:14px;display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto}
+button{border:0;border-radius:12px;padding:11px 14px;background:#ed5d94;color:white;font-weight:bold;cursor:pointer}
+button.secondary{background:#26354b}
+#chat{position:absolute;bottom:14px;right:14px;width:min(320px,calc(100% - 28px));pointer-events:auto}
+#chat form{display:flex;gap:6px;margin-top:8px}
+#message{min-width:0;width:100%;padding:10px;border-radius:9px;border:1px solid #ffffff35;background:#080f1b;color:white}
+#feed{font-size:13px;max-height:90px;overflow:auto}
+#bubble{position:absolute;display:none;transform:translate(-50%,-100%);background:#fff;color:#392234;padding:9px 13px;border-radius:14px;font-size:13px;max-width:220px;box-shadow:0 3px 20px #0008}
+#status{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:14px;color:#ffd6e5;text-align:center}
+@media(max-width:650px){
+ #help{top:auto;bottom:160px;right:12px;width:155px;font-size:11px}
+ #title h1{font-size:18px}
+ #title p{max-width:200px}
+ #chat{bottom:75px}
+ #actions{bottom:12px}
+ #actions button{padding:10px;font-size:12px}
+}
+</style>
 </head>
 <body>
-  <main>
+<div id="world"></div>
+<div id="ui">
+  <div id="title" class="panel">
     <h1>Hectomi ❤️</h1>
-    <p>Entra a nuestro mundo</p>
-
-    <form id="loginForm">
-      <input id="email" type="email" placeholder="Tu correo electrónico"
-        autocomplete="username" required>
-
-      <input id="password" type="password" placeholder="Tu contraseña"
-        autocomplete="current-password" required>
-
-      <button id="entrar" type="submit">Entrar</button>
+    <p>Un lugar especial para nosotros · Explora libremente</p>
+  </div>
+  <div id="help" class="panel">
+    <b>Cómo explorar</b><br>
+    W A S D o flechas: caminar<br>
+    Arrastra el ratón: girar cámara<br>
+    Rueda del ratón: acercar o alejar<br>
+    En celular: arrastra para mirar
+  </div>
+  <div id="actions">
+    <button id="home">🏡 Casa</button>
+    <button id="flowers" class="secondary">🌹 Jardín</button>
+    <button id="night" class="secondary">🌙 Noche</button>
+  </div>
+  <div id="chat" class="panel">
+    <b>💌 Mensaje de este momento</b>
+    <div id="feed">Aquí puedes escribir un mensaje en esta sesión.</div>
+    <form id="form">
+      <input id="message" maxlength="180" placeholder="Escribe algo bonito…" autocomplete="off">
+      <button>Enviar</button>
     </form>
+  </div>
+  <div id="bubble"></div>
+  <div id="status">Preparando nuestro mundo…</div>
+</div>
 
-    <p id="mensaje" role="status"></p>
-  </main>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/controls/OrbitControls.js';
 
-  <script type="module">
-    import { initializeApp } from
-      "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+const root = document.getElementById('world');
+const status = document.getElementById('status');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x081323);
+scene.fog = new THREE.Fog(0x081323, 28, 100);
 
-    import {
-      getAuth,
-      signInWithEmailAndPassword
-    } from
-      "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+const camera = new THREE.PerspectiveCamera(65, innerWidth/innerHeight, 0.1, 300);
+camera.position.set(0, 5, 11);
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDW96MUsBSTY2M0iNlmB0SxbA209dia8u4",
-      authDomain: "hectomi.firebaseapp.com",
-      projectId: "hectomi",
-      storageBucket: "hectomi.firebasestorage.app",
-      messagingSenderId: "622508139794",
-      appId: "1:622508139794:web:4b6843ba819c4c7234bfcb"
-    };
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+root.appendChild(renderer.domElement);
 
-    const mensaje = document.getElementById("mensaje");
-    const boton = document.getElementById("entrar");
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.target.set(0, 1, 0);
+controls.minDistance = 3;
+controls.maxDistance = 20;
+controls.maxPolarAngle = Math.PI * 0.48;
+controls.enablePan = false;
 
-    try {
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
+scene.add(new THREE.HemisphereLight(0xb8d9ff, 0x20351e, 2));
+const moon = new THREE.DirectionalLight(0xffd8e7, 2.4);
+moon.position.set(-8, 14, 7);
+moon.castShadow = true;
+scene.add(moon);
 
-      document.getElementById("loginForm").addEventListener(
-        "submit",
-        async (evento) => {
-          evento.preventDefault();
-          boton.disabled = true;
-          mensaje.textContent = "Comprobando acceso...";
+const mat = (color, roughness=0.9) =>
+  new THREE.MeshStandardMaterial({color, roughness});
 
-          try {
-            const email =
-              document.getElementById("email").value.trim();
-            const password =
-              document.getElementById("password").value;
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(180,180),
+  mat(0x173b2d)
+);
+ground.rotation.x = -Math.PI/2;
+ground.receiveShadow = true;
+scene.add(ground);
 
-            await signInWithEmailAndPassword(auth, email, password);
+// Camino
+const path = new THREE.Mesh(
+  new THREE.PlaneGeometry(4,70),
+  mat(0x79604e)
+);
+path.rotation.x = -Math.PI/2;
+path.position.set(0,0.025,-17);
+scene.add(path);
 
-            mensaje.textContent =
-              "¡Inicio de sesión correcto! Firebase funciona.";
-          } catch (error) {
-            console.error("Error de Firebase:", error.code, error.message);
-            mensaje.textContent =
-              "Error: " + (error.code || error.message);
-          } finally {
-            boton.disabled = false;
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-      mensaje.textContent =
-        "No se pudo iniciar Firebase. Revisa la configuración.";
-    }
-  </script>
+// Luces del jardín
+for(let i=0;i<34;i++){
+  const side = i%2===0 ? -1 : 1;
+  const z = 8 - Math.floor(i/2)*3.5;
+  const light = new THREE.PointLight(0xffa4c8, 2, 5);
+  light.position.set(side*(2.5+Math.random()*1.2),1,z);
+  scene.add(light);
+  const orb = new THREE.Mesh(
+    new THREE.SphereGeometry(0.09,12,12),
+    new THREE.MeshBasicMaterial({color:0xffa8d1})
+  );
+  orb.position.copy(light.position);
+  scene.add(orb);
+}
+
+// Árboles
+function tree(x,z,scale=1){
+  const trunk = new THREE.Mesh(
+    new THREE.CylinderGeometry(.16*scale,.24*scale,2.1*scale,7),
+    mat(0x563a2a)
+  );
+  trunk.position.set(x,1.05*scale,z);
+  trunk.castShadow=true;
+  scene.add(trunk);
+  for(let i=0;i<3;i++){
+    const crown = new THREE.Mesh(
+      new THREE.IcosahedronGeometry((1.0-i*.12)*scale,1),
+      mat(i===1?0x235b42:0x2e704d)
+    );
+    crown.position.set(x,(2.1+i*.5)*scale,z);
+    crown.castShadow=true;
+    scene.add(crown);
+  }
+}
+for(let i=0;i<55;i++){
+  const z = 13-Math.random()*85;
+  const x = (5+Math.random()*16)*(Math.random()<.5?-1:1);
+  tree(x,z,.7+Math.random()*.8);
+}
+
+// Casa romántica
+const house = new THREE.Group();
+const wall = new THREE.Mesh(
+  new THREE.BoxGeometry(7,3.4,5),
+  mat(0xe2c8bb)
+);
+wall.position.y=1.7;
+wall.castShadow=true;
+wall.receiveShadow=true;
+house.add(wall);
+
+const roof = new THREE.Mesh(
+  new THREE.ConeGeometry(5.5,2.5,4),
+  mat(0x5c293c)
+);
+roof.position.set(0,4.5,0);
+roof.rotation.y=Math.PI/4;
+roof.scale.set(1,1,0.8);
+roof.castShadow=true;
+house.add(roof);
+
+const door = new THREE.Mesh(
+  new THREE.BoxGeometry(1.1,2.2,.15),
+  mat(0x57372d)
+);
+door.position.set(0,1.1,2.56);
+house.add(door);
+
+for(const x of [-2.2,2.2]){
+  const window = new THREE.Mesh(
+    new THREE.BoxGeometry(1.1,1.1,.12),
+    new THREE.MeshBasicMaterial({color:0xffd78a})
+  );
+  window.position.set(x,2,2.57);
+  house.add(window);
+}
+house.position.set(0,0,-15);
+scene.add(house);
+
+// Personaje provisional: silueta 3D para probar el movimiento
+const player = new THREE.Group();
+const skin = mat(0xe8b89a);
+const clothes = mat(0x42283f);
+const body = new THREE.Mesh(
+  new THREE.CapsuleGeometry(.38,.85,5,10), clothes
+);
+body.position.y=1.05;
+body.castShadow=true;
+player.add(body);
+
+const head = new THREE.Mesh(
+  new THREE.SphereGeometry(.28,20,16),skin
+);
+head.position.y=1.9;
+head.castShadow=true;
+player.add(head);
+
+const hair = new THREE.Mesh(
+  new THREE.SphereGeometry(.29,16,12),
+  mat(0x30201e)
+);
+hair.scale.set(1,.65,1);
+hair.position.set(0,2.04,0);
+player.add(hair);
+
+const legs = [];
+for(const x of [-.17,.17]){
+  const leg = new THREE.Mesh(
+    new THREE.CapsuleGeometry(.12,.55,4,8),mat(0x202b43)
+  );
+  leg.position.set(x,.37,0);
+  player.add(leg);
+  legs.push(leg);
+}
+scene.add(player);
+player.position.set(0,0,5);
+
+// Corazones flotantes decorativos
+const hearts=[];
+for(let i=0;i<18;i++){
+  const heart = new THREE.Mesh(
+    new THREE.SphereGeometry(.12,10,8),
+    new THREE.MeshBasicMaterial({color:0xff679d})
+  );
+  heart.position.set((Math.random()-.5)*16,1+Math.random()*5,-Math.random()*30);
+  scene.add(heart);
+  hearts.push(heart);
+}
+
+// Controles: dirección del personaje relativa a la cámara
+const keys={};
+addEventListener('keydown',e=>{
+  keys[e.key.toLowerCase()]=true;
+  if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase())) e.preventDefault();
+},{passive:false});
+addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+
+let last=performance.now();
+function animate(now){
+  requestAnimationFrame(animate);
+  const dt=Math.min((now-last)/1000,.05);
+  last=now;
+
+  const forward = new THREE.Vector3();
+  camera.getWorldDirection(forward);
+  forward.y=0;
+  forward.normalize();
+  const right = new THREE.Vector3(forward.z,0,-forward.x);
+  const move = new THREE.Vector3();
+
+  if(keys.w||keys.arrowup) move.add(forward);
+  if(keys.s||keys.arrowdown) move.sub(forward);
+  if(keys.d||keys.arrowright) move.add(right);
+  if(keys.a||keys.arrowleft) move.sub(right);
+
+  if(move.lengthSq()>0){
+    move.normalize();
+    player.position.addScaledVector(move,dt*4);
+    player.rotation.y=Math.atan2(move.x,move.z);
+    legs.forEach((leg,i)=>leg.rotation.x=Math.sin(now*.012+i*Math.PI)*.6);
+    controls.target.x += move.x*dt*4;
+    controls.target.z += move.z*dt*4;
+  } else {
+    legs.forEach(leg=>leg.rotation.x*=.8);
+  }
+
+  hearts.forEach((h,i)=>{
+    h.position.y += Math.sin(now*.001+i)*dt*.12;
+    h.rotation.y += dt*.5;
+  });
+
+  controls.update();
+  renderer.render(scene,camera);
+}
+requestAnimationFrame(animate);
+
+addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth,innerHeight);
+});
+
+document.getElementById('home').onclick=()=>{
+  player.position.set(0,0,-9);
+  controls.target.set(0,1,-12);
+};
+document.getElementById('flowers').onclick=()=>{
+  player.position.set(6,0,1);
+  controls.target.set(6,1,0);
+};
+document.getElementById('night').onclick=()=>{
+  const dark=scene.background.getHex()===0x081323;
+  scene.background.setHex(dark?0x21172d:0x081323);
+  scene.fog.color.copy(scene.background);
+};
+
+document.getElementById('form').addEventListener('submit',e=>{
+  e.preventDefault();
+  const input=document.getElementById('message');
+  const value=input.value.trim();
+  if(!value)return;
+  document.getElementById('feed').textContent='Tú: '+value;
+  const bubble=document.getElementById('bubble');
+  bubble.textContent=value;
+  bubble.style.display='block';
+  input.value='';
+  setTimeout(()=>bubble.style.display='none',5000);
+});
+
+status.textContent='¡Bienvenido a nuestro mundo! ❤️';
+setTimeout(()=>status.style.display='none',3500);
+</script>
 </body>
 </html>
-```
