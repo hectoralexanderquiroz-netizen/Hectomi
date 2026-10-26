@@ -1,412 +1,265 @@
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Hectomi ❤️ Nuestro mundo</title>
-
 <style>
+:root{--pink:#ff6b9d;--glass:rgba(18,10,25,.82);--line:rgba(255,255,255,.17)}
 *{box-sizing:border-box}
-body{margin:0;overflow:hidden;background:#081323;color:white;font-family:Arial,sans-serif}
-#world{position:fixed;inset:0}
-.panel{background:#111a2be8;border:1px solid #ffffff30;border-radius:14px;padding:12px}
-#brand{position:fixed;top:12px;left:12px;z-index:2;pointer-events:none}
-#brand h1{margin:0;color:#ff9fc4;font-size:23px}
-#help{position:fixed;top:12px;right:12px;width:190px;font-size:12px;line-height:1.7;z-index:2;pointer-events:none}
-#buttons{position:fixed;bottom:12px;left:12px;display:flex;flex-wrap:wrap;gap:7px;z-index:3}
-button{border:0;border-radius:10px;padding:10px 12px;background:#df568d;color:white;font-weight:bold;cursor:pointer}
-button.secondary{background:#30405a}
-#chat{position:fixed;right:12px;bottom:12px;width:min(300px,calc(100% - 24px));z-index:2}
-#feed{font-size:12px;margin-top:8px;overflow-wrap:anywhere}
-#chat form{display:flex;gap:5px;margin-top:8px}
-#msg{width:100%;min-width:0;padding:9px;border-radius:8px;border:1px solid #ffffff40;background:#09111f;color:white}
-#status{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;background:#111a2b;padding:16px;border-radius:12px;text-align:center;max-width:90%}
-#modal{position:fixed;display:none;inset:0;background:#0009;z-index:10;align-items:center;justify-content:center;padding:16px}
-#modal>div{max-width:400px;background:#171c30;border-radius:18px;padding:22px;text-align:center}
-#modal p{line-height:1.5}
-#modal button{margin:4px}
-@media(max-width:650px){
- #brand h1{font-size:18px}
- #help{top:72px;width:145px;font-size:10px}
- #chat{bottom:78px;width:230px}
- #buttons{bottom:10px;left:10px;max-width:calc(100% - 20px)}
- #buttons button{font-size:11px;padding:9px}
-}
+body{margin:0;background:#090812;color:#fff;font-family:system-ui,sans-serif;overflow:hidden}
+button,input{font:inherit}
+button{border:1px solid #ffffff30;background:linear-gradient(135deg,#ff4d88,#a832bd);color:white;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:650}
+button.secondary{background:#ffffff14}
+.hidden{display:none!important}
+#world{position:fixed;inset:0;width:100%;height:100%}
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(circle,#29142e,#080711);z-index:10;padding:20px}
+.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:20px;padding:20px;box-shadow:0 12px 45px #0007}
+.login{width:min(420px,100%)}
+h1,h2,p{margin-top:0}
+h1{font-size:clamp(28px,6vw,42px)}
+.muted{color:#d7c9df;font-size:14px}
+.field{width:100%;border:1px solid #ffffff2b;background:#100c1b;color:white;padding:12px;border-radius:10px;margin:5px 0 12px}
+.topbar{position:fixed;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;align-items:center;pointer-events:none}
+.topbar>*{pointer-events:auto}
+.brand{padding:10px 14px;background:#130d1dcc;border:1px solid var(--line);border-radius:14px}
+.controls{position:fixed;left:12px;bottom:14px;display:flex;gap:8px;flex-wrap:wrap;max-width:70vw}
+.right{position:fixed;right:12px;top:78px;bottom:12px;width:min(340px,calc(100vw - 24px));display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.right>*{pointer-events:auto}
+.scroll{overflow:auto;min-height:0}
+.photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.photos img{width:100%;height:85px;object-fit:cover;border-radius:10px;background:#24192d}
+.messages{flex:1;min-height:70px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.bubble{padding:9px 11px;border-radius:13px;background:#ffffff14;max-width:94%;overflow-wrap:anywhere}
+.bubble.mine{align-self:flex-end;background:#922b79}
+.small{font-size:12px;color:#d8cadd}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.status{font-size:12px;color:#c7ffdd}
+.modal{position:fixed;inset:0;display:grid;place-items:center;background:#05030bd9;z-index:20;padding:18px}
+.modal .panel{width:min(420px,100%)}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#160e22;border:1px solid var(--line);border-radius:12px;padding:10px 14px;z-index:30;max-width:90vw}
+.hint{position:fixed;left:50%;top:75px;transform:translateX(-50%);background:#100b1ccc;padding:8px 12px;border-radius:10px;font-size:12px;text-align:center;max-width:90vw}
+@media(max-width:650px){.right{top:auto;bottom:76px;left:12px;right:12px;width:auto;max-height:38vh}.controls{max-width:96vw;bottom:10px;gap:5px}.controls button{padding:8px;font-size:12px}.photos img{height:60px}.topbar{align-items:flex-start}.hint{top:66px}.panel{padding:15px}}
 </style>
-
 <script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-  }
-}
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
 </script>
 </head>
-
 <body>
-<div id="world"></div>
+<canvas id="world"></canvas>
 
-<header id="brand" class="panel">
+<div id="loading">
+ <div class="panel login">
   <h1>Hectomi ❤️</h1>
-  <div>Nuestro mundo · Un lugar para compartir</div>
-</header>
-
-<div id="help" class="panel">
-  <b>🎮 Controles</b><br>
-  W A S D: caminar<br>
-  Ratón: girar la cámara<br>
-  Rueda: acercar o alejar<br>
-  En celular: desliza para mirar
-</div>
-
-<div id="buttons">
-  <button id="house">🏡 Casa</button>
-  <button id="garden" class="secondary">🌹 Jardín</button>
-  <button id="lake" class="secondary">🌙 Lago</button>
-  <button id="bed" class="secondary">🛏️ Habitación</button>
-  <button id="invite">💗 Invitar</button>
-  <button id="stop" class="secondary">✋ Detener</button>
-</div>
-
-<div id="chat" class="panel">
-  <b>💌 Mensaje</b>
-  <div id="feed">Escribe un mensaje bonito.</div>
-  <form id="chatForm">
-    <input id="msg" maxlength="180" placeholder="Te quiero porque…" autocomplete="off">
-    <button>Enviar</button>
+  <p>Un mundo hecho para nosotros.</p>
+  <p class="muted">Inicia sesión con tu cuenta registrada.</p>
+  <form id="loginForm">
+   <label class="muted">Correo electrónico</label>
+   <input class="field" id="email" type="email" autocomplete="username" required placeholder="Tu correo">
+   <label class="muted">Contraseña</label>
+   <input class="field" id="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña">
+   <div class="actions">
+    <button type="submit">Entrar al mundo ❤️</button>
+    <button class="secondary" type="button" id="register">Crear cuenta</button>
+   </div>
   </form>
+  <p id="loginStatus" class="muted" aria-live="polite"></p>
+  <p class="muted">Si la música no comienza automáticamente, pulsa Música.</p>
+ </div>
 </div>
 
-<div id="status">Preparando nuestro mundo…</div>
+<div class="topbar hidden" id="topbar">
+ <div class="brand"><b>Hectomi ❤️</b><div class="small" id="who"></div><div class="status" id="presence">● Conectando</div></div>
+ <div class="brand" id="counter">Nuestra historia ❤️</div>
+</div>
+<div class="hint hidden" id="hint">WASD para caminar · ratón para girar · botones para visitar lugares</div>
+<div class="controls hidden" id="controls">
+ <button data-go="casa">🏡 Casa</button><button data-go="jardin">🌷 Jardín</button><button data-go="lago">🌙 Lago</button><button data-go="cama">🛏️ Dormitorio</button><button id="musicBtn" class="secondary">♫ Música</button><button id="inviteBtn">❤️ Invitar</button><button id="logout" class="secondary">Salir</button>
+</div>
 
-<div id="modal">
-  <div>
-    <h2 style="color:#ff9fc4">💗 Una invitación</h2>
-    <p id="modalText">¿Quieres compartir un momento romántico conmigo?</p>
-    <button id="accept">❤️ Aceptar</button>
-    <button id="decline" class="secondary">Ahora no</button>
+<aside class="right hidden" id="side">
+ <section class="panel scroll">
+  <h2>📸 Nuestros recuerdos</h2>
+  <div class="photos">
+   <img src="foto1.jpeg" alt="Foto 1" onerror="this.style.display='none'">
+   <img src="foto2.jpeg" alt="Foto 2" onerror="this.style.display='none'">
+   <img src="foto3.jpeg" alt="Foto 3" onerror="this.style.display='none'">
+   <img src="foto4.jpeg" alt="Foto 4" onerror="this.style.display='none'">
   </div>
+  <p class="small">Sube las fotos al repositorio con estos nombres.</p>
+  <h2>💌 Nuestra carta</h2>
+  <p>Mi amor, este pequeño mundo es para recordarte cuánto te amo. Cada rincón guarda un pedacito de nuestra historia. ❤️</p>
+ </section>
+ <section class="panel" style="display:flex;flex-direction:column;min-height:0;max-height:45%">
+  <h2>💬 Mensajes privados</h2>
+  <div id="messages" class="messages"><p class="muted">Cargando mensajes…</p></div>
+  <form id="messageForm"><input id="messageInput" class="field" maxlength="500" placeholder="Escríbele algo bonito…" required><button type="submit">Enviar 💌</button></form>
+ </section>
+</aside>
+
+<div id="inviteModal" class="modal hidden">
+ <div class="panel">
+  <h2 id="inviteTitle">❤️ Invitación</h2><p id="inviteText">¿Quieres compartir un momento romántico?</p>
+  <div id="inviteChoices" class="actions"><button id="acceptInvite">Aceptar ❤️</button><button id="declineInvite" class="secondary">Ahora no</button></div>
+  <button id="stopScene" class="secondary hidden" style="margin-top:10px">Terminar momento</button>
+ </div>
 </div>
+<div id="toast" class="hidden" role="status"></div>
+<audio id="music" src="tutu.mp3" loop preload="auto"></audio>
 
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-const $ = id => document.getElementById(id);
-const status = $('status');
+const firebaseConfig={
+ apiKey:'AIzaSyDW96MUsBSTY2M0iNlmB0SxbA209dia8u4',
+ authDomain:'hectomi.firebaseapp.com',
+ projectId:'hectomi',
+ storageBucket:'hectomi.firebasestorage.app',
+ messagingSenderId:'622508139794',
+ appId:'1:622508139794:web:4b6843ba819c4c7234bfcb'
+};
+const allowed=['LHmsjRcxNHPtOVk2vVTT8uLaasb2','EgHqdi5sisWtNctCEPgOLsmYut23'];
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+const $=id=>document.getElementById(id);
+let user=null,unsubs=[],sceneReady=false,activeInvite=null,activeScene=false,toastTimer;
 
-try {
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x081323);
-  scene.fog = new THREE.Fog(0x081323, 35, 110);
+function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3500)}
+function authError(e){return ({'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/email-already-in-use':'Ese correo ya tiene cuenta.','auth/weak-password':'Usa una contraseña de al menos 6 caracteres.','auth/invalid-email':'Revisa el correo.'})[e.code]||('No se pudo iniciar sesión: '+e.message)}
+function cleanSubs(){unsubs.forEach(f=>f());unsubs=[]}
 
-  const camera = new THREE.PerspectiveCamera(
-    65, innerWidth / innerHeight, 0.1, 250
-  );
-  camera.position.set(0, 5, 10);
+$('loginForm').addEventListener('submit',async e=>{
+ e.preventDefault();$('loginStatus').textContent='Entrando…';
+ try{await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value)}
+ catch(err){$('loginStatus').textContent=authError(err)}
+});
+$('register').onclick=async()=>{
+ try{await createUserWithEmailAndPassword(auth,$('email').value.trim(),$('password').value);$('loginStatus').textContent='Cuenta creada. El acceso privado requiere una de las cuentas autorizadas.'}
+ catch(err){$('loginStatus').textContent=authError(err)}
+};
 
-  const renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
-  renderer.setSize(innerWidth, innerHeight);
-  renderer.shadowMap.enabled = true;
-  $('world').appendChild(renderer.domElement);
+onAuthStateChanged(auth,async u=>{
+ cleanSubs();user=u;
+ if(!u){$('loading').classList.remove('hidden');['topbar','controls','side','hint'].forEach(id=>$(id).classList.add('hidden'));return}
+ if(!allowed.includes(u.uid)){await signOut(auth);$('loginStatus').textContent='Esta cuenta no está autorizada para este espacio privado.';return}
+ await enterWorld();
+});
 
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.target.set(0, 1, 0);
-  controls.minDistance = 3;
-  controls.maxDistance = 22;
-  controls.maxPolarAngle = Math.PI * 0.48;
-  controls.enablePan = false;
-
-  scene.add(new THREE.HemisphereLight(0xc8ddff, 0x26351f, 2));
-
-  const moon = new THREE.DirectionalLight(0xffd8e9, 2);
-  moon.position.set(-8, 15, 8);
-  moon.castShadow = true;
-  scene.add(moon);
-
-  const mat = color => new THREE.MeshStandardMaterial({color});
-
-  const ground = new THREE.Mesh(
-    new THREE.PlaneGeometry(200, 200), mat(0x17402e)
-  );
-  ground.rotation.x = -Math.PI / 2;
-  ground.receiveShadow = true;
-  scene.add(ground);
-
-  // Caminos
-  function path(x,z,w,d) {
-    const p = new THREE.Mesh(
-      new THREE.PlaneGeometry(w,d), mat(0x78604e)
-    );
-    p.rotation.x = -Math.PI/2;
-    p.position.set(x,0.025,z);
-    scene.add(p);
-  }
-  path(0,-12,4,50);
-  path(12,-23,3,24);
-
-  // Lago
-  const water = new THREE.Mesh(
-    new THREE.CircleGeometry(7,48),
-    new THREE.MeshStandardMaterial({
-      color:0x17627a,roughness:.25,metalness:.2
-    })
-  );
-  water.rotation.x=-Math.PI/2;
-  water.position.set(12,.04,-31);
-  scene.add(water);
-
-  // Casa
-  const house = new THREE.Group();
-
-  const walls = new THREE.Mesh(
-    new THREE.BoxGeometry(7,3.4,5),mat(0xe5cdbf)
-  );
-  walls.position.y=1.7;
-  house.add(walls);
-
-  const roof = new THREE.Mesh(
-    new THREE.ConeGeometry(5.5,2.5,4),mat(0x682b48)
-  );
-  roof.position.y=4.4;
-  roof.rotation.y=Math.PI/4;
-  house.add(roof);
-
-  const door = new THREE.Mesh(
-    new THREE.BoxGeometry(1.1,2.2,.15),mat(0x54352c)
-  );
-  door.position.set(0,1.1,2.55);
-  house.add(door);
-
-  for (const x of [-2,2]) {
-    const windowMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(1,1,.12),
-      new THREE.MeshBasicMaterial({color:0xffd78a})
-    );
-    windowMesh.position.set(x,2,2.57);
-    house.add(windowMesh);
-  }
-  house.position.set(0,0,-14);
-  scene.add(house);
-
-  // Habitación con cama
-  const room = new THREE.Group();
-  const floor = new THREE.Mesh(
-    new THREE.BoxGeometry(8,.2,7),mat(0x694653)
-  );
-  floor.position.y=.1;
-  room.add(floor);
-
-  const bedBase = new THREE.Mesh(
-    new THREE.BoxGeometry(3.2,.45,4.2),mat(0x583348)
-  );
-  bedBase.position.set(0,.42,0);
-  room.add(bedBase);
-
-  const mattress = new THREE.Mesh(
-    new THREE.BoxGeometry(3.05,.3,4.05),mat(0xf4dce7)
-  );
-  mattress.position.set(0,.8,0);
-  room.add(mattress);
-
-  const headboard = new THREE.Mesh(
-    new THREE.BoxGeometry(3.3,1.3,.2),mat(0x573047)
-  );
-  headboard.position.set(0,1,-2.05);
-  room.add(headboard);
-
-  for (const x of [-.8,.8]) {
-    const pillow = new THREE.Mesh(
-      new THREE.BoxGeometry(1,.15,.65),mat(0xffffff)
-    );
-    pillow.position.set(x,1,-1.4);
-    room.add(pillow);
-  }
-  room.position.set(24,0,-13);
-  scene.add(room);
-
-  // Árboles
-  function tree(x,z,s=1) {
-    const trunk = new THREE.Mesh(
-      new THREE.CylinderGeometry(.14*s,.23*s,1.8*s,8),
-      mat(0x583b2b)
-    );
-    trunk.position.set(x,.9*s,z);
-    scene.add(trunk);
-
-    for (let i=0;i<3;i++) {
-      const crown = new THREE.Mesh(
-        new THREE.IcosahedronGeometry((.9-i*.1)*s,1),
-        mat(i===1?0x245b41:0x2c704b)
-      );
-      crown.position.set(x,(1.9+i*.45)*s,z);
-      scene.add(crown);
-    }
-  }
-
-  for (let i=0;i<65;i++) {
-    const x=(6+Math.random()*16)*(Math.random()<.5?-1:1);
-    const z=12-Math.random()*80;
-    tree(x,z,.7+Math.random()*.6);
-  }
-
-  // Luces y corazones
-  for (let i=0;i<22;i++) {
-    const light=new THREE.PointLight(0xff9ec8,1.6,5);
-    light.position.set(i%2?3:-3,1,8-i*2.8);
-    scene.add(light);
-  }
-
-  const hearts=[];
-  for (let i=0;i<20;i++) {
-    const h=new THREE.Mesh(
-      new THREE.SphereGeometry(.12,10,8),
-      new THREE.MeshBasicMaterial({color:0xff679d})
-    );
-    h.position.set((Math.random()-.5)*20,1+Math.random()*5,-Math.random()*40);
-    scene.add(h);
-    hearts.push(h);
-  }
-
-  // Personaje provisional para probar el mundo
-  const player=new THREE.Group();
-  const body=new THREE.Mesh(
-    new THREE.CapsuleGeometry(.34,.75,5,10),mat(0x472b45)
-  );
-  body.position.y=1.1;
-  player.add(body);
-
-  const head=new THREE.Mesh(
-    new THREE.SphereGeometry(.26,18,14),mat(0xe8b89a)
-  );
-  head.position.y=1.9;
-  player.add(head);
-
-  const hair=new THREE.Mesh(
-    new THREE.SphereGeometry(.28,16,12),mat(0x30201e)
-  );
-  hair.scale.y=.7;
-  hair.position.y=2.04;
-  player.add(hair);
-
-  const legs=[];
-  for (const x of [-.15,.15]) {
-    const leg=new THREE.Mesh(
-      new THREE.CapsuleGeometry(.11,.55,4,8),mat(0x263149)
-    );
-    leg.position.set(x,.38,0);
-    player.add(leg);
-    legs.push(leg);
-  }
-  player.position.set(0,0,5);
-  scene.add(player);
-
-  const keys={};
-  addEventListener('keydown',e=>{
-    keys[e.key.toLowerCase()]=true;
-  });
-  addEventListener('keyup',e=>{
-    keys[e.key.toLowerCase()]=false;
-  });
-
-  let last=performance.now();
-  function animate(now) {
-    requestAnimationFrame(animate);
-    const dt=Math.min((now-last)/1000,.05);
-    last=now;
-
-    const forward=new THREE.Vector3();
-    camera.getWorldDirection(forward);
-    forward.y=0;
-    forward.normalize();
-
-    const right=new THREE.Vector3(forward.z,0,-forward.x);
-    const move=new THREE.Vector3();
-
-    if(keys.w||keys.arrowup) move.add(forward);
-    if(keys.s||keys.arrowdown) move.sub(forward);
-    if(keys.d||keys.arrowright) move.add(right);
-    if(keys.a||keys.arrowleft) move.sub(right);
-
-    if(move.lengthSq()>0) {
-      move.normalize();
-      player.position.addScaledVector(move,dt*4);
-      player.rotation.y=Math.atan2(move.x,move.z);
-      controls.target.addScaledVector(move,dt*4);
-      legs.forEach((leg,i)=>{
-        leg.rotation.x=Math.sin(now*.012+i*Math.PI)*.5;
-      });
-    } else {
-      legs.forEach(leg=>leg.rotation.x*=.8);
-    }
-
-    hearts.forEach((h,i)=>{
-      h.position.y+=Math.sin(now*.001+i)*dt*.1;
-      h.rotation.y+=dt*.5;
-    });
-
-    controls.update();
-    renderer.render(scene,camera);
-  }
-
-  requestAnimationFrame(animate);
-
-  addEventListener('resize',()=>{
-    camera.aspect=innerWidth/innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth,innerHeight);
-  });
-
-  function teleport(x,z,tx,tz) {
-    player.position.set(x,0,z);
-    controls.target.set(tx,1,tz);
-  }
-
-  $('house').onclick=()=>teleport(0,0,0,-14);
-  $('garden').onclick=()=>teleport(0,0,0,0);
-  $('lake').onclick=()=>teleport(12,0,12,-31);
-  $('bed').onclick=()=>teleport(24,0,24,-13);
-
-  $('chatForm').onsubmit=e=>{
-    e.preventDefault();
-    const input=$('msg');
-    if(!input.value.trim()) return;
-    $('feed').textContent='Tú: '+input.value.trim();
-    input.value='';
-  };
-
-  $('invite').onclick=()=>{
-    $('modal').style.display='flex';
-    $('modalText').textContent=
-      '¿Quieres compartir un momento romántico? En esta demo, la invitación no se envía a otro dispositivo.';
-  };
-
-  $('accept').onclick=()=>{
-    $('modal').style.display='none';
-    $('feed').textContent='❤️ Invitación aceptada en esta demostración.';
-  };
-
-  $('decline').onclick=()=>{
-    $('modal').style.display='none';
-    $('feed').textContent='No pasa nada. Podemos seguir explorando ❤️';
-  };
-
-  $('stop').onclick=()=>{
-    $('modal').style.display='none';
-    $('feed').textContent='Interacción detenida. ❤️';
-  };
-
-  status.textContent='¡Nuestro mundo está listo! ❤️';
-  setTimeout(()=>status.style.display='none',2500);
-
-} catch (error) {
-  console.error('Error cargando Hectomi:',error);
-  status.textContent='No se pudo cargar el mundo. Abre F12 → Console y comparte el error rojo.';
+async function enterWorld(){
+ $('loading').classList.add('hidden');
+ ['topbar','controls','side','hint'].forEach(id=>$(id).classList.remove('hidden'));
+ $('who').textContent=user.email;
+ initWorld();
+ try{await $('music').play();$('musicBtn').textContent='♫ Pausar música'}
+ catch{$('musicBtn').textContent='♫ Reproducir música';toast('Pulsa Música para iniciar el audio. Comprueba que subiste tutu.mp3.')}
+ subscribeMessages();subscribeInvites();subscribePresence();
 }
+
+let renderer,scene,camera,orbit,avatar,keys={},clock=new THREE.Clock();
+function initWorld(){
+ if(sceneReady)return;sceneReady=true;
+ const canvas=$('world');
+ renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+ renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+ renderer.setSize(innerWidth,innerHeight);
+ scene=new THREE.Scene();scene.background=new THREE.Color('#090b20');scene.fog=new THREE.Fog('#090b20',35,105);
+ camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,250);camera.position.set(0,5,10);
+ orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.target.set(0,1,0);orbit.maxPolarAngle=Math.PI*.48;orbit.minDistance=3;orbit.maxDistance=18;
+ scene.add(new THREE.HemisphereLight(0xc7d9ff,0x30152d,2));
+ const moon=new THREE.DirectionalLight(0xffd9ed,2);moon.position.set(-8,14,7);scene.add(moon);
+ const ground=new THREE.Mesh(new THREE.PlaneGeometry(150,150),new THREE.MeshStandardMaterial({color:'#172c36'}));ground.rotation.x=-Math.PI/2;scene.add(ground);
+ function box(x,y,z,sx,sy,sz,color){const m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),new THREE.MeshStandardMaterial({color}));m.position.set(x,y,z);m.castShadow=true;scene.add(m);return m}
+ function sphere(x,y,z,r,color){const m=new THREE.Mesh(new THREE.SphereGeometry(r,16,12),new THREE.MeshStandardMaterial({color}));m.position.set(x,y,z);scene.add(m);return m}
+ box(0,.02,0,3,.05,32,'#5d4551');
+ const lake=new THREE.Mesh(new THREE.CircleGeometry(7,48),new THREE.MeshStandardMaterial({color:'#244c70',metalness:.25,roughness:.22}));lake.rotation.x=-Math.PI/2;lake.position.set(15,.04,-10);scene.add(lake);
+ for(let i=0;i<44;i++){let x=(Math.random()-.5)*65,z=(Math.random()-.5)*65;if(Math.abs(x)<4&&Math.abs(z)<8)continue;box(x,.7,z,.28,1.4,.28,'#51372f');sphere(x,1.8,z,.95,['#1e5b51','#285c47','#3f6353'][i%3])}
+ box(-8,1,-3,8,2,7,'#593d52');box(-8,2.2,-3,8.5,.35,7.5,'#34213e');
+ box(-8,1,-6.7,2,2,.25,'#c17f9c');box(-11.9,1,-3,.2,2,6,'#c17f9c');box(-4.1,1,-3,.2,2,6,'#c17f9c');box(-8,1,.45,8,2,.2,'#c17f9c');
+ box(-8,.65,-.4,1.1,1.3,.12,'#281b31');box(-8,.18,-2,3,.3,2,'#8c5a76');box(-8,.42,-2,2.2,.25,1.5,'#d4a4bd');
+ for(let i=0;i<35;i++){const x=(Math.random()-.5)*45,z=(Math.random()-.5)*45;const l=new THREE.PointLight(i%2?'#ff83c8':'#8e9dff',.7,5);l.position.set(x,1.2,z);scene.add(l);sphere(x,1.2,z,.055,i%2?'#ff83c8':'#8e9dff')}
+ avatar=new THREE.Group();
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.32,.9,4,8),new THREE.MeshStandardMaterial({color:'#e9a8c6'}));body.position.y=.8;avatar.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.28,16,12),new THREE.MeshStandardMaterial({color:'#f1c7b2'}));head.position.y=1.65;avatar.add(head);avatar.position.set(0,0,2);scene.add(avatar);
+ const pts=[];for(let i=0;i<900;i++)pts.push((Math.random()-.5)*160,Math.random()*60+5,(Math.random()-.5)*160);
+ const stars=new THREE.Points(new THREE.BufferGeometry(),new THREE.PointsMaterial({color:'#fff0f7',size:.08}));stars.geometry.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));scene.add(stars);
+ $('counter').textContent='Juntos: desde 11/09/2026';
+ function animate(){
+  requestAnimationFrame(animate);
+  const dt=Math.min(clock.getDelta(),.05);
+  const move=new THREE.Vector3((keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0),0,(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0));
+  if(move.lengthSq()){move.normalize().multiplyScalar(4*dt);avatar.position.add(move);avatar.position.x=THREE.MathUtils.clamp(avatar.position.x,-35,35);avatar.position.z=THREE.MathUtils.clamp(avatar.position.z,-35,35);avatar.rotation.y=Math.atan2(move.x,move.z);orbit.target.lerp(new THREE.Vector3(avatar.position.x,1,avatar.position.z),.12)}
+  orbit.update();renderer.render(scene,camera);
+ }
+ animate();
+ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+ addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
+ addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+ document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{
+  const spots={casa:[-8,0,-3],jardin:[4,0,4],lago:[15,0,-10],cama:[-8,0,-2]};
+  avatar.position.set(...spots[b.dataset.go]);orbit.target.set(avatar.position.x,1,avatar.position.z);camera.position.set(avatar.position.x+2,4,avatar.position.z+7);toast('Llegaste a '+b.textContent);
+ });
+}
+
+$('musicBtn').onclick=async()=>{
+ try{if($('music').paused){await $('music').play();$('musicBtn').textContent='♫ Pausar música'}else{$('music').pause();$('musicBtn').textContent='♫ Reproducir música'}}
+ catch{toast('No se encontró tutu.mp3 o el navegador bloqueó la música.')}
+};
+
+$('messageForm').addEventListener('submit',async e=>{
+ e.preventDefault();const text=$('messageInput').value.trim();if(!text)return;
+ try{await addDoc(collection(db,'messages'),{text,authorUid:user.uid,authorName:user.email==='dnohe1206@gmail.com'?'Nohemi':'Héctor',createdAt:serverTimestamp()});$('messageInput').value=''}
+ catch(err){toast('No se pudo enviar. Revisa las reglas de Firestore: '+err.code)}
+});
+
+function subscribeMessages(){
+ const q=query(collection(db,'messages'),orderBy('createdAt','asc'));
+ unsubs.push(onSnapshot(q,snap=>{
+  const el=$('messages');el.innerHTML='';
+  snap.forEach(d=>{const m=d.data(),b=document.createElement('div');b.className='bubble '+(m.authorUid===user.uid?'mine':'');const t=document.createElement('div');t.textContent=m.text;const meta=document.createElement('div');meta.className='small';meta.textContent=(m.authorName||'Alguien')+' · '+(m.createdAt?.toDate?m.createdAt.toDate().toLocaleString('es-CO'):'ahora');b.append(t,meta);el.append(b)});
+  el.scrollTop=el.scrollHeight;
+ },err=>toast('Mensajes: '+err.code)));
+}
+
+function subscribePresence(){
+ const ref=doc(db,'presence',user.uid);
+ const write=()=>setDoc(ref,{uid:user.uid,email:user.email,online:true,lastSeen:serverTimestamp()},{merge:true}).catch(()=>{});
+ write();const timer=setInterval(write,60000);
+ unsubs.push(()=>{clearInterval(timer);setDoc(ref,{online:false,lastSeen:serverTimestamp()},{merge:true}).catch(()=>{})});
+ const other=allowed.find(x=>x!==user.uid);
+ unsubs.push(onSnapshot(doc(db,'presence',other),s=>{$('presence').textContent=s.data()?.online?'● presencia reciente':'● sin presencia reciente'}));
+}
+
+$('inviteBtn').onclick=async()=>{
+ const other=allowed.find(x=>x!==user.uid);
+ try{await addDoc(collection(db,'invites'),{from:user.uid,to:other,status:'pending',kind:'romantic',createdAt:serverTimestamp()});toast('Invitación enviada ❤️')}
+ catch(e){toast('No se pudo invitar: '+e.code)}
+};
+
+function subscribeInvites(){
+ unsubs.push(onSnapshot(query(collection(db,'invites'),orderBy('createdAt','desc')),snap=>{
+  for(const d of snap.docs){
+   const x=d.data();
+   if(x.to===user.uid&&x.status==='pending'&&d.id!==activeInvite){
+    activeInvite=d.id;$('inviteTitle').textContent='❤️ Una invitación';$('inviteText').textContent='Tu pareja te invita a compartir un momento romántico. ¿Quieres aceptar?';$('inviteChoices').classList.remove('hidden');$('stopScene').classList.add('hidden');$('inviteModal').classList.remove('hidden');break;
+   }
+   if(x.from===user.uid&&x.status==='accepted'&&!activeScene){
+    activeInvite=d.id;activeScene=true;$('inviteTitle').textContent='❤️ Momento romántico';$('inviteText').textContent='Invitación aceptada. Cualquiera puede terminar el momento cuando quiera.';$('inviteChoices').classList.add('hidden');$('stopScene').classList.remove('hidden');$('inviteModal').classList.remove('hidden');
+   }
+  }
+ },e=>toast('Invitaciones: '+e.code)));
+}
+$('acceptInvite').onclick=async()=>{if(!activeInvite)return;try{await updateDoc(doc(db,'invites',activeInvite),{status:'accepted'});activeScene=true;$('inviteModal').classList.add('hidden');toast('Invitación aceptada ❤️')}catch(e){toast('No se pudo aceptar: '+e.code)}};
+$('declineInvite').onclick=async()=>{if(!activeInvite)return;try{await updateDoc(doc(db,'invites',activeInvite),{status:'declined'});$('inviteModal').classList.add('hidden');activeInvite=null;toast('Has rechazado la invitación.')}catch(e){toast('No se pudo responder: '+e.code)}};
+$('stopScene').onclick=async()=>{if(activeInvite)try{await updateDoc(doc(db,'invites',activeInvite),{status:'ended'})}catch{}activeScene=false;activeInvite=null;$('inviteModal').classList.add('hidden');toast('Momento terminado ❤️')};
+$('logout').onclick=()=>signOut(auth);
+window.addEventListener('error',e=>{$('loginStatus').textContent='Error de carga: '+e.message});
+</script>
+<script>
+setTimeout(()=>{const l=document.getElementById('loading');if(l&&!l.classList.contains('hidden')){const s=document.getElementById('loginStatus');if(!s.textContent)s.textContent='Si la pantalla no avanza, comprueba tu conexión y revisa la consola del navegador.'}},12000);
 </script>
 </body>
 </html>
