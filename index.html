@@ -92,10 +92,13 @@ p{line-height:1.5}
  <button id="photosBtn" class="secondary">📸 Fotos</button>
  <button id="letterBtn" class="secondary">💌 Carta</button>
  <button id="messagesBtn" class="secondary">💬 Mensajes</button>
- <button id="musicBtn" class="secondary">♫ Música</button>
- <button id="dateBtn">❤️ Momento juntos</button>
- <button id="logoutBtn" class="secondary">Salir</button>
+<button id="musicBtn" class="secondary">♫ Música</button>
+<button id="dateBtn">❤️ Momento juntos</button>
+<button id="voiceBtn" class="secondary">🎙️ Activar voz</button>
+<button id="muteBtn" class="secondary" disabled>🔇 Silenciar micrófono</button>
+<button id="logoutBtn" class="secondary">Salir</button>
 </nav>
+ <audio id="remoteAudio" autoplay playsinline></audio>
 
 <div id="pad" class="hidden">
  <span></span><button data-key="w">▲</button><span></span>
@@ -181,10 +184,14 @@ p{line-height:1.5}
 
 <script type="module">
 import * as THREE from 'three';
+ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import {getFirestore,collection,addDoc,query,orderBy,onSnapshot,serverTimestamp,doc,setDoc,updateDoc} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import {
+ getFirestore,collection,addDoc,query,orderBy,onSnapshot,
+ serverTimestamp,doc,setDoc,updateDoc,getDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 const firebaseConfig={
  apiKey:'AIzaSyDW96MUsBSTY2M0iNlmB0SxbA209dia8u4',
@@ -202,6 +209,236 @@ const keys={},clock=new THREE.Clock();
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3500)}
 function showPanel(id){['photosPanel','letterPanel','messagesPanel'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function clearSubs(){unsubs.forEach(f=>f());unsubs=[]}
+ /* VOZ EN TIEMPO REAL */
+let voicePC = null;
+let voiceStream = null;
+let voiceUnsubs = [];
+let voiceBusy = false;
+let voiceMuted = false;
+
+const voiceRef = () => doc(db, 'voiceSessions', 'main');
+
+function stopVoiceLocal() {
+  voiceUnsubs.forEach(fn => fn());
+  voiceUnsubs = [];
+
+  if (voicePC) voicePC.close();
+  voicePC = null;
+
+  if (voiceStream) {
+    voiceStream.getTracks().forEach(track => track.stop());
+  }
+  voiceStream = null;
+
+  $('remoteAudio').srcObject = null;
+  voiceBusy = false;
+  voiceMuted = false;
+  $('muteBtn').disabled = true;
+  $('muteBtn').textContent = '🔇 Silenciar micrófono';
+}
+
+async function activateVoice() {
+  if (!user || voiceBusy) return;
+
+  try {
+    voiceBusy = true;
+    $('voiceBtn').textContent = 'Conectando…';
+
+    // Solicita permiso para usar el micrófono.
+    voiceStream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: false
+    });
+
+    voicePC = new RTCPeerConnection({
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' }
+      ]
+    });
+
+    voiceStream.getTracks().forEach(track => {
+      voicePC.addTrack(track, voiceStream);
+    });
+   const ownCandidatesRef = () =>
+  collection(
+    db,
+    'voiceSessions',
+    'main',
+    voicePC && voicePC.__role === 'callee'
+      ? 'calleeCandidates'
+      : 'callerCandidates'
+  );
+
+    voicePC.ontrack = async event => {
+      $('remoteAudio').srcObject = event.streams[0];
+      try {
+        await $('remoteAudio').play();
+      } catch {
+        toast('Toca la pantalla para escuchar a tu pareja.');
+      }
+    };
+
+    voicePC.onconnectionstatechange = () => {
+      if (!voicePC) return;
+
+      if (voicePC.connectionState === 'connected') {
+        $('voiceBtn').textContent = '🎙️ Voz conectada';
+        $('muteBtn').disabled = false;
+        toast('¡Ya pueden hablar! ❤️');
+      } else if (
+        ['failed', 'disconnected', 'closed'].includes(
+          voicePC.connectionState
+        )
+      ) {
+        $('voiceBtn').textContent = '🎙️ Reintentar voz';
+        toast('La conexión de voz se interrumpió.');
+      }
+    };
+
+    const sessionSnap = await getDoc(voiceRef());
+
+    // Si la otra persona ya inició la llamada, responder.
+    if (
+      sessionSnap.exists() &&
+      sessionSnap.data().status === 'calling' &&
+      sessionSnap.data().callerUid !== user.uid &&
+      sessionSnap.data().calleeUid === user.uid &&
+      sessionSnap.data().offer
+    ) {
+      const data = sessionSnap.data();
+
+      await voicePC.setRemoteDescription(data.offer);
+
+      const answer = await voicePC.createAnswer();
+      await voicePC.setLocalDescription(answer);
+
+      await updateDoc(voiceRef(), {
+        answer: {
+          type: answer.type,
+          sdp: answer.sdp
+        },
+        status: 'connected',
+        updatedAt: serverTimestamp()
+      });
+
+      listenVoiceCandidates('callerCandidates');
+    } else {
+      // Crear una llamada nueva para la otra cuenta autorizada.
+      const otherUid = allowed.find(uid => uid !== user.uid);
+
+      const offer = await voicePC.createOffer();
+      await voicePC.setLocalDescription(offer);
+
+      await setDoc(voiceRef(), {
+        callerUid: user.uid,
+        calleeUid: otherUid,
+        offer: {
+          type: offer.type,
+          sdp: offer.sdp
+        },
+        answer: null,
+        status: 'calling',
+        updatedAt: serverTimestamp()
+      });
+
+      listenVoiceCandidates('calleeCandidates');
+
+      const unsub = onSnapshot(voiceRef(), async snap => {
+        if (!snap.exists() || !voicePC) return;
+
+        const data = snap.data();
+
+        if (
+          data.answer &&
+          !voicePC.currentRemoteDescription
+        ) {
+          await voicePC.setRemoteDescription(data.answer);
+        }
+      });
+
+      voiceUnsubs.push(unsub);
+    }
+
+    // Publicar los candidatos de conexión de este dispositivo.
+    const ownCandidates =
+      sessionSnap.exists() &&
+      sessionSnap.data().status === 'calling' &&
+      sessionSnap.data().callerUid !== user.uid
+        ? 'calleeCandidates'
+        : 'callerCandidates';
+
+    voicePC.onicecandidate = event => {
+      if (!event.candidate || !user) return;
+
+      addDoc(
+        collection(db, 'voiceSessions', 'main', ownCandidates),
+        {
+          candidate: event.candidate.candidate,
+          sdpMid: event.candidate.sdpMid,
+          sdpMLineIndex: event.candidate.sdpMLineIndex,
+          authorUid: user.uid
+        }
+      ).catch(err => console.error('ICE:', err));
+    };
+
+    $('voiceBtn').textContent = '🎙️ Voz iniciada';
+    $('muteBtn').disabled = false;
+
+  } catch (err) {
+    console.error('Error de voz:', err);
+    stopVoiceLocal();
+    $('voiceBtn').textContent = '🎙️ Activar voz';
+    toast('No se pudo activar la voz. Revisa el micrófono y Firestore.');
+  }
+}
+
+function listenVoiceCandidates(collectionName) {
+  const unsub = onSnapshot(
+    collection(db, 'voiceSessions', 'main', collectionName),
+    snapshot => {
+      snapshot.docChanges().forEach(async change => {
+        if (change.type !== 'added' || !voicePC) return;
+
+        const data = change.doc.data();
+
+        // Ignorar los candidatos publicados por este mismo usuario.
+        if (data.authorUid === user?.uid) return;
+
+        try {
+          await voicePC.addIceCandidate({
+            candidate: data.candidate,
+            sdpMid: data.sdpMid,
+            sdpMLineIndex: data.sdpMLineIndex
+          });
+        } catch (err) {
+          console.error('No se pudo añadir candidato ICE:', err);
+        }
+      });
+    },
+    err => console.error('Error escuchando candidatos:', err)
+  );
+
+  voiceUnsubs.push(unsub);
+}
+
+$('voiceBtn').onclick = activateVoice;
+
+$('muteBtn').onclick = () => {
+  if (!voiceStream) return;
+
+  voiceMuted = !voiceMuted;
+
+  voiceStream.getAudioTracks().forEach(track => {
+    track.enabled = !voiceMuted;
+  });
+
+  $('muteBtn').textContent = voiceMuted
+    ? '🔊 Activar micrófono'
+    : '🔇 Silenciar micrófono';
+};
+
+// Al salir de la sesión, detener el micrófono local.
+window.addEventListener('pagehide', stopVoiceLocal);
 
 $('loginForm').onsubmit=async e=>{
  e.preventDefault();$('loginStatus').textContent='Entrando…';
