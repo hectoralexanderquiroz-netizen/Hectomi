@@ -1,119 +1,190 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Hectomi ❤️ Nuestro mundo</title>
-<style>
-:root{--pink:#ff6b9d;--glass:rgba(18,10,25,.82);--line:rgba(255,255,255,.17)}
-*{box-sizing:border-box}
-body{margin:0;background:#090812;color:#fff;font-family:system-ui,sans-serif;overflow:hidden}
-button,input{font:inherit}
-button{border:1px solid #ffffff30;background:linear-gradient(135deg,#ff4d88,#a832bd);color:white;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:650}
-button.secondary{background:#ffffff14}
-.hidden{display:none!important}
-#world{position:fixed;inset:0;width:100%;height:100%}
-#loading{position:fixed;inset:0;display:grid;place-items:center;background:radial-gradient(circle,#29142e,#080711);z-index:10;padding:20px}
-.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(14px);border-radius:20px;padding:20px;box-shadow:0 12px 45px #0007}
-.login{width:min(420px,100%)}
-h1,h2,p{margin-top:0}
-h1{font-size:clamp(28px,6vw,42px)}
-.muted{color:#d7c9df;font-size:14px}
-.field{width:100%;border:1px solid #ffffff2b;background:#100c1b;color:white;padding:12px;border-radius:10px;margin:5px 0 12px}
-.topbar{position:fixed;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;gap:10px;align-items:center;pointer-events:none}
-.topbar>*{pointer-events:auto}
-.brand{padding:10px 14px;background:#130d1dcc;border:1px solid var(--line);border-radius:14px}
-.controls{position:fixed;left:12px;bottom:14px;display:flex;gap:8px;flex-wrap:wrap;max-width:70vw}
-.right{position:fixed;right:12px;top:78px;bottom:12px;width:min(340px,calc(100vw - 24px));display:flex;flex-direction:column;gap:10px;pointer-events:none}
-.right>*{pointer-events:auto}
-.scroll{overflow:auto;min-height:0}
-.photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
-.photos img{width:100%;height:85px;object-fit:cover;border-radius:10px;background:#24192d}
-.messages{flex:1;min-height:70px;overflow:auto;display:flex;flex-direction:column;gap:8px}
-.bubble{padding:9px 11px;border-radius:13px;background:#ffffff14;max-width:94%;overflow-wrap:anywhere}
-.bubble.mine{align-self:flex-end;background:#922b79}
-.small{font-size:12px;color:#d8cadd}
-.actions{display:flex;gap:7px;flex-wrap:wrap}
-.status{font-size:12px;color:#c7ffdd}
-.modal{position:fixed;inset:0;display:grid;place-items:center;background:#05030bd9;z-index:20;padding:18px}
-.modal .panel{width:min(420px,100%)}
-#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#160e22;border:1px solid var(--line);border-radius:12px;padding:10px 14px;z-index:30;max-width:90vw}
-.hint{position:fixed;left:50%;top:75px;transform:translateX(-50%);background:#100b1ccc;padding:8px 12px;border-radius:10px;font-size:12px;text-align:center;max-width:90vw}
-@media(max-width:650px){.right{top:auto;bottom:76px;left:12px;right:12px;width:auto;max-height:38vh}.controls{max-width:96vw;bottom:10px;gap:5px}.controls button{padding:8px;font-size:12px}.photos img{height:60px}.topbar{align-items:flex-start}.hint{top:66px}.panel{padding:15px}}
-</style>
+
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
 </script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;overflow:hidden;background:#080c1c;color:white;font-family:system-ui,Arial}
+button,input,textarea{font:inherit}
+button{background:linear-gradient(135deg,#fa579b,#8b45b8);border:1px solid #ffffff35;border-radius:12px;padding:10px 13px;color:white;cursor:pointer}
+button.secondary{background:#16172ccc}
+.hidden{display:none!important}
+#world{position:fixed;inset:0;width:100%;height:100%}
+.panel{background:#100d1ddd;border:1px solid #ffffff30;border-radius:17px;padding:16px;backdrop-filter:blur(12px);box-shadow:0 10px 35px #0006}
+#login{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:18px;background:radial-gradient(circle,#382044,#080915)}
+.login{width:min(420px,100%)}
+h1{font-size:clamp(28px,6vw,42px);margin:0 0 8px}
+h2{font-size:19px;margin:0 0 12px}
+p{line-height:1.5}
+.small{font-size:12px;color:#d8cbe3}
+.field{display:block;width:100%;padding:12px;margin:8px 0 12px;background:#0c0b18;color:white;border:1px solid #ffffff35;border-radius:10px}
+.top{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;z-index:3;pointer-events:none}
+.top>div{pointer-events:auto}
+.brand{background:#100d1ddd;border:1px solid #ffffff30;border-radius:12px;padding:9px 12px;font-size:12px}
+.controls{position:fixed;left:10px;bottom:10px;right:10px;z-index:4;display:flex;flex-wrap:wrap;gap:6px;pointer-events:auto}
+.controls button{padding:9px 11px;font-size:13px}
+.hint{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:2;background:#100d1dcc;border-radius:10px;padding:8px 12px;font-size:12px;text-align:center;max-width:94vw}
+.drawer{position:fixed;right:10px;top:75px;bottom:75px;width:min(350px,calc(100vw - 20px));z-index:7;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.photos img{width:100%;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;background:#21162d}
+.messages{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto}
+.bubble{background:#ffffff17;padding:9px;border-radius:10px;overflow-wrap:anywhere}
+.mine{align-self:flex-end;background:#862b75}
+.modal{position:fixed;inset:0;z-index:15;background:#03020bdd;display:grid;place-items:center;padding:16px}
+.modal .panel{width:min(440px,100%);max-height:90vh;overflow:auto}
+#bigPhoto{display:block;max-width:85vw;max-height:65vh;margin:12px auto;border-radius:10px}
+#toast{position:fixed;z-index:30;bottom:90px;left:50%;transform:translateX(-50%);background:#171021;border:1px solid #ffffff30;border-radius:12px;padding:10px 14px;max-width:90vw}
+#pad{position:fixed;right:10px;bottom:85px;z-index:5;display:grid;grid-template-columns:42px 42px 42px;gap:4px}
+#pad button{padding:9px 0;background:#171027dd;touch-action:none}
+@media(max-width:650px){
+ .controls{bottom:7px;gap:4px}
+ .controls button{padding:7px 9px;font-size:11px}
+ .drawer{top:112px;bottom:140px}
+ .hint{top:68px}
+ .brand{padding:8px}
+ #pad{bottom:90px}
+}
+</style>
 </head>
+
 <body>
 <canvas id="world"></canvas>
 
-<div id="loading">
+<div id="login">
  <div class="panel login">
   <h1>Hectomi ❤️</h1>
-  <p>Un mundo hecho para nosotros.</p>
-  <p class="muted">Inicia sesión con tu cuenta registrada.</p>
+  <p>Un mundo secreto para nosotros.</p>
+  <p class="small">Inicia sesión con una de las cuentas autorizadas.</p>
   <form id="loginForm">
-   <label class="muted">Correo electrónico</label>
-   <input class="field" id="email" type="email" autocomplete="username" required placeholder="Tu correo">
-   <label class="muted">Contraseña</label>
-   <input class="field" id="password" type="password" autocomplete="current-password" required placeholder="Tu contraseña">
-   <div class="actions">
-    <button type="submit">Entrar al mundo ❤️</button>
-    <button class="secondary" type="button" id="register">Crear cuenta</button>
-   </div>
+   <input id="email" class="field" type="email" placeholder="Correo electrónico" required autocomplete="username">
+   <input id="password" class="field" type="password" placeholder="Contraseña" required autocomplete="current-password">
+   <button type="submit">Entrar al mundo ❤️</button>
   </form>
-  <p id="loginStatus" class="muted" aria-live="polite"></p>
-  <p class="muted">Si la música no comienza automáticamente, pulsa Música.</p>
+  <p id="loginStatus" class="small"></p>
  </div>
 </div>
 
-<div class="topbar hidden" id="topbar">
- <div class="brand"><b>Hectomi ❤️</b><div class="small" id="who"></div><div class="status" id="presence">● Conectando</div></div>
+<div id="top" class="top hidden">
+ <div class="brand"><b>Hectomi ❤️</b><div id="who"></div><div id="presence">Conectando…</div></div>
  <div class="brand" id="counter">Nuestra historia ❤️</div>
 </div>
-<div class="hint hidden" id="hint">WASD para caminar · ratón para girar · botones para visitar lugares</div>
-<div class="controls hidden" id="controls">
- <button data-go="casa">🏡 Casa</button><button data-go="jardin">🌷 Jardín</button><button data-go="lago">🌙 Lago</button><button data-go="cama">🛏️ Dormitorio</button><button id="musicBtn" class="secondary">♫ Música</button><button id="inviteBtn">❤️ Invitar</button><button id="logout" class="secondary">Salir</button>
+
+<div id="hint" class="hint hidden">WASD o flechas para caminar · arrastra el ratón para mirar alrededor</div>
+
+<nav id="controls" class="controls hidden">
+ <button data-place="inicio">🌹 Plaza</button>
+ <button data-place="bosque">🌲 Bosque</button>
+ <button data-place="jardin">🌷 Jardín</button>
+ <button data-place="lago">🌙 Lago</button>
+ <button data-place="cascada">💧 Cascada</button>
+ <button data-place="mirador">✨ Mirador</button>
+ <button data-place="casa">🏡 Casa</button>
+ <button data-place="dormitorio">🛏️ Dormitorio</button>
+ <button data-place="camaExterior">❤️ Cama exterior</button>
+ <button id="photosBtn" class="secondary">📸 Fotos</button>
+ <button id="letterBtn" class="secondary">💌 Carta</button>
+ <button id="messagesBtn" class="secondary">💬 Mensajes</button>
+ <button id="musicBtn" class="secondary">♫ Música</button>
+ <button id="dateBtn">❤️ Momento juntos</button>
+ <button id="logoutBtn" class="secondary">Salir</button>
+</nav>
+
+<div id="pad" class="hidden">
+ <span></span><button data-key="w">▲</button><span></span>
+ <button data-key="a">◀</button><button data-key="s">▼</button><button data-key="d">▶</button>
 </div>
 
-<aside class="right hidden" id="side">
- <section class="panel scroll">
-  <h2>📸 Nuestros recuerdos</h2>
-  <div class="photos">
-   <img src="foto1.jpeg" alt="Foto 1" onerror="this.style.display='none'">
-   <img src="foto2.jpeg" alt="Foto 2" onerror="this.style.display='none'">
-   <img src="foto3.jpeg" alt="Foto 3" onerror="this.style.display='none'">
-   <img src="foto4.jpeg" alt="Foto 4" onerror="this.style.display='none'">
+<aside id="photosPanel" class="drawer hidden">
+ <section class="panel">
+  <div style="display:flex;justify-content:space-between;gap:8px">
+   <h2>📸 Nuestros recuerdos</h2><button data-close="photosPanel" class="secondary">✕</button>
   </div>
-  <p class="small">Sube las fotos al repositorio con estos nombres.</p>
-  <h2>💌 Nuestra carta</h2>
-  <p>Mi amor, este pequeño mundo es para recordarte cuánto te amo. Cada rincón guarda un pedacito de nuestra historia. ❤️</p>
- </section>
- <section class="panel" style="display:flex;flex-direction:column;min-height:0;max-height:45%">
-  <h2>💬 Mensajes privados</h2>
-  <div id="messages" class="messages"><p class="muted">Cargando mensajes…</p></div>
-  <form id="messageForm"><input id="messageInput" class="field" maxlength="500" placeholder="Escríbele algo bonito…" required><button type="submit">Enviar 💌</button></form>
+  <div class="photos">
+   <img src="foto1.jpeg" data-photo="0" alt="Recuerdo 1">
+   <img src="foto2.jpeg" data-photo="1" alt="Recuerdo 2">
+   <img src="foto3.jpeg" data-photo="2" alt="Recuerdo 3">
+   <img src="foto4.jpeg" data-photo="3" alt="Recuerdo 4">
+  </div>
+  <p class="small">Toca una foto para ampliarla.</p>
  </section>
 </aside>
 
-<div id="inviteModal" class="modal hidden">
- <div class="panel">
-  <h2 id="inviteTitle">❤️ Invitación</h2><p id="inviteText">¿Quieres compartir un momento romántico?</p>
-  <div id="inviteChoices" class="actions"><button id="acceptInvite">Aceptar ❤️</button><button id="declineInvite" class="secondary">Ahora no</button></div>
-  <button id="stopScene" class="secondary hidden" style="margin-top:10px">Terminar momento</button>
- </div>
+<aside id="letterPanel" class="drawer hidden">
+ <section class="panel">
+  <div style="display:flex;justify-content:space-between;gap:8px">
+   <h2>💌 Para mi preciosa</h2><button data-close="letterPanel" class="secondary">✕</button>
+  </div>
+  <p>Mi amor, Nohemi ❤️</p>
+  <p>Este mundo es un pequeño regalo para ti. Quiero que caminemos por cada rincón, que encontremos lugares bonitos y que sigamos construyendo recuerdos juntos.</p>
+  <p>Gracias por formar parte de mi vida. Te amo. ❤️</p>
+ </section>
+</aside>
+
+<aside id="messagesPanel" class="drawer hidden">
+ <section class="panel">
+  <div style="display:flex;justify-content:space-between;gap:8px">
+   <h2>💬 Mensajes privados</h2><button data-close="messagesPanel" class="secondary">✕</button>
+  </div>
+  <div id="messages" class="messages"></div>
+  <form id="messageForm">
+   <input id="messageInput" class="field" maxlength="500" placeholder="Escribe algo bonito…" required>
+   <button>Enviar 💌</button>
+  </form>
+ </section>
+</aside>
+
+<div id="photoModal" class="modal hidden">
+ <section class="panel" style="text-align:center">
+  <button id="closePhoto" class="secondary">Cerrar ✕</button>
+  <img id="bigPhoto" alt="Recuerdo">
+  <div class="row">
+   <button id="prevPhoto" class="secondary">← Anterior</button>
+   <button id="nextPhoto" class="secondary">Siguiente →</button>
+  </div>
+ </section>
 </div>
-<div id="toast" class="hidden" role="status"></div>
-<audio id="music" src="tutu.mp3" loop preload="auto"></audio>
+
+<div id="dateModal" class="modal hidden">
+ <section class="panel">
+  <h2 id="dateTitle">❤️ Nuestro momento</h2>
+  <p id="dateText">Elijan un momento para compartir. Todo debe ser cómodo para ambos.</p>
+  <div id="dateChoices" class="row">
+   <button id="acceptDate">Sí, juntos ❤️</button>
+   <button id="rejectDate" class="secondary">Ahora no</button>
+  </div>
+  <div id="romanceChoices" class="hidden">
+   <p class="small">Elijan una pose romántica. Pueden detenerla cuando quieran.</p>
+   <div class="row">
+    <button data-pose="hug">🤗 Abrazo</button>
+    <button data-pose="kiss">💋 Beso</button>
+    <button data-pose="sit">🌙 Sentarse juntos</button>
+    <button data-pose="cuddle">❤️ Acurrucarse</button>
+    <button data-pose="lie">🛏️ Acostarse juntos</button>
+    <button id="finishDate" class="secondary">Terminar momento</button>
+   </div>
+  </div>
+ </section>
+</div>
+
+<div id="toast" class="hidden"></div>
+
+<!-- Se reproduce la pista de audio del archivo de video, sin mostrar el video. -->
+<video id="music" src="Tutu.mp4.mp4" loop playsinline preload="auto" style="display:none"></video>
 
 <script type="module">
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {getFirestore,collection,addDoc,query,orderBy,onSnapshot,serverTimestamp,doc,setDoc,updateDoc} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 const firebaseConfig={
  apiKey:'AIzaSyDW96MUsBSTY2M0iNlmB0SxbA209dia8u4',
@@ -126,140 +197,356 @@ const firebaseConfig={
 const allowed=['LHmsjRcxNHPtOVk2vVTT8uLaasb2','EgHqdi5sisWtNctCEPgOLsmYut23'];
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id);
-let user=null,unsubs=[],sceneReady=false,activeInvite=null,activeScene=false,toastTimer;
-
+let user=null,unsubs=[],toastTimer,inviteId=null,photoIndex=0,romantic=false;
+const keys={},clock=new THREE.Clock();
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3500)}
-function authError(e){return ({'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/email-already-in-use':'Ese correo ya tiene cuenta.','auth/weak-password':'Usa una contraseña de al menos 6 caracteres.','auth/invalid-email':'Revisa el correo.'})[e.code]||('No se pudo iniciar sesión: '+e.message)}
-function cleanSubs(){unsubs.forEach(f=>f());unsubs=[]}
+function showPanel(id){['photosPanel','letterPanel','messagesPanel'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+function clearSubs(){unsubs.forEach(f=>f());unsubs=[]}
 
-$('loginForm').addEventListener('submit',async e=>{
+$('loginForm').onsubmit=async e=>{
  e.preventDefault();$('loginStatus').textContent='Entrando…';
  try{await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value)}
- catch(err){$('loginStatus').textContent=authError(err)}
-});
-$('register').onclick=async()=>{
- try{await createUserWithEmailAndPassword(auth,$('email').value.trim(),$('password').value);$('loginStatus').textContent='Cuenta creada. El acceso privado requiere una de las cuentas autorizadas.'}
- catch(err){$('loginStatus').textContent=authError(err)}
+ catch(err){$('loginStatus').textContent=err.code==='auth/invalid-credential'?'Correo o contraseña incorrectos.':'No se pudo entrar. Comprueba tu conexión y Firebase.'}
 };
 
 onAuthStateChanged(auth,async u=>{
- cleanSubs();user=u;
- if(!u){$('loading').classList.remove('hidden');['topbar','controls','side','hint'].forEach(id=>$(id).classList.add('hidden'));return}
- if(!allowed.includes(u.uid)){await signOut(auth);$('loginStatus').textContent='Esta cuenta no está autorizada para este espacio privado.';return}
- await enterWorld();
+ clearSubs();user=u;
+ if(!u){$('login').classList.remove('hidden');['top','controls','hint','pad'].forEach(x=>$(x).classList.add('hidden'));return}
+ if(!allowed.includes(u.uid)){await signOut(auth);$('loginStatus').textContent='Cuenta no autorizada.';return}
+ $('login').classList.add('hidden');
+ ['top','controls','hint','pad'].forEach(x=>$(x).classList.remove('hidden'));
+ $('who').textContent=u.email||'';
+ startWorld();startMessages();startPresence();startInvites();
+ try{await $('music').play();$('musicBtn').textContent='♫ Pausar'}
+ catch{$('musicBtn').textContent='♫ Reproducir';toast('Pulsa Música para escuchar Tutu.')}
 });
 
-async function enterWorld(){
- $('loading').classList.add('hidden');
- ['topbar','controls','side','hint'].forEach(id=>$(id).classList.remove('hidden'));
- $('who').textContent=user.email;
- initWorld();
- try{await $('music').play();$('musicBtn').textContent='♫ Pausar música'}
- catch{$('musicBtn').textContent='♫ Reproducir música';toast('Pulsa Música para iniciar el audio. Comprueba que subiste tutu.mp3.')}
- subscribeMessages();subscribeInvites();subscribePresence();
+/* Contador de pareja */
+const startDate=new Date(2026,8,11);
+function counter(){
+ let t=Math.max(0,Date.now()-startDate.getTime());
+ const d=Math.floor(t/86400000);t%=86400000;
+ const h=String(Math.floor(t/3600000)).padStart(2,'0');t%=3600000;
+ const m=String(Math.floor(t/60000)).padStart(2,'0');t%=60000;
+ const s=String(Math.floor(t/1000)).padStart(2,'0');
+ $('counter').textContent=`❤️ ${d} días · ${h}:${m}:${s}`;
 }
+counter();setInterval(counter,1000);
 
-let renderer,scene,camera,orbit,avatar,keys={},clock=new THREE.Clock();
-function initWorld(){
- if(sceneReady)return;sceneReady=true;
- const canvas=$('world');
- renderer=new THREE.WebGLRenderer({canvas,antialias:true});
- renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+/* Mundo abierto */
+let scene,camera,renderer,orbit,player,partner,started=false;
+function startWorld(){
+ if(started)return;started=true;
+ renderer=new THREE.WebGLRenderer({canvas:$('world'),antialias:true});
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
  renderer.setSize(innerWidth,innerHeight);
- scene=new THREE.Scene();scene.background=new THREE.Color('#090b20');scene.fog=new THREE.Fog('#090b20',35,105);
- camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,250);camera.position.set(0,5,10);
- orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.target.set(0,1,0);orbit.maxPolarAngle=Math.PI*.48;orbit.minDistance=3;orbit.maxDistance=18;
- scene.add(new THREE.HemisphereLight(0xc7d9ff,0x30152d,2));
- const moon=new THREE.DirectionalLight(0xffd9ed,2);moon.position.set(-8,14,7);scene.add(moon);
- const ground=new THREE.Mesh(new THREE.PlaneGeometry(150,150),new THREE.MeshStandardMaterial({color:'#172c36'}));ground.rotation.x=-Math.PI/2;scene.add(ground);
- function box(x,y,z,sx,sy,sz,color){const m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),new THREE.MeshStandardMaterial({color}));m.position.set(x,y,z);m.castShadow=true;scene.add(m);return m}
- function sphere(x,y,z,r,color){const m=new THREE.Mesh(new THREE.SphereGeometry(r,16,12),new THREE.MeshStandardMaterial({color}));m.position.set(x,y,z);scene.add(m);return m}
- box(0,.02,0,3,.05,32,'#5d4551');
- const lake=new THREE.Mesh(new THREE.CircleGeometry(7,48),new THREE.MeshStandardMaterial({color:'#244c70',metalness:.25,roughness:.22}));lake.rotation.x=-Math.PI/2;lake.position.set(15,.04,-10);scene.add(lake);
- for(let i=0;i<44;i++){let x=(Math.random()-.5)*65,z=(Math.random()-.5)*65;if(Math.abs(x)<4&&Math.abs(z)<8)continue;box(x,.7,z,.28,1.4,.28,'#51372f');sphere(x,1.8,z,.95,['#1e5b51','#285c47','#3f6353'][i%3])}
- box(-8,1,-3,8,2,7,'#593d52');box(-8,2.2,-3,8.5,.35,7.5,'#34213e');
- box(-8,1,-6.7,2,2,.25,'#c17f9c');box(-11.9,1,-3,.2,2,6,'#c17f9c');box(-4.1,1,-3,.2,2,6,'#c17f9c');box(-8,1,.45,8,2,.2,'#c17f9c');
- box(-8,.65,-.4,1.1,1.3,.12,'#281b31');box(-8,.18,-2,3,.3,2,'#8c5a76');box(-8,.42,-2,2.2,.25,1.5,'#d4a4bd');
- for(let i=0;i<35;i++){const x=(Math.random()-.5)*45,z=(Math.random()-.5)*45;const l=new THREE.PointLight(i%2?'#ff83c8':'#8e9dff',.7,5);l.position.set(x,1.2,z);scene.add(l);sphere(x,1.2,z,.055,i%2?'#ff83c8':'#8e9dff')}
- avatar=new THREE.Group();
- const body=new THREE.Mesh(new THREE.CapsuleGeometry(.32,.9,4,8),new THREE.MeshStandardMaterial({color:'#e9a8c6'}));body.position.y=.8;avatar.add(body);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.28,16,12),new THREE.MeshStandardMaterial({color:'#f1c7b2'}));head.position.y=1.65;avatar.add(head);avatar.position.set(0,0,2);scene.add(avatar);
- const pts=[];for(let i=0;i<900;i++)pts.push((Math.random()-.5)*160,Math.random()*60+5,(Math.random()-.5)*160);
- const stars=new THREE.Points(new THREE.BufferGeometry(),new THREE.PointsMaterial({color:'#fff0f7',size:.08}));stars.geometry.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));scene.add(stars);
- $('counter').textContent='Juntos: desde 11/09/2026';
+ renderer.shadowMap.enabled=true;
+ scene=new THREE.Scene();
+ scene.background=new THREE.Color('#101a31');
+ scene.fog=new THREE.FogExp2('#101a31',.006);
+ camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,400);
+ camera.position.set(0,5,10);
+ orbit=new OrbitControls(camera,renderer.domElement);
+ orbit.enableDamping=true;orbit.maxPolarAngle=Math.PI*.48;
+ orbit.minDistance=2.5;orbit.maxDistance=25;orbit.target.set(0,1,0);
+ scene.add(new THREE.HemisphereLight(0xc8dfff,0x38233a,2));
+ const moon=new THREE.DirectionalLight('#ffe0f0',2.4);moon.position.set(-15,25,12);scene.add(moon);
+
+ const mat=(c,r=.85,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
+ function box(x,y,z,sx,sy,sz,c){
+  const o=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat(c));
+  o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o;
+ }
+ function ball(x,y,z,r,c){
+  const o=new THREE.Mesh(new THREE.SphereGeometry(r,18,14),mat(c));
+  o.position.set(x,y,z);o.castShadow=true;scene.add(o);return o;
+ }
+ function path(x,z,len,w,angle=0){
+  const o=box(x,.04,z,w,.05,len,'#74677a');o.rotation.y=angle;return o;
+ }
+
+ const terrain=new THREE.Mesh(new THREE.PlaneGeometry(240,240),mat('#244438'));
+ terrain.rotation.x=-Math.PI/2;terrain.receiveShadow=true;scene.add(terrain);
+ path(0,0,60,2.4);
+ path(8,-9,28,1.8,-.5);
+ path(-9,-9,28,1.8,.5);
+ path(0,18,30,1.8,.2);
+ path(24,-14,22,1.6,.5);
+ path(-26,13,25,1.7,-.4);
+
+ /* Lago extenso */
+ const lake=new THREE.Mesh(new THREE.CircleGeometry(13,72),new THREE.MeshStandardMaterial({color:'#27658b',metalness:.35,roughness:.18}));
+ lake.rotation.x=-Math.PI/2;lake.position.set(23,.07,-13);scene.add(lake);
+ for(let i=0;i<42;i++){
+  const a=i/42*Math.PI*2;
+  ball(23+Math.cos(a)*13.1,.17,-13+Math.sin(a)*13.1,.18,i%2?'#ffb7d9':'#c6dfcc');
+ }
+ /* Casa y jardín propio */
+ box(-12,1.5,-5,9,3,7,'#b78da5');
+ box(-12,3.25,-5,9.7,.4,7.7,'#3c2947');
+ box(-14,2,-1.4,1.5,1.1,.1,'#8be1ef');
+ box(-10,2,-1.4,1.5,1.1,.1,'#8be1ef');
+ box(-12,1,-1.35,1.2,1.9,.15,'#38243b');
+ box(-12,.1,-1.2,2.2,.15,.8,'#d9b5cb');
+
+ /* Dormitorio independiente */
+ box(-12,1.3,-17,7,2.6,6,'#76506e');
+ box(-12,2.75,-17,7.5,.3,6.5,'#392740');
+ box(-12,.35,-17,3.5,.5,4.3,'#986c8e');
+ box(-12,.65,-17,3.25,.2,4.1,'#f3dfeb');
+ box(-13,.82,-18.5,1.1,.3,.6,'#fff5fa');
+ box(-11,.82,-18.5,1.1,.3,.6,'#fff5fa');
+ box(-12,1.15,-19,3.4,.15,.15,'#e9bad7');
+
+ /* Cama exterior bajo una pérgola */
+ box(15,.3,-2,4,.45,4.8,'#8b5a79');
+ box(15,.56,-2,3.8,.18,4.6,'#f5dfec');
+ box(14,.74,-3.5,1.1,.28,.6,'#fff5fa');
+ box(16,.74,-3.5,1.1,.28,.6,'#fff5fa');
+ for(const x of [13,17])for(const z of [-4.2,.2])box(x,1.3,z,.12,2.2,.12,'#a77e8b');
+ const canopy=box(15,2.45,-2,4.3,.12,4.7,'#c99fc9');
+ canopy.material.transparent=true;canopy.material.opacity=.45;
+
+ /* Bosque, flores, colinas y pequeños caminos */
+ for(let i=0;i<210;i++){
+  const x=(Math.random()-.5)*170,z=(Math.random()-.5)*170;
+  if(Math.abs(x)<7&&Math.abs(z)<24)continue;
+  if(Math.hypot(x-23,z+13)<15)continue;
+  if(Math.hypot(x+12,z+5)<7||Math.hypot(x+12,z+17)<6)continue;
+  const h=1.2+Math.random()*1.5;
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.23,h,9),mat('#594034'));
+  trunk.position.set(x,h/2,z);scene.add(trunk);
+  ball(x,h+1,z,.8+Math.random()*.8,['#205542','#28684c','#315b48','#39654f'][i%4]);
+  if(i%3===0)ball(x+.5,h+1.2,z,.18,'#ff9ac8');
+ }
+ for(let i=0;i<230;i++){
+  const x=(Math.random()-.5)*95,z=(Math.random()-.5)*95;
+  if(Math.hypot(x-23,z+13)<14)continue;
+  ball(x,.14,z,.09+Math.random()*.08,['#ff8bbb','#ffdcf0','#ffe7a3','#c2a8ff'][i%4]);
+ }
+ /* Montañas al horizonte */
+ for(let i=0;i<35;i++){
+  const x=-110+i*6.5;
+  const mountain=new THREE.Mesh(new THREE.ConeGeometry(8+Math.random()*8,15+Math.random()*17,5),mat(i%2?'#344760':'#293c50'));
+  mountain.position.set(x,7,-100-Math.random()*15);scene.add(mountain);
+  const far=new THREE.Mesh(new THREE.ConeGeometry(11,18,5),mat('#293951'));
+  far.position.set(x,8,100+Math.random()*12);scene.add(far);
+ }
+ /* Cascada */
+ box(42,3,-30,9,6,4,'#465561');
+ const water=new THREE.Mesh(new THREE.PlaneGeometry(4,6),new THREE.MeshStandardMaterial({color:'#8ce4fa',emissive:'#164f72',transparent:true,opacity:.8,side:THREE.DoubleSide}));
+ water.position.set(42,3,-27.8);scene.add(water);
+ const stream=new THREE.Mesh(new THREE.CircleGeometry(5,32),mat('#286d8b',.2,.25));
+ stream.rotation.x=-Math.PI/2;stream.position.set(42,.08,-20);scene.add(stream);
+ /* Puente y mirador */
+ box(27,.5,-13,5,.2,1.8,'#9a7783');
+ for(const x of [25,29])box(x,.9,-13,.12,.8,1.8,'#d6b4c3');
+ box(-32,.3,18,8,.5,8,'#5e4e68');
+ for(const x of [-35,-29])for(const z of [15,21]){
+  box(x,1,z,.12,1.5,.12,'#8f8197');
+  ball(x,1.9,z,.2,'#ffe5a9');
+  const light=new THREE.PointLight('#ffc7e4',1.3,8);light.position.set(x,2,z);scene.add(light);
+ }
+ /* Faroles */
+ for(let i=0;i<40;i++){
+  const x=(Math.random()-.5)*65,z=(Math.random()-.5)*65;
+  box(x,.7,z,.08,1.4,.08,'#69586d');
+  ball(x,1.45,z,.12,'#ffe2ad');
+  const light=new THREE.PointLight('#ffc7df',.35,4);light.position.set(x,1.5,z);scene.add(light);
+ }
+ /* Cielo estrellado */
+ const pos=[];
+ for(let i=0;i<2000;i++)pos.push((Math.random()-.5)*300,Math.random()*85+10,(Math.random()-.5)*300);
+ const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+ scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:'#fff0fa',size:.12})));
+
+ /* Personajes estilizados */
+ function makePerson(bodyColor,hairColor){
+  const g=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.3,.75,4,8),mat(bodyColor));body.position.y=.8;g.add(body);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.25,18,14),mat('#e9bea8'));head.position.y=1.5;g.add(head);
+  const hair=new THREE.Mesh(new THREE.SphereGeometry(.27,18,12,0,Math.PI*2,0,Math.PI*.65),mat(hairColor));hair.position.y=1.57;g.add(hair);
+  for(const s of [-1,1]){
+   const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.08,.4,3,6),mat(bodyColor));arm.position.set(s*.37,.85,0);g.add(arm);
+  }
+  return g;
+ }
+ player=makePerson('#e5a0c0','#3a2338');player.position.set(0,0,2);scene.add(player);
+ partner=makePerson('#8bb9df','#34233b');partner.position.set(1.3,0,2);scene.add(partner);
+
+ const places={
+  inicio:[0,0,2],bosque:[-36,0,-25],jardin:[-5,0,10],
+  lago:[20,0,-1],cascada:[42,0,-21],mirador:[-32,0,18],
+  casa:[-12,0,0],dormitorio:[-12,0,-13],camaExterior:[15,0,1]
+ };
+ document.querySelectorAll('[data-place]').forEach(b=>b.onclick=()=>{
+  const p=places[b.dataset.place];
+  player.position.set(...p);
+  orbit.target.set(p[0],1,p[2]);
+  camera.position.set(p[0]+3,4,p[2]+7);
+  toast('Explora este lugar a tu ritmo ❤️');
+ });
+
  function animate(){
   requestAnimationFrame(animate);
   const dt=Math.min(clock.getDelta(),.05);
-  const move=new THREE.Vector3((keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0),0,(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0));
-  if(move.lengthSq()){move.normalize().multiplyScalar(4*dt);avatar.position.add(move);avatar.position.x=THREE.MathUtils.clamp(avatar.position.x,-35,35);avatar.position.z=THREE.MathUtils.clamp(avatar.position.z,-35,35);avatar.rotation.y=Math.atan2(move.x,move.z);orbit.target.lerp(new THREE.Vector3(avatar.position.x,1,avatar.position.z),.12)}
+  const dir=new THREE.Vector3(
+   (keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0),
+   0,
+   (keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)
+  );
+  if(dir.lengthSq()){
+   dir.normalize().multiplyScalar(4*dt);
+   player.position.add(dir);
+   player.position.x=THREE.MathUtils.clamp(player.position.x,-110,110);
+   player.position.z=THREE.MathUtils.clamp(player.position.z,-110,110);
+   player.rotation.y=Math.atan2(dir.x,dir.z);
+   orbit.target.lerp(new THREE.Vector3(player.position.x,1,player.position.z),.12);
+  }
   orbit.update();renderer.render(scene,camera);
  }
  animate();
- addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
- addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
- addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
- document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{
-  const spots={casa:[-8,0,-3],jardin:[4,0,4],lago:[15,0,-10],cama:[-8,0,-2]};
-  avatar.position.set(...spots[b.dataset.go]);orbit.target.set(avatar.position.x,1,avatar.position.z);camera.position.set(avatar.position.x+2,4,avatar.position.z+7);toast('Llegaste a '+b.textContent);
+ addEventListener('resize',()=>{
+  camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);
  });
 }
 
-$('musicBtn').onclick=async()=>{
- try{if($('music').paused){await $('music').play();$('musicBtn').textContent='♫ Pausar música'}else{$('music').pause();$('musicBtn').textContent='♫ Reproducir música'}}
- catch{toast('No se encontró tutu.mp3 o el navegador bloqueó la música.')}
-};
-
-$('messageForm').addEventListener('submit',async e=>{
- e.preventDefault();const text=$('messageInput').value.trim();if(!text)return;
- try{await addDoc(collection(db,'messages'),{text,authorUid:user.uid,authorName:user.email==='dnohe1206@gmail.com'?'Nohemi':'Héctor',createdAt:serverTimestamp()});$('messageInput').value=''}
- catch(err){toast('No se pudo enviar. Revisa las reglas de Firestore: '+err.code)}
+/* Controles de movimiento */
+addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
+addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+document.querySelectorAll('[data-key]').forEach(b=>{
+ const k=b.dataset.key;
+ const down=e=>{e.preventDefault();keys[k]=true};
+ const up=e=>{e.preventDefault();keys[k]=false};
+ b.addEventListener('pointerdown',down);
+ b.addEventListener('pointerup',up);
+ b.addEventListener('pointercancel',up);
+ b.addEventListener('pointerleave',up);
 });
 
-function subscribeMessages(){
- const q=query(collection(db,'messages'),orderBy('createdAt','asc'));
- unsubs.push(onSnapshot(q,snap=>{
-  const el=$('messages');el.innerHTML='';
-  snap.forEach(d=>{const m=d.data(),b=document.createElement('div');b.className='bubble '+(m.authorUid===user.uid?'mine':'');const t=document.createElement('div');t.textContent=m.text;const meta=document.createElement('div');meta.className='small';meta.textContent=(m.authorName||'Alguien')+' · '+(m.createdAt?.toDate?m.createdAt.toDate().toLocaleString('es-CO'):'ahora');b.append(t,meta);el.append(b)});
-  el.scrollTop=el.scrollHeight;
- },err=>toast('Mensajes: '+err.code)));
-}
+/* Fotos */
+const photoFiles=['foto1.jpeg','foto2.jpeg','foto3.jpeg','foto4.jpeg'];
+function openPhoto(i){photoIndex=(i+4)%4;$('bigPhoto').src=photoFiles[photoIndex];$('photoModal').classList.remove('hidden')}
+$('photosBtn').onclick=()=>showPanel('photosPanel');
+$('letterBtn').onclick=()=>showPanel('letterPanel');
+$('messagesBtn').onclick=()=>showPanel('messagesPanel');
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).classList.add('hidden'));
+document.querySelectorAll('[data-photo]').forEach(b=>b.onclick=()=>openPhoto(Number(b.dataset.photo)));
+$('closePhoto').onclick=()=>$('photoModal').classList.add('hidden');
+$('prevPhoto').onclick=()=>openPhoto(photoIndex-1);
+$('nextPhoto').onclick=()=>openPhoto(photoIndex+1);
+addEventListener('keydown',e=>{if(e.key==='Escape'){$('photoModal').classList.add('hidden');$('dateModal').classList.add('hidden')}});
 
-function subscribePresence(){
- const ref=doc(db,'presence',user.uid);
- const write=()=>setDoc(ref,{uid:user.uid,email:user.email,online:true,lastSeen:serverTimestamp()},{merge:true}).catch(()=>{});
- write();const timer=setInterval(write,60000);
- unsubs.push(()=>{clearInterval(timer);setDoc(ref,{online:false,lastSeen:serverTimestamp()},{merge:true}).catch(()=>{})});
- const other=allowed.find(x=>x!==user.uid);
- unsubs.push(onSnapshot(doc(db,'presence',other),s=>{$('presence').textContent=s.data()?.online?'● presencia reciente':'● sin presencia reciente'}));
-}
-
-$('inviteBtn').onclick=async()=>{
- const other=allowed.find(x=>x!==user.uid);
- try{await addDoc(collection(db,'invites'),{from:user.uid,to:other,status:'pending',kind:'romantic',createdAt:serverTimestamp()});toast('Invitación enviada ❤️')}
- catch(e){toast('No se pudo invitar: '+e.code)}
+/* Música desde Tutu.mp4.mp4 */
+$('musicBtn').onclick=async()=>{
+ try{
+  if($('music').paused){await $('music').play();$('musicBtn').textContent='♫ Pausar'}
+  else{$('music').pause();$('musicBtn').textContent='♫ Reproducir'}
+ }catch{toast('No se pudo reproducir Tutu.mp4.mp4. Revisa el nombre y que el archivo esté en la raíz de GitHub.')}
 };
 
-function subscribeInvites(){
+/* Mensajes en tiempo real */
+$('messageForm').onsubmit=async e=>{
+ e.preventDefault();
+ const text=$('messageInput').value.trim();
+ if(!text||!user)return;
+ try{
+  await addDoc(collection(db,'messages'),{
+   text,authorUid:user.uid,
+   authorName:user.email==='dnohe1206@gmail.com'?'Nohemi':'Héctor',
+   createdAt:serverTimestamp()
+  });
+  $('messageInput').value='';
+ }catch{toast('No se pudo enviar. Revisa las reglas de Firestore.')}
+};
+function startMessages(){
+ unsubs.push(onSnapshot(query(collection(db,'messages'),orderBy('createdAt','asc')),snap=>{
+  const el=$('messages');el.replaceChildren();
+  snap.forEach(d=>{
+   const m=d.data(),b=document.createElement('div');b.className='bubble '+(m.authorUid===user.uid?'mine':'');
+   const text=document.createElement('div');text.textContent=m.text||'';
+   const meta=document.createElement('div');meta.className='small';
+   meta.textContent=(m.authorName||'Pareja')+' · '+(m.createdAt?.toDate?m.createdAt.toDate().toLocaleString('es-CO'):'ahora');
+   b.append(text,meta);el.append(b);
+  });
+  el.scrollTop=el.scrollHeight;
+ },()=>toast('Mensajes no disponibles. Revisa Firestore.')));
+}
+
+/* Presencia aproximada */
+function startPresence(){
+ const other=allowed.find(x=>x!==user.uid),ref=doc(db,'presence',user.uid);
+ const beat=()=>setDoc(ref,{online:true,lastSeen:serverTimestamp()},{merge:true}).catch(()=>{});
+ beat();const timer=setInterval(beat,30000);
+ unsubs.push(()=>clearInterval(timer));
+ unsubs.push(onSnapshot(doc(db,'presence',other),s=>{
+  const d=s.data(),recent=d?.lastSeen?.toDate&&Date.now()-d.lastSeen.toDate().getTime()<90000;
+  $('presence').textContent=recent?'● Conectado recientemente':'● Sin señal reciente';
+ },()=>{$('presence').textContent='Presencia no disponible'}));
+}
+
+/* Invitación romántica entre las dos cuentas */
+$('dateBtn').onclick=async()=>{
+ try{
+  const other=allowed.find(x=>x!==user.uid);
+  const ref=await addDoc(collection(db,'invites'),{
+   from:user.uid,to:other,status:'pending',createdAt:serverTimestamp()
+  });
+  inviteId=ref.id;
+  $('dateTitle').textContent='❤️ Invitación enviada';
+  $('dateText').textContent='Esperando la respuesta de tu pareja.';
+  $('dateChoices').classList.add('hidden');
+  $('romanceChoices').classList.remove('hidden');
+  $('dateModal').classList.remove('hidden');
+ }catch{toast('No se pudo enviar. Revisa las reglas de Firestore.')}
+};
+function startInvites(){
  unsubs.push(onSnapshot(query(collection(db,'invites'),orderBy('createdAt','desc')),snap=>{
   for(const d of snap.docs){
-   const x=d.data();
-   if(x.to===user.uid&&x.status==='pending'&&d.id!==activeInvite){
-    activeInvite=d.id;$('inviteTitle').textContent='❤️ Una invitación';$('inviteText').textContent='Tu pareja te invita a compartir un momento romántico. ¿Quieres aceptar?';$('inviteChoices').classList.remove('hidden');$('stopScene').classList.add('hidden');$('inviteModal').classList.remove('hidden');break;
+   const v=d.data();
+   if(v.to===user.uid&&v.status==='pending'){
+    inviteId=d.id;
+    $('dateTitle').textContent='❤️ Tu pareja te invita';
+    $('dateText').textContent='¿Quieres compartir un momento romántico? Puedes decir que no.';
+    $('dateChoices').classList.remove('hidden');
+    $('romanceChoices').classList.add('hidden');
+    $('dateModal').classList.remove('hidden');break;
    }
-   if(x.from===user.uid&&x.status==='accepted'&&!activeScene){
-    activeInvite=d.id;activeScene=true;$('inviteTitle').textContent='❤️ Momento romántico';$('inviteText').textContent='Invitación aceptada. Cualquiera puede terminar el momento cuando quiera.';$('inviteChoices').classList.add('hidden');$('stopScene').classList.remove('hidden');$('inviteModal').classList.remove('hidden');
-   }
+   if(v.status==='ended'&&d.id===inviteId){$('dateModal').classList.add('hidden');inviteId=null;romantic=false}
   }
- },e=>toast('Invitaciones: '+e.code)));
+ },()=>toast('Invitaciones no disponibles. Revisa Firestore.')));
 }
-$('acceptInvite').onclick=async()=>{if(!activeInvite)return;try{await updateDoc(doc(db,'invites',activeInvite),{status:'accepted'});activeScene=true;$('inviteModal').classList.add('hidden');toast('Invitación aceptada ❤️')}catch(e){toast('No se pudo aceptar: '+e.code)}};
-$('declineInvite').onclick=async()=>{if(!activeInvite)return;try{await updateDoc(doc(db,'invites',activeInvite),{status:'declined'});$('inviteModal').classList.add('hidden');activeInvite=null;toast('Has rechazado la invitación.')}catch(e){toast('No se pudo responder: '+e.code)}};
-$('stopScene').onclick=async()=>{if(activeInvite)try{await updateDoc(doc(db,'invites',activeInvite),{status:'ended'})}catch{}activeScene=false;activeInvite=null;$('inviteModal').classList.add('hidden');toast('Momento terminado ❤️')};
-$('logout').onclick=()=>signOut(auth);
-window.addEventListener('error',e=>{$('loginStatus').textContent='Error de carga: '+e.message});
-</script>
-<script>
-setTimeout(()=>{const l=document.getElementById('loading');if(l&&!l.classList.contains('hidden')){const s=document.getElementById('loginStatus');if(!s.textContent)s.textContent='Si la pantalla no avanza, comprueba tu conexión y revisa la consola del navegador.'}},12000);
+$('acceptDate').onclick=async()=>{
+ if(!inviteId)return;
+ try{
+  await updateDoc(doc(db,'invites',inviteId),{status:'accepted'});
+  romantic=true;$('dateChoices').classList.add('hidden');$('romanceChoices').classList.remove('hidden');
+  $('dateTitle').textContent='❤️ Nuestro momento';$('dateText').textContent='Elijan una pose romántica y deténganla cuando quieran.';
+ }catch{toast('No se pudo aceptar la invitación.')}
+};
+$('rejectDate').onclick=async()=>{
+ if(inviteId)try{await updateDoc(doc(db,'invites',inviteId),{status:'declined'})}catch{}
+ $('dateModal').classList.add('hidden');inviteId=null;
+};
+document.querySelectorAll('[data-pose]').forEach(b=>b.onclick=()=>{
+ const messages={
+  hug:'🤗 Un abrazo cariñoso.',
+  kiss:'💋 Un beso romántico, con consentimiento mutuo.',
+  sit:'🌙 Sentarse juntos junto al lago.',
+  cuddle:'❤️ Acurrucarse juntos.',
+  lie:'🛏️ Acostarse juntos y disfrutar de la tranquilidad.'
+ };
+ $('dateText').textContent=messages[b.dataset.pose];
+ toast(messages[b.dataset.pose]);
+});
+$('finishDate').onclick=async()=>{
+ if(inviteId)try{await updateDoc(doc(db,'invites',inviteId),{status:'ended'})}catch{}
+ romantic=false;inviteId=null;$('dateModal').classList.add('hidden');toast('Momento terminado ❤️');
+};
+$('logoutBtn').onclick=async()=>{
+ try{if(user)await setDoc(doc(db,'presence',user.uid),{online:false,lastSeen:serverTimestamp()},{merge:true})}catch{}
+ await signOut(auth);
+};
 </script>
 </body>
 </html>
