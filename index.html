@@ -292,9 +292,9 @@ async function publishMyPosition(force = false) {
       rotationY: player.rotation.y,
       updatedAt: serverTimestamp()
     }, { merge: true });
-  } catch (error) {
+    } catch (error) {
     console.error('Error publicando posición:', error);
-    toast('No se pudo guardar tu posición en Firebase.');
+    toast('Error Firebase: ' + error.code);
   }
 }
 function startWorld(){
