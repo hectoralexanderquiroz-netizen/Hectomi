@@ -1,418 +1,129 @@
-
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hectomi ❤️ Nuestro Universo</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#10091b;color:#fff;font-family:Arial,sans-serif}
-button,input{font:inherit}
-button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;background:#b94d91;color:white}
-header{padding:18px;text-align:center;background:#180e29}
-section{padding:22px 16px;max-width:1000px;margin:auto}
-h1,h2{color:#ffc2e3}
-#juego{position:relative;width:100%;height:68vh;min-height:400px;background:#090617;border-radius:18px;overflow:hidden}
-#escena{width:100%;height:100%;display:block}
-#estado{font-size:13px;color:#d9b9e9}
-#controles{position:absolute;bottom:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:end;pointer-events:none}
-#joy{width:105px;height:105px;border-radius:50%;background:#ffffff20;border:1px solid #ffffff55;position:relative;pointer-events:auto;touch-action:none}
-#palo{position:absolute;width:42px;height:42px;left:30px;top:30px;border-radius:50%;background:#e77cbd}
-#acciones{display:flex;flex-direction:column;gap:8px;pointer-events:auto}
-#aviso{position:absolute;top:15px;left:50%;transform:translateX(-50%);background:#160c26dd;border-radius:12px;padding:9px 12px;text-align:center;max-width:90%;font-size:13px}
-.card{background:#21142f;border:1px solid #ffffff20;border-radius:16px;padding:16px;margin:12px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.grid img{width:100%;height:190px;object-fit:cover;border-radius:12px}
-input{background:#10091b;color:white;border:1px solid #655071;border-radius:10px;padding:12px;width:100%;margin:5px 0}
-#mensajes{height:220px;overflow:auto;background:#10091b;border-radius:12px;padding:10px}
-.msg{padding:8px;margin:6px 0;background:#392344;border-radius:10px;overflow-wrap:anywhere}
-.msg small{display:block;color:#e3bddd;font-size:11px;margin-top:4px}
-.burbuja{position:absolute;z-index:5;transform:translate(-50%,-100%);background:#fff;color:#31172d;border-radius:12px;padding:7px 10px;max-width:190px;font-size:13px;pointer-events:none}
-.oculto{display:none!important}
-@media(max-width:600px){#juego{height:62vh;min-height:360px}section{padding:15px 10px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hectomi ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #160b18, #4a1028);
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    main {
+      width: min(360px, 85%);
+      padding: 28px;
+      text-align: center;
+      background: #24151f;
+      border: 1px solid #ff668b;
+      border-radius: 20px;
+    }
+
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      border-radius: 9px;
+      border: 0;
+      font-size: 16px;
+    }
+
+    button {
+      background: #ff668b;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #mensaje {
+      overflow-wrap: anywhere;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>Hectomi ❤️</h1>
-  <div>Un universo para ti y Nohemi</div>
-  <p id="estado">Conectando...</p>
-</header>
+  <main>
+    <h1>Hectomi ❤️</h1>
+    <p>Entra a nuestro mundo</p>
 
-<section>
-  <div class="card" id="acceso">
-    <h2>Entrar a nuestro mundo</h2>
-    <p>Inicia sesión con tu cuenta autorizada.</p>
-    <input id="correo" type="email" placeholder="Correo electrónico" autocomplete="username">
-    <input id="clave" type="password" placeholder="Contraseña" autocomplete="current-password">
-    <button id="entrar">Entrar</button>
-    <button id="salir" class="oculto">Cerrar sesión</button>
-    <p id="error" role="status"></p>
-  </div>
+    <form id="loginForm">
+      <input id="email" type="email" placeholder="Tu correo electrónico"
+        autocomplete="username" required>
 
-  <h2>🌌 Nuestro mundo</h2>
-  <p>PC: usa WASD o las flechas. Mueve el ratón para mirar. En celular, usa el joystick.</p>
-  <div id="juego">
-    <canvas id="escena"></canvas>
-    <div id="aviso">Explora el jardín y acércate a la banca o la casa ✨</div>
-    <div id="controles">
-      <div id="joy"><div id="palo"></div></div>
-      <div id="acciones">
-        <button id="interactuar">Interactuar</button>
-        <button id="mirar">Girar cámara ↻</button>
-      </div>
-    </div>
-  </div>
+      <input id="password" type="password" placeholder="Tu contraseña"
+        autocomplete="current-password" required>
 
-  <div class="card">
-    <h2>💬 Mensajes para nosotros</h2>
-    <p>Los mensajes quedan guardados para leerlos incluso si el otro está desconectado.</p>
-    <div id="mensajes"><p>Inicia sesión para cargar el chat privado.</p></div>
-    <form id="formChat">
-      <input id="texto" maxlength="500" placeholder="Escribe un mensaje..." required>
-      <button type="submit">Enviar mensaje</button>
+      <button id="entrar" type="submit">Entrar</button>
     </form>
-  </div>
 
-  <div class="card">
-    <h2>💌 Nuestra carta</h2>
-    <p>Para mi preciosa Nohemi: cada recuerdo contigo hace que nuestro pequeño universo sea especial. ❤️</p>
-    <p>Esta es una carta provisional: reemplázala por el texto de tu carta original.</p>
-  </div>
+    <p id="mensaje" role="status"></p>
+  </main>
 
-  <h2>📸 Nuestros recuerdos</h2>
-  <div class="grid">
-    <img src="foto1.jpeg" alt="Nuestro recuerdo 1">
-    <img src="foto2.jpeg" alt="Nuestro recuerdo 2">
-    <img src="foto3.jpeg" alt="Nuestro recuerdo 3">
-    <img src="foto4.jpeg" alt="Nuestro recuerdo 4">
-  </div>
+  <script type="module">
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
-  <div class="card">
-    <h2>⏳ Nuestro tiempo juntos</h2>
-    <p id="contador">Calculando...</p>
-  </div>
+    import {
+      getAuth,
+      signInWithEmailAndPassword
+    } from
+      "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-  <div class="card">
-    <h2>🎵 Nuestra canción</h2>
-    <button id="musica">Reproducir / pausar Tutu</button>
-    <audio id="audio" src="Tutu.mp4.mp4" loop preload="none"></audio>
-  </div>
-</section>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDW96MUsBSTY2M0iNlmB0SxbA209dia8u4",
+      authDomain: "hectomi.firebaseapp.com",
+      projectId: "hectomi",
+      storageBucket: "hectomi.firebasestorage.app",
+      messagingSenderId: "622508139794",
+      appId: "1:622508139794:web:4b6843ba819c4c7234bfcb"
+    };
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script>
-/* 1. FIREBASE: usa la configuración de tu proyecto Hectomi */
-const firebaseConfig = {
-  apiKey: "AIzaSyDW96MUsBST2YM0iNlmB0SxbA209dia8u4",
-  authDomain: "hectomi.firebaseapp.com",
-  projectId: "hectomi",
-  storageBucket: "hectomi.firebasestorage.app",
-  messagingSenderId: "622508139794",
-  appId: "1:622508139794:web:4b6843ba819c4c7234bfcb"
-};
+    const mensaje = document.getElementById("mensaje");
+    const boton = document.getElementById("entrar");
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+    try {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
 
-const permitidos = [
-  "hectoralexanderquiroz@gmail.com",
-  "dnohe1206@gmail.com"
-];
-let usuario = null;
-let detenerMensajes = null;
-let detenerJugadores = null;
-let ultimaBurbuja = "";
-let jugadorRemoto = null;
+      document.getElementById("loginForm").addEventListener(
+        "submit",
+        async (evento) => {
+          evento.preventDefault();
+          boton.disabled = true;
+          mensaje.textContent = "Comprobando acceso...";
 
-/* 2. AUTENTICACIÓN */
-const $ = id => document.getElementById(id);
-$("entrar").onclick = async () => {
-  $("error").textContent = "";
-  try {
-    const cred = await auth.signInWithEmailAndPassword(
-      $("correo").value.trim(), $("clave").value
-    );
-    if (!permitidos.includes((cred.user.email || "").toLowerCase())) {
-      await auth.signOut();
-      throw new Error("Esta cuenta no está autorizada.");
+          try {
+            const email =
+              document.getElementById("email").value.trim();
+            const password =
+              document.getElementById("password").value;
+
+            await signInWithEmailAndPassword(auth, email, password);
+
+            mensaje.textContent =
+              "¡Inicio de sesión correcto! Firebase funciona.";
+          } catch (error) {
+            console.error("Error de Firebase:", error.code, error.message);
+            mensaje.textContent =
+              "Error: " + (error.code || error.message);
+          } finally {
+            boton.disabled = false;
+          }
+        }
+      );
+    } catch (error) {
+      console.error(error);
+      mensaje.textContent =
+        "No se pudo iniciar Firebase. Revisa la configuración.";
     }
-  } catch (e) {
-    $("error").textContent = "No se pudo entrar: " + e.message;
-  }
-};
-
-$("salir").onclick = () => auth.signOut();
-
-auth.onAuthStateChanged(async user => {
-  usuario = user && permitidos.includes((user.email || "").toLowerCase())
-    ? user : null;
-  $("acceso").querySelector("h2").textContent =
-    usuario ? "Sesión iniciada" : "Entrar a nuestro mundo";
-  $("entrar").classList.toggle("oculto", !!usuario);
-  $("salir").classList.toggle("oculto", !usuario);
-  $("estado").textContent = usuario
-    ? "Conectado como " + usuario.email
-    : "Desconectado";
-  if (!usuario) {
-    if (detenerMensajes) detenerMensajes();
-    if (detenerJugadores) detenerJugadores();
-    detenerMensajes = detenerJugadores = null;
-    $("mensajes").textContent = "Inicia sesión para cargar el chat privado.";
-    return;
-  }
-  escucharMensajes();
-  escucharJugador();
-});
-
-/* 3. CHAT PERSISTENTE Y BURBUJAS */
-function escucharMensajes() {
-  if (detenerMensajes) detenerMensajes();
-  detenerMensajes = db.collection("messages")
-    .orderBy("createdAt", "asc").limitToLast(100)
-    .onSnapshot(snap => {
-      const caja = $("mensajes");
-      caja.replaceChildren();
-      snap.forEach(doc => {
-        const m = doc.data();
-        const div = document.createElement("div");
-        div.className = "msg";
-        div.textContent = (m.authorName || "Usuario") + ": " + (m.text || "");
-        const small = document.createElement("small");
-        small.textContent = m.createdAt && m.createdAt.toDate
-          ? m.createdAt.toDate().toLocaleString() : "Enviando...";
-        div.appendChild(small);
-        caja.appendChild(div);
-      });
-      caja.scrollTop = caja.scrollHeight;
-      const last = snap.docs[snap.docs.length - 1];
-      if (last && last.id !== ultimaBurbuja) {
-        const m = last.data();
-        ultimaBurbuja = last.id;
-        if (m.text) mostrarBurbuja(m.text, m.authorUid);
-      }
-    }, e => $("error").textContent = "Error en chat: " + e.message);
-}
-
-$("formChat").addEventListener("submit", async e => {
-  e.preventDefault();
-  if (!usuario) return alert("Primero inicia sesión.");
-  const text = $("texto").value.trim();
-  if (!text) return;
-  $("texto").value = "";
-  try {
-    await db.collection("messages").add({
-      text,
-      authorUid: usuario.uid,
-      authorName: usuario.email === "dnohe1206@gmail.com" ? "Nohemi" : "Tú",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-  } catch (e) {
-    alert("No se pudo guardar el mensaje: " + e.message);
-  }
-});
-
-let burbujaEl = null;
-let burbujaHasta = 0;
-function mostrarBurbuja(text, uid) {
-  if (!worldReady || !avatar) return;
-  if (burbujaEl) burbujaEl.remove();
-  burbujaEl = document.createElement("div");
-  burbujaEl.className = "burbuja";
-  burbujaEl.textContent = text.slice(0, 180);
-  $("juego").appendChild(burbujaEl);
-  burbujaHasta = Date.now() + 5000;
-}
-
-/* 4. CONTADOR: 11 de septiembre de 2026 */
-function actualizarContador() {
-  const inicio = new Date(2026, 8, 11, 0, 0, 0);
-  const ms = Date.now() - inicio.getTime();
-  if (ms < 0) {
-    $("contador").textContent = "Nuestra historia comienza pronto ❤️";
-    return;
-  }
-  const dias = Math.floor(ms / 86400000);
-  const horas = Math.floor(ms / 3600000) % 24;
-  const min = Math.floor(ms / 60000) % 60;
-  const seg = Math.floor(ms / 1000) % 60;
-  $("contador").textContent =
-    `${dias} días, ${horas}h ${min}m ${seg}s juntos ❤️`;
-}
-actualizarContador();
-setInterval(actualizarContador, 1000);
-
-/* 5. MÚSICA LOCAL */
-$("musica").onclick = async () => {
-  const a = $("audio");
-  try {
-    if (a.paused) await a.play();
-    else a.pause();
-  } catch {
-    alert("Comprueba que Tutu.mp4.mp4 esté junto a index.html.");
-  }
-};
-
-/* 6. PROTOTIPO 3D LIGERO */
-let renderer, scene, camera, avatar, worldReady = false;
-let yaw = 0, moveX = 0, moveZ = 0;
-const keys = {};
-const canvas = $("escena");
-const juego = $("juego");
-const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
-
-function crearAvatar(color) {
-  const g = new THREE.Group();
-  const ropa = new THREE.MeshStandardMaterial({color, roughness: .85});
-  const piel = new THREE.MeshStandardMaterial({color: 0xe6b99b});
-  const pelo = new THREE.MeshStandardMaterial({color: 0x30202d});
-  const cuerpo = new THREE.Mesh(new THREE.CapsuleGeometry(.27, .55, 4, 8), ropa);
-  cuerpo.position.y = .83; g.add(cuerpo);
-  const cabeza = new THREE.Mesh(new THREE.SphereGeometry(.22, 12, 10), piel);
-  cabeza.position.y = 1.48; g.add(cabeza);
-  const cabello = new THREE.Mesh(new THREE.SphereGeometry(.23, 12, 8, 0, Math.PI*2, 0, Math.PI*.65), pelo);
-  cabello.position.y = 1.55; g.add(cabello);
-  return g;
-}
-
-function iniciarMundo() {
-  if (!window.THREE) {
-    $("aviso").textContent = "No se pudo cargar el motor 3D. Comprueba internet.";
-    return;
-  }
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0b0820);
-  scene.fog = new THREE.Fog(0x0b0820, 24, 75);
-  camera = new THREE.PerspectiveCamera(65, 1, .1, 150);
-  renderer = new THREE.WebGLRenderer({canvas, antialias: false});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.2));
-  renderer.shadowMap.enabled = false;
-  scene.add(new THREE.HemisphereLight(0xe4d4ff, 0x29351e, 2));
-  const luz = new THREE.DirectionalLight(0xffc3e2, 2);
-  luz.position.set(-5, 12, 4); scene.add(luz);
-
-  const suelo = new THREE.Mesh(
-    new THREE.CircleGeometry(42, 48),
-    new THREE.MeshStandardMaterial({color: 0x253c32, roughness: 1})
-  );
-  suelo.rotation.x = -Math.PI/2; scene.add(suelo);
-
-  const tronco = new THREE.MeshStandardMaterial({color: 0x65465b});
-  const hojas = new THREE.MeshStandardMaterial({color: 0x285548});
-  const flores = new THREE.MeshStandardMaterial({color: 0xf28fc7, emissive: 0x301020});
-  for (let i=0; i<32; i++) {
-    const a = i*2.399, r = 8+(i%5)*2.4;
-    const x = Math.cos(a)*r, z = Math.sin(a)*r;
-    const t = new THREE.Mesh(new THREE.CylinderGeometry(.12,.19,2.5,5), tronco);
-    t.position.set(x,1.25,z); scene.add(t);
-    const copa = new THREE.Mesh(new THREE.ConeGeometry(1.1,2.5,6), hojas);
-    copa.position.set(x,3,z); scene.add(copa);
-    if (i%2===0) {
-      const f = new THREE.Mesh(new THREE.SphereGeometry(.18,6,6), flores);
-      f.position.set(x+.4,3.1,z); scene.add(f);
-    }
-  }
-
-  const bancoMat = new THREE.MeshStandardMaterial({color:0x99647f});
-  const asiento = new THREE.Mesh(new THREE.BoxGeometry(2,.15,.55), bancoMat);
-  asiento.position.set(3,.7,-4); scene.add(asiento);
-  const respaldo = new THREE.Mesh(new THREE.BoxGeometry(2,.55,.12), bancoMat);
-  respaldo.position.set(3,1,-4.25); scene.add(respaldo);
-
-  // Casa provisional para explorar
-  const casaMat = new THREE.MeshStandardMaterial({color:0x68446f});
-  const casa = new THREE.Mesh(new THREE.BoxGeometry(4,2.5,3), casaMat);
-  casa.position.set(-7,1.25,-7); scene.add(casa);
-  const techo = new THREE.Mesh(new THREE.ConeGeometry(3.2,1.8,4), flores);
-  techo.position.set(-7,3.3,-7); techo.rotation.y=Math.PI/4; scene.add(techo);
-
-  // Estrellas ligeras
-  const puntos=[];
-  for(let i=0;i<450;i++) puntos.push((Math.random()-.5)*100,Math.random()*35+5,(Math.random()-.5)*100);
-  const geo=new THREE.BufferGeometry();
-  geo.setAttribute("position",new THREE.Float32BufferAttribute(puntos,3));
-  scene.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0xffd9f3,size:.14})));
-
-  avatar=crearAvatar(0xa44f9a); scene.add(avatar);
-  worldReady=true;
-  redimensionar();
-  animar();
-}
-
-function redimensionar() {
-  if(!renderer || !camera) return;
-  const w=juego.clientWidth, h=juego.clientHeight;
-  renderer.setSize(w,h,false);
-  camera.aspect=w/h; camera.updateProjectionMatrix();
-}
-function animar() {
-  requestAnimationFrame(animar);
-  if(!worldReady) return;
-  const dt=.016;
-  const f=(keys.w||keys.arrowup?1:0)-(keys.s||keys.arrowdown?1:0)-moveZ;
-  const s=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)-moveX;
-  const len=Math.hypot(f,s);
-  if(len>.01) {
-    avatar.position.x += (Math.sin(yaw)*f+Math.cos(yaw)*s)/len*dt*4;
-    avatar.position.z += (Math.cos(yaw)*f-Math.sin(yaw)*s)/len*dt*4;
-    avatar.rotation.y=Math.atan2(Math.sin(yaw)*f+Math.cos(yaw)*s,Math.cos(yaw)*f-Math.sin(yaw)*s);
-  }
-  avatar.position.x=clamp(avatar.position.x,-35,35);
-  avatar.position.z=clamp(avatar.position.z,-35,35);
-  const objetivo=new THREE.Vector3(
-    avatar.position.x-Math.sin(yaw)*5,
-    avatar.position.y+2.7,
-    avatar.position.z-Math.cos(yaw)*5
-  );
-  camera.position.lerp(objetivo,.12);
-  camera.lookAt(avatar.position.x,avatar.position.y+1,avatar.position.z);
-  renderer.render(scene,camera);
-  if(burbujaEl && Date.now()>burbujaHasta){burbujaEl.remove();burbujaEl=null;}
-  if(burbujaEl && avatar){
-    const p=avatar.position.clone(); p.y+=2.1; p.project(camera);
-    burbujaEl.style.left=((p.x*.5+.5)*juego.clientWidth)+"px";
-    burbujaEl.style.top=((-p.y*.5+.5)*juego.clientHeight)+"px";
-  }
-}
-$("interactuar").onclick=()=>{
-  if(!worldReady) return;
-  const dBanco=Math.hypot(avatar.position.x-3,avatar.position.z+4);
-  const dCasa=Math.hypot(avatar.position.x+7,avatar.position.z+7);
-  if(dBanco<3) $("aviso").textContent="🪑 Estás junto a la banca. Sentarse será una próxima interacción.";
-  else if(dCasa<4) $("aviso").textContent="🏡 Has encontrado la casa romántica.";
-  else $("aviso").textContent="Explora el mapa y busca la banca o la casa.";
-};
-$("mirar").onclick=()=>yaw+=Math.PI/4;
-addEventListener("keydown",e=>keys[e.key.toLowerCase()]=true);
-addEventListener("keyup",e=>keys[e.key.toLowerCase()]=false);
-addEventListener("resize",redimensionar);
-
-let joyId=null;
-const joy=$("joy"), palo=$("palo");
-joy.addEventListener("pointerdown",e=>{
-  joyId=e.pointerId; joy.setPointerCapture(e.pointerId); moverJoy(e);
-});
-joy.addEventListener("pointermove",e=>{if(e.pointerId===joyId)moverJoy(e);});
-function moverJoy(e){
-  const r=joy.getBoundingClientRect();
-  let dx=e.clientX-(r.left+r.width/2), dy=e.clientY-(r.top+r.height/2);
-  const d=Math.hypot(dx,dy), max=30;
-  if(d>max){dx=dx/d*max;dy=dy/d*max;}
-  palo.style.left=(30+dx)+"px";palo.style.top=(30+dy)+"px";
-  moveX=dx/max;moveZ=dy/max;
-}
-function soltarJoy(){joyId=null;moveX=moveZ=0;palo.style.left="30px";palo.style.top="30px";}
-joy.addEventListener("pointerup",soltarJoy);
-joy.addEventListener("pointercancel",soltarJoy);
-iniciarMundo();
-
-/* NOTA: el movimiento remoto y la presencia aún requieren implementación.
-   Este prototipo no sincroniza las posiciones entre jugadores. */
-</script>
+  </script>
 </body>
 </html>
+```
