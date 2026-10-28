@@ -3,82 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Hectomi ❤️ Nuestro mundo</title>
+<title>Hectomi ❤️ Nuestro Mundo Privado</title>
 
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
 </script>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;overflow:hidden;background:#080c1c;color:white;font-family:system-ui,Arial}
-button,input,textarea{font:inherit}
-button{background:linear-gradient(135deg,#fa579b,#8b45b8);border:1px solid #ffffff35;border-radius:12px;padding:10px 13px;color:white;cursor:pointer}
-button.secondary{background:#16172ccc}
-.hidden{display:none!important}
-#world{position:fixed;inset:0;width:100%;height:100%}
-.panel{background:#100d1ddd;border:1px solid #ffffff30;border-radius:17px;padding:16px;backdrop-filter:blur(12px);box-shadow:0 10px 35px #0006}
-#login{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:18px;background:radial-gradient(circle,#382044,#080915)}
-.login{width:min(420px,100%)}
-h1{font-size:clamp(28px,6vw,42px);margin:0 0 8px}
-h2{font-size:19px;margin:0 0 12px}
-p{line-height:1.5}
-.small{font-size:12px;color:#d8cbe3}
-.field{display:block;width:100%;padding:12px;margin:8px 0 12px;background:#0c0b18;color:white;border:1px solid #ffffff35;border-radius:10px}
-.top{position:fixed;top:10px;left:10px;right:10px;display:flex;justify-content:space-between;gap:8px;z-index:3;pointer-events:none}
-.top>div{pointer-events:auto}
-.brand{background:#100d1ddd;border:1px solid #ffffff30;border-radius:12px;padding:9px 12px;font-size:12px}
-.controls{position:fixed;left:10px;bottom:10px;right:10px;z-index:4;display:flex;flex-wrap:wrap;gap:6px;pointer-events:auto}
-.controls button{padding:9px 11px;font-size:13px}
-.hint{position:fixed;top:72px;left:50%;transform:translateX(-50%);z-index:2;background:#100d1dcc;border-radius:10px;padding:8px 12px;font-size:12px;text-align:center;max-width:94vw}
-.drawer{position:fixed;right:10px;top:75px;bottom:75px;width:min(350px,calc(100vw - 20px));z-index:7;overflow:auto;display:flex;flex-direction:column;gap:10px}
-.photos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.photos img{width:100%;height:100px;object-fit:cover;border-radius:10px;cursor:pointer;background:#21162d}
-.messages{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto}
-.bubble{background:#ffffff17;padding:9px;border-radius:10px;overflow-wrap:anywhere}
-.mine{align-self:flex-end;background:#862b75}
-.modal{position:fixed;inset:0;z-index:15;background:#03020bdd;display:grid;place-items:center;padding:16px}
-.modal .panel{width:min(440px,100%);max-height:90vh;overflow:auto}
-#bigPhoto{display:block;max-width:85vw;max-height:65vh;margin:12px auto;border-radius:10px}
-#toast{position:fixed;z-index:30;bottom:90px;left:50%;transform:translateX(-50%);background:#171021;border:1px solid #ffffff30;border-radius:12px;padding:10px 14px;max-width:90vw}
-#pad{position:fixed;right:10px;bottom:85px;z-index:5;display:grid;grid-template-columns:42px 42px 42px;gap:4px}
-#pad button{padding:9px 0;background:#171027dd;touch-action:none}
-@media(max-width:650px){
- .controls{bottom:7px;gap:4px}
- .controls button{padding:7px 9px;font-size:11px}
- .drawer{top:112px;bottom:140px}
- .hint{top:68px}
- .brand{padding:8px}
- #pad{bottom:90px}
+:root {
+  --bg-glass: rgba(16, 12, 30, 0.85);
+  --border-glass: rgba(255, 255, 255, 0.12);
+  --accent-pink: #fa579b;
+  --accent-purple: #8b45b8;
 }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; overflow: hidden; background: #05070f; color: white; font-family: system-ui, -apple-system, sans-serif; }
+button, input, textarea { font: inherit; }
+
+button {
+  background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+  border: 1px solid var(--border-glass);
+  border-radius: 14px;
+  padding: 10px 16px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(250, 87, 155, 0.3);
+  transition: transform 0.1s ease;
+}
+button:active { transform: scale(0.96); }
+button.secondary { background: rgba(25, 20, 40, 0.8); box-shadow: none; border-color: rgba(255,255,255,0.08); }
+
+.hidden { display: none !important; }
+#world { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; }
+
+/* Panel de Login */
+#login { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: radial-gradient(circle at center, #2a1538 0%, #05070f 100%); }
+.login-card { width: min(380px, 100%); background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 24px; padding: 24px; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center; }
+h1 { font-size: 32px; margin: 0 0 6px; background: linear-gradient(to right, #ff9ac8, #d29ac5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h2 { font-size: 18px; margin: 0 0 10px; color: #f0e6f6; }
+p { line-height: 1.4; color: #c4b5d0; font-size: 14px; }
+.small { font-size: 12px; color: #9a88a8; }
+.field { display: block; width: 100%; padding: 12px 16px; margin: 10px 0 16px; background: rgba(10, 8, 20, 0.9); color: white; border: 1px solid var(--border-glass); border-radius: 12px; outline: none; }
+.field:focus { border-color: var(--accent-pink); }
+
+/* Barra Superior Limpia */
+.top { position: fixed; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; z-index: 10; pointer-events: none; gap: 8px; }
+.top > * { pointer-events: auto; }
+.brand { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 14px; padding: 8px 12px; font-size: 11px; backdrop-filter: blur(10px); }
+
+/* Controles Inferiores Flotantes (Optimizados para Celular) */
+.controls-bar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 20;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: env(safe-area-inset-bottom);
+  scrollbar-width: none;
+  pointer-events: auto;
+}
+.controls-bar::-webkit-scrollbar { display: none; }
+.controls-bar button { white-space: nowrap; flex-shrink: 0; padding: 10px 14px; font-size: 13px; }
+
+/* Menú Desplegable de Opciones Extra */
+#menuPanel {
+  position: fixed;
+  bottom: 75px;
+  left: 12px;
+  right: 12px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 14px;
+  z-index: 25;
+  backdrop-filter: blur(20px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+#menuPanel button { font-size: 12px; padding: 10px 6px; text-align: center; }
+
+/* Joystick / Pad Táctil Discreto */
+#pad { position: fixed; right: 16px; bottom: 85px; z-index: 15; display: grid; grid-template-columns: 40px 40px 40px; gap: 3px; opacity: 0.85; }
+#pad button { padding: 8px 0; background: rgba(23, 16, 39, 0.7); border-radius: 8px; font-size: 12px; touch-action: none; }
+
+/* Paneles Laterales / Modales Estilizados */
+.drawer { position: fixed; inset: 12px; margin: auto; width: min(400px, 100%); max-height: 82vh; z-index: 50; display: flex; flex-direction: column; }
+.panel-content { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; padding: 20px; backdrop-filter: blur(25px); overflow-y: auto; max-height: 82vh; box-shadow: 0 25px 50px rgba(0,0,0,0.7); }
+.photos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.photos img { width: 100%; height: 110px; object-fit:cover; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-glass); }
+
+.messages { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; margin: 12px 0; padding-right: 4px; }
+.bubble { background: rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 12px; font-size: 13px; word-break: break-word; }
+.mine { align-self: flex-end; background: linear-gradient(135deg, #a73c7f, #6b2d75); }
+
+.modal { position: fixed; inset: 0; z-index: 100; background: rgba(3, 2, 11, 0.85); backdrop-filter: blur(10px); display: grid; place-items: center; padding: 16px; }
+.modal .panel-content { width: min(380px, 100%); text-align: center; }
+#bigPhoto { display: block; width: 100%; max-height: 55vh; object-fit: contain; margin: 12px 0; border-radius: 12px; }
+
+#toast { position: fixed; z-index: 200; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(20, 15, 32, 0.95); border: 1px solid var(--border-glass); border-radius: 14px; padding: 10px 18px; font-size: 13px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 90vw; text-align: center; }
+
+.row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+.row button { flex: 1; }
 </style>
 </head>
 
 <body>
 <canvas id="world"></canvas>
 
+<!-- Pantalla de Login -->
 <div id="login">
- <div class="panel login">
+ <div class="login-card">
   <h1>Hectomi ❤️</h1>
-  <p>Nuestro espacio especial en el mundo.</p>
-  <p class="small">Inicia sesión con tu cuenta autorizada.</p>
+  <p>Nuestro mundo privado y secreto.</p>
+  <p class="small" style="margin-top:6px;">Inicia sesión con tu cuenta autorizada.</p>
   <form id="loginForm">
    <input id="email" class="field" type="email" placeholder="Correo electrónico" required autocomplete="username">
    <input id="password" class="field" type="password" placeholder="Contraseña" required autocomplete="current-password">
-   <button type="submit">Entrar al mundo ❤️</button>
+   <button type="submit" style="width:100%; margin-top:4px;">Entrar al mundo ❤️</button>
   </form>
-  <p id="loginStatus" class="small"></p>
+  <p id="loginStatus" class="small" style="margin-top:10px; color:#ff9ac8;"></p>
  </div>
 </div>
 
+<!-- Barra Superior -->
 <div id="top" class="top hidden">
- <div class="brand"><b>Hectomi ❤️</b><div id="who"></div><div id="presence">Conectando…</div></div>
- <div class="brand" id="counter">Nuestra historia ❤️</div>
+ <div class="brand"><b style="color:#ff9ac8">Hectomi</b><div id="who" style="opacity:0.8"></div><div id="presence" style="font-size:10px; color:#a3e4d7;">Conectando…</div></div>
+ <div class="brand" id="counter" style="font-weight:600;">❤️ Cargando…</div>
 </div>
 
-<div id="hint" class="hint hidden">WASD o flechas para caminar · arrastra el ratón para mirar alrededor</div>
-
-<nav id="controls" class="controls hidden">
+<!-- Menú Desplegable Oculto -->
+<div id="menuPanel" class="hidden">
  <button data-place="inicio">🌹 Plaza</button>
  <button data-place="bosque">🌲 Bosque</button>
  <button data-place="jardin">🌷 Jardín</button>
@@ -87,27 +147,34 @@ p{line-height:1.5}
  <button data-place="mirador">✨ Mirador</button>
  <button data-place="casa">🏡 Casa</button>
  <button data-place="dormitorio">🛏️ Dormitorio</button>
- <button data-place="camaExterior">❤️ Cama exterior</button>
+ <button data-place="camaExterior">❤️ Cama</button>
+</div>
+
+<!-- Controles Inferiores (No tapan la pantalla) -->
+<nav id="controls" class="controls-bar hidden">
+ <button id="menuToggleBtn" class="secondary">📍 Lugares</button>
  <button id="photosBtn" class="secondary">📸 Fotos</button>
  <button id="letterBtn" class="secondary">💌 Carta</button>
- <button id="messagesBtn" class="secondary">💬 Mensajes</button>
+ <button id="messagesBtn" class="secondary">💬 Chat</button>
  <button id="musicBtn" class="secondary">♫ Música</button>
- <button id="dateBtn">❤️ Momento juntos</button>
- <button id="voiceBtn" class="secondary">🎙️ Activar voz</button>
- <button id="muteBtn" class="secondary" disabled>🔇 Silenciar micrófono</button>
+ <button id="dateBtn">❤️ Momento</button>
+ <button id="voiceBtn" class="secondary">🎙️ Voz</button>
  <button id="logoutBtn" class="secondary">Salir</button>
 </nav>
+
 <audio id="remoteAudio" autoplay playsinline></audio>
 
+<!-- Joystick Táctil Compacto -->
 <div id="pad" class="hidden">
  <span></span><button data-key="w">▲</button><span></span>
  <button data-key="a">◀</button><button data-key="s">▼</button><button data-key="d">▶</button>
 </div>
 
+<!-- Paneles / Drawers -->
 <aside id="photosPanel" class="drawer hidden">
- <section class="panel">
-  <div style="display:flex;justify-content:space-between;gap:8px">
-   <h2>📸 Nuestros recuerdos</h2><button data-close="photosPanel" class="secondary">✕</button>
+ <div class="panel-content">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <h2>📸 Nuestros Recuerdos</h2><button data-close="photosPanel" class="secondary" style="padding:6px 10px;">✕</button>
   </div>
   <div class="photos">
    <img src="foto1.jpeg" data-photo="0" alt="Recuerdo 1">
@@ -115,65 +182,66 @@ p{line-height:1.5}
    <img src="foto3.jpeg" data-photo="2" alt="Recuerdo 3">
    <img src="foto4.jpeg" data-photo="3" alt="Recuerdo 4">
   </div>
-  <p class="small">Toca una foto para ampliarla.</p>
- </section>
+  <p class="small" style="text-align:center; margin-top:12px;">Toca una foto para ampliarla.</p>
+ </div>
 </aside>
 
 <aside id="letterPanel" class="drawer hidden">
- <section class="panel">
-  <div style="display:flex;justify-content:space-between;gap:8px">
-   <h2>💌 Para nosotros</h2><button data-close="letterPanel" class="secondary">✕</button>
+ <div class="panel-content">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <h2>💌 Para Nosotros</h2><button data-close="letterPanel" class="secondary" style="padding:6px 10px;">✕</button>
   </div>
-  <p>Mi amor ❤️</p>
-  <p>Este espacio lo construí pensando en cada detalle de nosotros. Es un refugio donde la distancia no cuenta y donde siempre podemos encontrarnos, reírnos y compartir un momento juntos.</p>
-  <p>Gracias por cada risa, por tu paciencia y por todo lo bonito que vivimos día a día. Te amo muchísimo. ❤️</p>
- </section>
+  <p style="margin-top:10px;">Mi amor ❤️</p>
+  <p>Este espacio lo construí pensando en cada detalle nuestro. Es un refugio exclusivo donde podemos encontrarnos, conversar y compartir momentos especiales sin importar la distancia.</p>
+  <p>Te amo muchísimo. ❤️</p>
+ </div>
 </aside>
 
 <aside id="messagesPanel" class="drawer hidden">
- <section class="panel">
-  <div style="display:flex;justify-content:space-between;gap:8px">
-   <h2>💬 Mensajes privados</h2><button data-close="messagesPanel" class="secondary">✕</button>
+ <div class="panel-content">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <h2>💬 Chat Privado</h2><button data-close="messagesPanel" class="secondary" style="padding:6px 10px;">✕</button>
   </div>
   <div id="messages" class="messages"></div>
-  <form id="messageForm">
-   <input id="messageInput" class="field" maxlength="500" placeholder="Escribe algo bonito…" required>
-   <button>Enviar 💌</button>
+  <form id="messageForm" style="display:flex;gap:6px; margin-top:4px;">
+   <input id="messageInput" class="field" maxlength="500" placeholder="Escribe algo bonito…" required style="margin:0; flex:1;">
+   <button style="padding:10px 14px;">Enviar</button>
   </form>
- </section>
+ </div>
 </aside>
 
+<!-- Modales -->
 <div id="photoModal" class="modal hidden">
- <section class="panel" style="text-align:center">
-  <button id="closePhoto" class="secondary">Cerrar ✕</button>
-  <img id="bigPhoto" alt="Recuerdo">
+ <div class="panel-content">
+  <button id="closePhoto" class="secondary" style="float:right; padding:6px 10px;">✕</button>
+  <h2 style="text-align:left; margin-bottom:0;">Recuerdo</h2>
+  <img id="bigPhoto" alt="Recuerdo Ampliado">
   <div class="row">
    <button id="prevPhoto" class="secondary">← Anterior</button>
    <button id="nextPhoto" class="secondary">Siguiente →</button>
   </div>
- </section>
+ </div>
 </div>
 
 <div id="dateModal" class="modal hidden">
- <section class="panel">
-  <h2 id="dateTitle">❤️ Nuestro momento</h2>
-  <p id="dateText">Elijan un momento para compartir con total comodidad.</p>
+ <div class="panel-content">
+  <h2 id="dateTitle">❤️ Momento Juntos</h2>
+  <p id="dateText">¿Quieres compartir un momento especial con tu pareja?</p>
   <div id="dateChoices" class="row">
    <button id="acceptDate">Sí, juntos ❤️</button>
    <button id="rejectDate" class="secondary">Ahora no</button>
   </div>
   <div id="romanceChoices" class="hidden">
-   <p class="small">Seleccionen una pose para el momento:</p>
-   <div class="row">
-    <button data-pose="hug">🤗 Abrazo</button>
-    <button data-pose="kiss">💋 Beso</button>
-    <button data-pose="sit">🌙 Sentarse juntos</button>
-    <button data-pose="cuddle">❤️ Acurrucarse</button>
-    <button data-pose="lie">🛏️ Acostarse juntos</button>
-    <button id="finishDate" class="secondary">Terminar momento</button>
+   <p class="small">Elige una atmósfera o pose:</p>
+   <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:10px;">
+    <button data-pose="hug" class="secondary">🤗 Abrazo</button>
+    <button data-pose="kiss" class="secondary">💋 Beso</button>
+    <button data-pose="sit" class="secondary">🌙 Sentarse</button>
+    <button data-pose="cuddle" class="secondary">❤️ Acurrucarse</button>
    </div>
+   <button id="finishDate" class="secondary" style="width:100%; margin-top:10px;">Terminar momento</button>
   </div>
- </section>
+ </div>
 </div>
 
 <div id="toast" class="hidden"></div>
@@ -204,19 +272,18 @@ let user=null,unsubs=[],toastTimer,inviteId=null,photoIndex=0,romantic=false;
 const keys={},clock=new THREE.Clock();
 
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3500)}
-function showPanel(id){['photosPanel','letterPanel','messagesPanel'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+function showPanel(id){['photosPanel','letterPanel','messagesPanel','menuPanel'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function clearSubs(){unsubs.forEach(f=>f());unsubs=[]}
 
-let voicePC=null,voiceStream=null,voiceUnsubs=[],voiceBusy=false,voiceMuted=false;
-const voiceRef=()=>doc(db,'voiceSessions','main');
+/* Toggle del menú de lugares */
+$('menuToggleBtn').onclick=()=>{
+  const panel=$('menuPanel');
+  panel.classList.toggle('hidden');
+  ['photosPanel','letterPanel','messagesPanel'].forEach(x=>$(x).classList.add('hidden'));
+};
 
-function stopVoiceLocal(){
- voiceUnsubs.forEach(fn=>fn());voiceUnsubs=[];
- if(voicePC)voicePC.close();voicePC=null;
- if(voiceStream)voiceStream.getTracks().forEach(track=>track.stop());
- voiceStream=null;$('remoteAudio').srcObject=null;voiceBusy=false;voiceMuted=false;
- $('muteBtn').disabled=true;$('muteBtn').textContent='🔇 Silenciar micrófono';
-}
+let voicePC=null,voiceStream=null,voiceUnsubs=[],voiceBusy=false;
+const voiceRef=()=>doc(db,'voiceSessions','main');
 
 async function activateVoice(){
  if(!user||voiceBusy)return;
@@ -234,9 +301,9 @@ async function activateVoice(){
   voicePC.onconnectionstatechange=()=>{
    if(!voicePC)return;
    if(voicePC.connectionState==='connected'){
-    $('voiceBtn').textContent='🎙️ Voz conectada';$('muteBtn').disabled=false;toast('¡Voz conectada con éxito! ❤️');
+    $('voiceBtn').textContent='🎙️ Conectado';toast('¡Voz conectada con éxito! ❤️');
    }else if(['failed','disconnected','closed'].includes(voicePC.connectionState)){
-    $('voiceBtn').textContent='🎙️ Reintentar voz';toast('La conexión de voz se interrumpió.');
+    $('voiceBtn').textContent='🎙️ Reintentar';toast('Conexión de voz interrumpida.');
    }
   };
 
@@ -267,11 +334,11 @@ async function activateVoice(){
    if(!event.candidate||!user)return;
    addDoc(collection(db,'voiceSessions','main',ownCandidates),{
     candidate:event.candidate.candidate,sdpMid:event.candidate.sdpMid,sdpMLineIndex:event.candidate.sdpMLineIndex,authorUid:user.uid
-   }).catch(err=>console.error('ICE:',err));
+   }).catch(()=>{});
   };
-  $('voiceBtn').textContent='🎙️ Voz iniciada';$('muteBtn').disabled=false;
+  $('voiceBtn').textContent='🎙️ Activa';
  }catch(err){
-  console.error('Error de voz:', err);stopVoiceLocal();$('voiceBtn').textContent='🎙️ Activar voz';toast('No se pudo activar la voz.');
+  console.error(err);voiceBusy=false;$('voiceBtn').textContent='🎙️ Voz';toast('No se pudo activar el micrófono.');
  }
 }
 
@@ -281,42 +348,34 @@ function listenVoiceCandidates(collectionName){
    if(change.type!=='added'||!voicePC)return;
    const data=change.doc.data();
    if(data.authorUid===user?.uid)return;
-   try{await voicePC.addIceCandidate({candidate:data.candidate,sdpMid:data.sdpMid,sdpMLineIndex:data.sdpMLineIndex})}catch(err){console.error(err)}
+   try{await voicePC.addIceCandidate({candidate:data.candidate,sdpMid:data.sdpMid,sdpMLineIndex:data.sdpMLineIndex})}catch(e){}
   });
  });
  voiceUnsubs.push(unsub);
 }
 
 $('voiceBtn').onclick=activateVoice;
-$('muteBtn').onclick=()=>{
- if(!voiceStream)return;
- voiceMuted=!voiceMuted;
- voiceStream.getAudioTracks().forEach(track=>track.enabled=!voiceMuted);
- $('muteBtn').textContent=voiceMuted?'🔊 Activar micrófono':'🔇 Silenciar micrófono';
-};
-window.addEventListener('pagehide',stopVoiceLocal);
 
 $('loginForm').onsubmit=async e=>{
  e.preventDefault();$('loginStatus').textContent='Entrando…';
  try{await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value)}
- catch(err){$('loginStatus').textContent=err.code==='auth/invalid-credential'?'Correo o contraseña incorrectos.':'No se pudo entrar.'}
+ catch(err){$('loginStatus').textContent='Correo o contraseña incorrectos.';}
 };
 
 onAuthStateChanged(auth,async u=>{
  clearSubs();user=u;
- if(!u){$('login').classList.remove('hidden');['top','controls','hint','pad'].forEach(x=>$(x).classList.add('hidden'));return}
+ if(!u){$('login').classList.remove('hidden');['top','controls','pad'].forEach(x=>$(x).classList.add('hidden'));return}
  if(!allowed.includes(u.uid)){await signOut(auth);$('loginStatus').textContent='Cuenta no autorizada.';return}
  $('login').classList.add('hidden');
- ['top','controls','hint','pad'].forEach(x=>$(x).classList.remove('hidden'));
- $('who').textContent=u.email||'';
+ ['top','controls','pad'].forEach(x=>$(x).classList.remove('hidden'));
+ $('who').textContent=u.email==='dnohe1206@gmail.com'?'Nohemi':'Héctor';
  startWorld();
  startMessages();
  startPresence();
  startInvites();
  startPlayerSync();
  publishMyPosition(true);
- try{await $('music').play();$('musicBtn').textContent='♫ Pausar'}
- catch{$('musicBtn').textContent='♫ Reproducir';toast('Pulsa Música para escuchar.')}
+ try{await $('music').play();$('musicBtn').textContent='♫ Pausa'}catch{$('musicBtn').textContent='♫ Música'}
 });
 
 const startDate=new Date(2026,8,11);
@@ -354,69 +413,67 @@ async function publishMyPosition(force=false){
   await setDoc(doc(db,'players',user.uid),{
    x:player.position.x,y:player.position.y,z:player.position.z,rotationY:player.rotation.y,updatedAt:serverTimestamp()
   },{merge:true});
- }catch(error){console.error(error)}
+ }catch(e){}
 }
 
 function startWorld(){
  if(started)return;started=true;
  renderer=new THREE.WebGLRenderer({canvas:$('world'),antialias:true});
- renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
+ renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
  renderer.setSize(innerWidth,innerHeight);
  renderer.shadowMap.enabled=true;
  scene=new THREE.Scene();
- scene.background=new THREE.Color('#101a31');
- scene.fog=new THREE.FogExp2('#101a31',.006);
+ scene.background=new THREE.Color('#070b16');
+ scene.fog=new THREE.FogExp2('#070b16',.007);
  camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,400);
  camera.position.set(0,5,10);
  orbit=new OrbitControls(camera,renderer.domElement);
  orbit.enableDamping=true;orbit.maxPolarAngle=Math.PI*.48;
- orbit.minDistance=2.5;orbit.maxDistance=25;orbit.target.set(0,1,0);
- scene.add(new THREE.HemisphereLight(0xc8dfff,0x38233a,2));
- const moon=new THREE.DirectionalLight('#ffe0f0',2.4);moon.position.set(-15,25,12);scene.add(moon);
+ orbit.minDistance=2.5;orbit.maxDistance=22;orbit.target.set(0,1,0);
+ scene.add(new THREE.HemisphereLight(0xdbe7ff,0x2b1d33,2.2));
+ const moon=new THREE.DirectionalLight('#ffcce6',2.2);moon.position.set(-15,25,12);scene.add(moon);
 
- const mat=(c,r=.85,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
+ const mat=(c,r=.8,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
  function box(x,y,z,sx,sy,sz,c){const o=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat(c));o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o}
- function ball(x,y,z,r,c){const o=new THREE.Mesh(new THREE.SphereGeometry(r,18,14),mat(c));o.position.set(x,y,z);o.castShadow=true;scene.add(o);return o}
- function path(x,z,len,w,angle=0){const o=box(x,.04,z,w,.05,len,'#74677a');o.rotation.y=angle;return o}
+ function ball(x,y,z,r,c){const o=new THREE.Mesh(new THREE.SphereGeometry(r,16,12),mat(c));o.position.set(x,y,z);o.castShadow=true;scene.add(o);return o}
+ function path(x,z,len,w,angle=0){const o=box(x,.04,z,w,.05,len,'#5d5366');o.rotation.y=angle;return o}
 
- const terrain=new THREE.Mesh(new THREE.PlaneGeometry(240,240),mat('#244438'));
+ const terrain=new THREE.Mesh(new THREE.PlaneGeometry(240,240),mat('#1d362c'));
  terrain.rotation.x=-Math.PI/2;terrain.receiveShadow=true;scene.add(terrain);
  path(0,0,60,2.4);path(8,-9,28,1.8,-.5);path(-9,-9,28,1.8,.5);path(0,18,30,1.8,.2);path(24,-14,22,1.6,.5);path(-26,13,25,1.7,-.4);
 
- const lake=new THREE.Mesh(new THREE.CircleGeometry(13,72),new THREE.MeshStandardMaterial({color:'#27658b',metalness:.35,roughness:.18}));
+ const lake=new THREE.Mesh(new THREE.CircleGeometry(13,64),new THREE.MeshStandardMaterial({color:'#1b4f6b',metalness:.4,roughness:.15}));
  lake.rotation.x=-Math.PI/2;lake.position.set(23,.07,-13);scene.add(lake);
- for(let i=0;i<42;i++){const a=i/42*Math.PI*2;ball(23+Math.cos(a)*13.1,.17,-13+Math.sin(a)*13.1,.18,i%2?'#ffb7d9':'#c6dfcc');}
 
- box(-12,1.5,-5,9,3,7,'#b78da5');box(-12,3.25,-5,9.7,.4,7.7,'#3c2947');
- box(-14,2,-1.4,1.5,1.1,.1,'#8be1ef');box(-10,2,-1.4,1.5,1.1,.1,'#8be1ef');
- box(-12,1,-1.35,1.2,1.9,.15,'#38243b');box(-12,.1,-1.2,2.2,.15,.8,'#d9b5cb');
+ box(-12,1.5,-5,9,3,7,'#a47893');box(-12,3.25,-5,9.7,.4,7.7,'#2e1f37');
+ box(-14,2,-1.4,1.5,1.1,.1,'#7cd8e6');box(-10,2,-1.4,1.5,1.1,.1,'#7cd8e6');
+ box(-12,1,-1.35,1.2,1.9,.15,'#2b1a2e');box(-12,.1,-1.2,2.2,.15,.8,'#c49eb6');
 
- box(-12,1.3,-17,7,2.6,6,'#76506e');box(-12,2.75,-17,7.5,.3,6.5,'#392740');
- box(-12,.35,-17,3.5,.5,4.3,'#986c8e');box(-12,.65,-17,3.25,.2,4.1,'#f3dfeb');
+ box(-12,1.3,-17,7,2.6,6,'#63425e');box(-12,2.75,-17,7.5,.3,6.5,'#2c1e33');
 
- box(15,.3,-2,4,.45,4.8,'#8b5a79');box(15,.56,-2,3.8,.18,4.6,'#f5dfec');
- for(const x of [13,17])for(const z of [-4.2,.2])box(x,1.3,z,.12,2.2,.12,'#a77e8b');
- const canopy=box(15,2.45,-2,4.3,.12,4.7,'#c99fc9');canopy.material.transparent=true;canopy.material.opacity=.45;
+ box(15,.3,-2,4,.45,4.8,'#754b65');box(15,.56,-2,3.8,.18,4.6,'#e8ccdc');
+ for(const x of [13,17])for(const z of [-4.2,.2])box(x,1.3,z,.12,2.2,.12,'#936b79');
+ const canopy=box(15,2.45,-2,4.3,.12,4.7,'#b88cb8');canopy.material.transparent=true;canopy.material.opacity=.45;
 
- for(let i=0;i<210;i++){
-  const x=(Math.random()-.5)*170,z=(Math.random()-.5)*170;
+ for(let i=0;i<180;i++){
+  const x=(Math.random()-.5)*160,z=(Math.random()-.5)*160;
   if(Math.abs(x)<7&&Math.abs(z)<24)continue;
   const h=1.2+Math.random()*1.5;
-  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.23,h,9),mat('#594034'));
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.23,h,8),mat('#4a352c'));
   trunk.position.set(x,h/2,z);scene.add(trunk);
-  ball(x,h+1,z,.8+Math.random()*.8,['#205542','#28684c','#315b48','#39654f'][i%4]);
+  ball(x,h+1,z,.8+Math.random()*.8,['#194435','#21543d','#274c3d','#2f5340'][i%4]);
  }
 
  function makePerson(bodyColor,hairColor){
   const g=new THREE.Group();
   const body=new THREE.Mesh(new THREE.CapsuleGeometry(.3,.75,4,8),mat(bodyColor));body.position.y=.8;g.add(body);
-  const head=new THREE.Mesh(new THREE.SphereGeometry(.25,18,14),mat('#e9bea8'));head.position.y=1.5;g.add(head);
-  const hair=new THREE.Mesh(new THREE.SphereGeometry(.27,18,12,0,Math.PI*2,0,Math.PI*.65),mat(hairColor));hair.position.y=1.57;g.add(hair);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.25,16,12),mat('#e2b29b'));head.position.y=1.5;g.add(head);
+  const hair=new THREE.Mesh(new THREE.SphereGeometry(.27,16,10,0,Math.PI*2,0,Math.PI*.65),mat(hairColor));hair.position.y=1.57;g.add(hair);
   for(const s of [-1,1]){const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.08,.4,3,6),mat(bodyColor));arm.position.set(s*.37,.85,0);g.add(arm);}
   return g;
  }
- player=makePerson('#e5a0c0','#3a2338');player.position.set(0,0,2);scene.add(player);
- partner=makePerson('#8bb9df','#34233b');partner.position.set(1.3,0,2);scene.add(partner);
+ player=makePerson('#d68fae','#2c1b2a');player.position.set(0,0,2);scene.add(player);
+ partner=makePerson('#7aaadc','#25192e');partner.position.set(1.3,0,2);scene.add(partner);
 
  const places={
   inicio:[0,0,2],bosque:[-36,0,-25],jardin:[-5,0,10],
@@ -426,6 +483,7 @@ function startWorld(){
  document.querySelectorAll('[data-place]').forEach(b=>b.onclick=()=>{
   const p=places[b.dataset.place];
   player.position.set(...p);orbit.target.set(p[0],1,p[2]);camera.position.set(p[0]+3,4,p[2]+7);
+  $('menuPanel').classList.add('hidden');
  });
 
  function animate(){
@@ -439,8 +497,8 @@ function startWorld(){
   if(dir.lengthSq()){
    dir.normalize().multiplyScalar(4*dt);
    player.position.add(dir);
-   player.position.x=THREE.MathUtils.clamp(player.position.x,-110,110);
-   player.position.z=THREE.MathUtils.clamp(player.position.z,-110,110);
+   player.position.x=THREE.MathUtils.clamp(player.position.x,-100,100);
+   player.position.z=THREE.MathUtils.clamp(player.position.z,-100,100);
    player.rotation.y=Math.atan2(dir.x,dir.z);
    orbit.target.lerp(new THREE.Vector3(player.position.x,1,player.position.z),.12);
   }
@@ -473,9 +531,9 @@ $('nextPhoto').onclick=()=>openPhoto(photoIndex+1);
 
 $('musicBtn').onclick=async()=>{
  try{
-  if($('music').paused){await $('music').play();$('musicBtn').textContent='♫ Pausar'}
-  else{$('music').pause();$('musicBtn').textContent='♫ Reproducir'}
- }catch{toast('No se pudo reproducir la música.')}
+  if($('music').paused){await $('music').play();$('musicBtn').textContent='♫ Pausa'}
+  else{$('music').pause();$('musicBtn').textContent='♫ Música'}
+ }catch{toast('No se pudo reproducir el audio.')}
 };
 
 $('messageForm').onsubmit=async e=>{
@@ -483,7 +541,6 @@ $('messageForm').onsubmit=async e=>{
  const text=$('messageInput').value.trim();
  if(!text||!user)return;
  try{
-  // Identifica el nombre basándose en el correo registrado
   const isNohemi=user.email==='dnohe1206@gmail.com';
   await addDoc(collection(db,'messages'),{
    text,authorUid:user.uid,
@@ -501,11 +558,12 @@ function startMessages(){
    const m=d.data(),b=document.createElement('div');b.className='bubble '+(m.authorUid===user.uid?'mine':'');
    const text=document.createElement('div');text.textContent=m.text||'';
    const meta=document.createElement('div');meta.className='small';
-   meta.textContent=(m.authorName||'Pareja')+' · '+(m.createdAt?.toDate?m.createdAt.toDate().toLocaleString('es-CO'):'ahora');
+   meta.style.marginTop='3px';meta.style.opacity='0.6';
+   meta.textContent=(m.authorName||'Pareja')+' · '+(m.createdAt?.toDate?m.createdAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}):'ahora');
    b.append(text,meta);el.append(b);
   });
   el.scrollTop=el.scrollHeight;
- },()=>toast('Mensajes no disponibles.')));
+ },()=>toast('Chat no disponible.')));
 }
 
 function startPresence(){
@@ -515,8 +573,8 @@ function startPresence(){
  unsubs.push(()=>clearInterval(timer));
  unsubs.push(onSnapshot(doc(db,'presence',other),s=>{
   const d=s.data(),recent=d?.lastSeen?.toDate&&Date.now()-d.lastSeen.toDate().getTime()<90000;
-  $('presence').textContent=recent?'● Conectado recientemente':'● Sin señal reciente';
- },()=>{$('presence').textContent='Presencia no disponible'}));
+  $('presence').textContent=recent?'● En línea':'● Desconectado';
+ },()=>{$('presence').textContent='Presencia oculta'}));
 }
 
 $('dateBtn').onclick=async()=>{
@@ -524,8 +582,8 @@ $('dateBtn').onclick=async()=>{
   const other=allowed.find(x=>x!==user.uid);
   const ref=await addDoc(collection(db,'invites'),{from:user.uid,to:other,status:'pending',createdAt:serverTimestamp()});
   inviteId=ref.id;
-  $('dateTitle').textContent='❤️ Invitación enviada';
-  $('dateText').textContent='Esperando respuesta…';
+  $('dateTitle').textContent='❤️ Momento Solicitado';
+  $('dateText').textContent='Esperando respuesta de tu pareja…';
   $('dateChoices').classList.add('hidden');
   $('romanceChoices').classList.remove('hidden');
   $('dateModal').classList.remove('hidden');
@@ -538,7 +596,7 @@ function startInvites(){
    const v=d.data();
    if(v.to===user.uid&&v.status==='pending'){
     inviteId=d.id;
-    $('dateTitle').textContent='❤️ Invitación recibida';
+    $('dateTitle').textContent='❤️ Invitación Recibida';
     $('dateText').textContent='¿Quieres compartir un momento romántico?';
     $('dateChoices').classList.remove('hidden');
     $('romanceChoices').classList.add('hidden');
@@ -554,7 +612,7 @@ $('acceptDate').onclick=async()=>{
  try{
   await updateDoc(doc(db,'invites',inviteId),{status:'accepted'});
   romantic=true;$('dateChoices').classList.add('hidden');$('romanceChoices').classList.remove('hidden');
-  $('dateTitle').textContent='❤️ Nuestro momento';$('dateText').textContent='Elijan una pose romántica.';
+  $('dateTitle').textContent='❤️ Nuestro Momento';$('dateText').textContent='Disfruten de este espacio juntos.';
  }catch{}
 };
 
@@ -565,18 +623,17 @@ $('rejectDate').onclick=async()=>{
 
 document.querySelectorAll('[data-pose]').forEach(b=>b.onclick=()=>{
  const messages={
-  hug:'🤗 Un abrazo cariñoso.',
-  kiss:'💋 Un beso romántico.',
-  sit:'🌙 Sentados junto al lago.',
-  cuddle:'❤️ Acurrucados.',
-  lie:'🛏️ Descansando juntos.'
+  hug:'🤗 Un abrazo cálido compartido.',
+  kiss:'💋 Un beso tierno.',
+  sit:'🌙 Sentados contemplando el paisaje.',
+  cuddle:'❤️ Acurrucados con calma.'
  };
  toast(messages[b.dataset.pose]);
 });
 
 $('finishDate').onclick=async()=>{
  if(inviteId)try{await updateDoc(doc(db,'invites',inviteId),{status:'ended'})}catch{}
- romantic=false;inviteId=null;$('dateModal').classList.add('hidden');toast('Momento terminado ❤️');
+ romantic=false;inviteId=null;$('dateModal').classList.add('hidden');toast('Momento finalizado ❤️');
 };
 
 $('logoutBtn').onclick=async()=>{
