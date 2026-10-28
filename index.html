@@ -3,617 +3,1724 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Hectomi ❤️ Nuestro Mundo Íntimo</title>
+<meta name="theme-color" content="#05030c">
+<title>Hectomi ❤️ Nuestro Mundo</title>
 
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
 </script>
 
 <style>
-:root {
-  --bg-glass: rgba(15, 10, 25, 0.88);
-  --border-glass: rgba(255, 255, 255, 0.15);
-  --accent-pink: #ff4785;
-  --accent-purple: #9b38cc;
+:root{
+  --glass: rgba(15,10,25,.9);
+  --line: rgba(255,255,255,.14);
+  --pink:#ff4785;
+  --purple:#9b38cc;
+  --ink:#f3e9f7;
 }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;overflow:hidden;background:#04030a;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,textarea{font:inherit}
+button{background:linear-gradient(135deg,var(--pink),var(--purple));border:1px solid var(--line);border-radius:14px;padding:10px 15px;color:#fff;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(255,71,133,.3);transition:transform .1s}
+button:active{transform:scale(.96)}
+button.ghost{background:rgba(24,17,38,.85);box-shadow:none;border-color:rgba(255,255,255,.1)}
+.hidden{display:none!important}
+#world{position:fixed;inset:0;width:100%;height:100%;z-index:1;touch-action:none}
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; overflow: hidden; background: #03050a; color: white; font-family: system-ui, -apple-system, sans-serif; }
-button, input, textarea { font: inherit; }
+/* ---------- login ---------- */
+#login{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 50% 35%,#33113f 0%,#05030c 75%)}
+.card{width:min(390px,100%);background:var(--glass);border:1px solid var(--line);border-radius:26px;padding:26px;backdrop-filter:blur(26px);box-shadow:0 28px 70px rgba(0,0,0,.75);text-align:center}
+h1{font-size:32px;margin:0 0 6px;background:linear-gradient(90deg,#ffb3d4,#dda6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:18px;margin:0;color:#f6ecfb}
+h3{font-size:14px;margin:18px 0 6px;color:#c9b6d8;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+p{line-height:1.45;color:#d2c4de;font-size:14px}
+.small{font-size:12px;color:#a394b5}
+.field{display:block;width:100%;padding:12px 14px;margin:8px 0 14px;background:rgba(8,6,15,.95);color:#fff;border:1px solid var(--line);border-radius:12px;outline:none}
+.field:focus{border-color:var(--pink)}
+textarea.field{resize:vertical;min-height:80px}
 
-button {
-  background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
-  border: 1px solid var(--border-glass);
-  border-radius: 14px;
-  padding: 10px 16px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(255, 71, 133, 0.35);
-  transition: transform 0.1s ease;
-}
-button:active { transform: scale(0.95); }
-button.secondary { background: rgba(25, 18, 40, 0.85); box-shadow: none; border-color: rgba(255,255,255,0.1); }
+/* ---------- HUD ---------- */
+.top{position:fixed;top:calc(10px + env(safe-area-inset-top));left:10px;right:10px;display:flex;gap:8px;justify-content:space-between;align-items:flex-start;z-index:10;pointer-events:none}
+.pill{background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:7px 12px;backdrop-filter:blur(14px);font-size:11px;line-height:1.35;pointer-events:auto}
+.pill b{color:#ff9ac8}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#67e8b6;margin-right:5px;vertical-align:middle}
+.dot.off{background:#8b8494}
 
-.hidden { display: none !important; }
-#world { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.near{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:22;padding:11px 20px;border-radius:999px;font-size:13px;box-shadow:0 12px 32px rgba(0,0,0,.55)}
 
-/* Login */
-#login { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: radial-gradient(circle at center, #2e103d 0%, #03050a 100%); }
-.login-card { width: min(380px, 100%); background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 24px; padding: 24px; backdrop-filter: blur(25px); box-shadow: 0 25px 60px rgba(0,0,0,0.7); text-align: center; }
-h1 { font-size: 32px; margin: 0 0 6px; background: linear-gradient(to right, #ff9ac8, #e0a3ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-h2 { font-size: 18px; margin: 0 0 10px; color: #f2e6f8; }
-p { line-height: 1.4; color: #d0c2dc; font-size: 14px; }
-.small { font-size: 12px; color: #9e8bb0; }
-.field { display: block; width: 100%; padding: 12px 16px; margin: 10px 0 16px; background: rgba(8, 6, 15, 0.95); color: white; border: 1px solid var(--border-glass); border-radius: 12px; outline: none; }
-.field:focus { border-color: var(--accent-pink); }
+.bar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:20;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.bar::-webkit-scrollbar{display:none}
+.bar button{flex:0 0 auto;white-space:nowrap;font-size:12.5px;padding:10px 13px}
 
-/* Barra Superior */
-.top { position: fixed; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; z-index: 10; pointer-events: none; gap: 8px; }
-.top > * { pointer-events: auto; }
-.brand { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 14px; padding: 8px 12px; font-size: 11px; backdrop-filter: blur(12px); }
+/* ---------- joystick ---------- */
+#stick{position:fixed;right:14px;bottom:calc(74px + env(safe-area-inset-bottom));width:116px;height:116px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.07),rgba(12,8,22,.55));border:1px solid var(--line);z-index:18;touch-action:none;display:grid;place-items:center;backdrop-filter:blur(6px)}
+#knob{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,rgba(255,113,164,.9),rgba(150,60,200,.9));box-shadow:0 6px 18px rgba(0,0,0,.4);transition:transform .05s linear}
 
-/* Menú Desplegable de Lugares y Exploración */
-#menuPanel {
-  position: fixed;
-  bottom: 75px;
-  left: 12px;
-  right: 12px;
-  background: var(--bg-glass);
-  border: 1px solid var(--border-glass);
-  border-radius: 20px;
-  padding: 14px;
-  z-index: 25;
-  backdrop-filter: blur(25px);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-}
-#menuPanel button { font-size: 12px; padding: 10px 6px; text-align: center; }
+/* ---------- paneles ---------- */
+.drawer{position:fixed;inset:10px;margin:auto;width:min(430px,100%);max-height:86vh;z-index:60;display:flex}
+.sheet{background:var(--glass);border:1px solid var(--line);border-radius:24px;padding:18px;backdrop-filter:blur(30px);overflow-y:auto;width:100%;max-height:86vh;box-shadow:0 30px 70px rgba(0,0,0,.8)}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.sheet-head button{padding:6px 11px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.grid3 button{font-size:11.5px;padding:12px 4px;line-height:1.25}
 
-/* Controles Inferiores Libres */
-.controls-bar {
-  position: fixed;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
-  z-index: 20;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: env(safe-area-inset-bottom);
-  scrollbar-width: none;
-  pointer-events: auto;
-}
-.controls-bar::-webkit-scrollbar { display: none; }
-.controls-bar button { white-space: nowrap; flex-shrink: 0; padding: 10px 14px; font-size: 13px; }
+.messages{display:flex;flex-direction:column;gap:8px;max-height:46vh;overflow-y:auto;margin:6px 0;padding-right:4px}
+.bubble{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.06);padding:9px 12px;border-radius:14px;font-size:13px;word-break:break-word;max-width:88%}
+.bubble.mine{align-self:flex-end;background:linear-gradient(135deg,#b83280,#7a2291);border-color:transparent}
+.bubble .meta{font-size:10.5px;opacity:.65;margin-top:4px}
 
-/* Joystick Táctil Discreto */
-#pad { position: fixed; right: 16px; bottom: 85px; z-index: 15; display: grid; grid-template-columns: 40px 40px 40px; gap: 3px; opacity: 0.85; }
-#pad button { padding: 8px 0; background: rgba(20, 12, 35, 0.8); border-radius: 8px; font-size: 12px; touch-action: none; }
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:8px}
+.photo{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1/1;background:#150e22}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo .del{position:absolute;top:5px;right:5px;padding:3px 7px;font-size:11px;border-radius:9px;background:rgba(10,6,18,.85);box-shadow:none}
+.row{display:flex;gap:8px;margin-top:10px}
+.row > *{flex:1}
 
-/* Paneles Laterales y Modales */
-.drawer { position: fixed; inset: 12px; margin: auto; width: min(400px, 100%); max-height: 85vh; z-index: 50; display: flex; flex-direction: column; }
-.panel-content { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; padding: 20px; backdrop-filter: blur(30px); overflow-y: auto; max-height: 85vh; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
+.game-card{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:16px;padding:18px;margin:10px 0 4px;font-size:15px;color:#ffcae5;min-height:96px;display:grid;place-items:center;text-align:center;line-height:1.4}
 
-.photos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-.photos img { width: 100%; height: 110px; object-fit: cover; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-glass); }
+.modal{position:fixed;inset:0;z-index:110;background:rgba(3,2,10,.9);backdrop-filter:blur(12px);display:grid;place-items:center;padding:16px}
+.modal .sheet{width:min(400px,100%);text-align:center}
+#bigPhoto{display:block;width:100%;max-height:56vh;object-fit:contain;margin:10px 0;border-radius:14px;background:#0d0817}
 
-.messages { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; margin: 12px 0; padding-right: 4px; }
-.bubble { background: rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 12px; font-size: 13px; word-break: break-word; }
-.mine { align-self: flex-end; background: linear-gradient(135deg, #b83280, #7a2291); }
+#toast{position:fixed;z-index:200;bottom:calc(150px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:rgba(18,12,32,.96);border:1px solid var(--line);border-radius:14px;padding:10px 16px;font-size:13px;backdrop-filter:blur(12px);box-shadow:0 12px 34px rgba(0,0,0,.65);max-width:88vw;text-align:center}
 
-.modal { position: fixed; inset: 0; z-index: 100; background: rgba(3, 2, 10, 0.88); backdrop-filter: blur(12px); display: grid; place-items: center; padding: 16px; }
-.modal .panel-content { width: min(380px, 100%); text-align: center; }
-#bigPhoto { display: block; width: 100%; max-height: 55vh; object-fit: contain; margin: 12px 0; border-radius: 12px; }
-
-#toast { position: fixed; z-index: 200; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(18, 12, 32, 0.95); border: 1px solid var(--border-glass); border-radius: 14px; padding: 10px 18px; font-size: 13px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.6); max-width: 90vw; text-align: center; }
-
-.row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
-.row button { flex: 1; }
-
-.game-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); border-radius: 14px; padding: 14px; margin: 10px 0; font-size: 15px; color: #ffcae5; min-height: 70px; display: grid; place-items: center; text-align: center; }
+#boot{position:fixed;inset:0;z-index:150;display:grid;place-items:center;background:#05030c;color:#c9b6d8;font-size:13px}
+.spinner{width:30px;height:30px;border:3px solid rgba(255,255,255,.15);border-top-color:#ff7ab0;border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
-
 <body>
 <canvas id="world"></canvas>
 
-<!-- Login -->
 <div id="login">
- <div class="login-card">
-  <h1>Hectomi ❤️</h1>
-  <p>Nuestro mundo privado, secreto y sin censura.</p>
-  <p class="small" style="margin-top:6px;">Inicia sesión con tu cuenta.</p>
-  <form id="loginForm">
-   <input id="email" class="field" type="email" placeholder="Correo electrónico" required autocomplete="username">
-   <input id="password" class="field" type="password" placeholder="Contraseña" required autocomplete="current-password">
-   <button type="submit" style="width:100%; margin-top:4px;">Entrar al mundo ❤️</button>
-  </form>
-  <p id="loginStatus" class="small" style="margin-top:10px; color:#ff9ac8;"></p>
- </div>
+  <div class="card">
+    <h1>Hectomi ❤️</h1>
+    <p>Nuestro mundo privado, solo para nosotros dos.</p>
+    <form id="loginForm">
+      <input id="email" class="field" type="email" placeholder="Correo electrónico" required autocomplete="username">
+      <input id="password" class="field" type="password" placeholder="Contraseña" required autocomplete="current-password">
+      <button type="submit" style="width:100%">Entrar al mundo ❤️</button>
+    </form>
+    <p id="loginStatus" class="small" style="margin-top:12px;color:#ff9ac8"></p>
+  </div>
 </div>
 
-<!-- Barra Superior -->
+<div id="boot" class="hidden"><div style="text-align:center"><div class="spinner"></div>Preparando nuestro mundo…</div></div>
+
 <div id="top" class="top hidden">
- <div class="brand"><b style="color:#ff9ac8">Hectomi</b><div id="who" style="opacity:0.8"></div><div id="presence" style="font-size:10px; color:#a3e4d7;">Conectando…</div></div>
- <div class="brand" id="counter" style="font-weight:600;">❤️ Cargando…</div>
+  <div class="pill"><b>Hectomi</b><div id="who" style="opacity:.85"></div><div class="small"><span id="pdot" class="dot off"></span><span id="presence">Conectando…</span></div></div>
+  <div class="pill" style="text-align:right"><div id="region" style="font-weight:600">Sendero</div><div id="clock" class="small">--:--</div><div id="counter" style="color:#ffc2dc">❤️ …</div></div>
 </div>
 
-<!-- Menú de Lugares y Exploración -->
-<div id="menuPanel" class="hidden">
- <button data-place="inicio">🌹 Plaza</button>
- <button data-place="bosque">🌲 Bosque</button>
- <button data-place="laberinto">🌀 Laberinto</button>
- <button data-place="cueva">🔥 Cueva Íntima</button>
- <button data-place="lago">🌙 Lago Mágico</button>
- <button data-place="cascada">💧 Cascada</button>
- <button data-place="mirador">✨ Mirador</button>
- <button data-place="casa">🏡 Casa</button>
- <button data-place="dormitorio">🛏️ Dormitorio</button>
-</div>
+<button id="nearBtn" class="near hidden">Interactuar</button>
 
-<!-- Controles Libres Inferiores -->
-<nav id="controls" class="controls-bar hidden">
- <button id="menuToggleBtn" class="secondary">🌍 Explorar</button>
- <button id="gameBtn">🔥 Juego Íntimo</button>
- <button id="photosBtn" class="secondary">📸 Fotos</button>
- <button id="letterBtn" class="secondary">💌 Carta</button>
- <button id="messagesBtn" class="secondary">💬 Chat</button>
- <button id="musicBtn" class="secondary">♫ Música</button>
- <button id="voiceBtn" class="secondary">🎙️ Voz</button>
- <button id="logoutBtn" class="secondary">Salir</button>
+<div id="stick" class="hidden"><div id="knob"></div></div>
+
+<nav id="bar" class="bar hidden">
+  <button id="menuBtn" class="ghost">🌍 Explorar</button>
+  <button id="gameBtn">🔥 Juego</button>
+  <button id="photosBtn" class="ghost">📸 Fotos</button>
+  <button id="letterBtn" class="ghost">💌 Carta</button>
+  <button id="chatBtn" class="ghost">💬 Chat</button>
+  <button id="momentsBtn" class="ghost">⏳ Nuestro tiempo</button>
+  <button id="musicBtn" class="ghost">♫ Música</button>
+  <button id="voiceBtn" class="ghost">🎙️ Voz</button>
+  <button id="logoutBtn" class="ghost">Salir</button>
 </nav>
 
-<audio id="remoteAudio" autoplay playsinline></audio>
+<aside id="menuPanel" class="drawer hidden"><div class="sheet">
+  <div class="sheet-head"><h2>🌍 Explorar el mundo</h2><button class="ghost" data-close="menuPanel">✕</button></div>
+  <p class="small">Muévete con el joystick o salta directo a un lugar.</p>
+  <div class="grid3" id="placesGrid"></div>
+</div></aside>
 
-<!-- Joystick Táctil -->
-<div id="pad" class="hidden">
- <span></span><button data-key="w">▲</button><span></span>
- <button data-key="a">◀</button><button data-key="s">▼</button><button data-key="d">▶</button>
-</div>
-
-<!-- Panel de Juegos Íntimos y Atrevidos -->
-<aside id="gamePanel" class="drawer hidden">
- <div class="panel-content">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-   <h2>🔥 Juego de Dos</h2><button data-close="gamePanel" class="secondary" style="padding:6px 10px;">✕</button>
-  </div>
-  <p class="small" style="margin-top:6px;">Elige una categoría para jugar y encender la química:</p>
-  <div class="row">
-   <button id="romanceMode">💖 Conexión Romántica</button>
-   <button id="spiceMode" style="background:linear-gradient(135deg, #ff2a6d, #b80058);">🌶️ Modo Atrevido</button>
-  </div>
-  <div id="gameBox" class="game-card">Toca un modo para empezar la partida...</div>
-  <button id="nextCard" style="width:100%; margin-top:6px;">Siguiente reto / pregunta ✨</button>
- </div>
-</aside>
-
-<!-- Paneles de Fotos, Carta y Chat -->
-<aside id="photosPanel" class="drawer hidden">
- <div class="panel-content">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-   <h2>📸 Nuestros Recuerdos</h2><button data-close="photosPanel" class="secondary" style="padding:6px 10px;">✕</button>
-  </div>
-  <div class="photos">
-   <img src="foto1.jpeg" data-photo="0" alt="Recuerdo 1">
-   <img src="foto2.jpeg" data-photo="1" alt="Recuerdo 2">
-   <img src="foto3.jpeg" data-photo="2" alt="Recuerdo 3">
-   <img src="foto4.jpeg" data-photo="3" alt="Recuerdo 4">
-  </div>
-  <p class="small" style="text-align:center; margin-top:12px;">Toca una foto para ampliarla.</p>
- </div>
-</aside>
-
-<aside id="letterPanel" class="drawer hidden">
- <div class="panel-content">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-   <h2>💌 Para Nosotros</h2><button data-close="letterPanel" class="secondary" style="padding:6px 10px;">✕</button>
-  </div>
-  <p style="margin-top:10px;">Mi amor ❤️</p>
-  <p>Este mundo secreto lo diseñé solo para nosotros dos. Un espacio sin reglas externas, donde podemos escapar, jugar, hablarnos sin filtros y sentirnos cerca sin importar los kilómetros.</p>
-  <p>Te amo con toda el alma. ❤️</p>
- </div>
-</aside>
-
-<aside id="messagesPanel" class="drawer hidden">
- <div class="panel-content">
-  <div style="display:flex;justify-content:space-between;align-items:center">
-   <h2>💬 Chat Privado</h2><button data-close="messagesPanel" class="secondary" style="padding:6px 10px;">✕</button>
-  </div>
+<aside id="chatPanel" class="drawer hidden"><div class="sheet">
+  <div class="sheet-head"><h2>💬 Chat privado</h2><button class="ghost" data-close="chatPanel">✕</button></div>
   <div id="messages" class="messages"></div>
-  <form id="messageForm" style="display:flex;gap:6px; margin-top:4px;">
-   <input id="messageInput" class="field" maxlength="500" placeholder="Escribe algo bonito o travieso…" required style="margin:0; flex:1;">
-   <button style="padding:10px 14px;">Enviar</button>
+  <form id="messageForm" style="display:flex;gap:6px">
+    <input id="messageInput" class="field" maxlength="500" placeholder="Escribe algo bonito o travieso…" required style="margin:0;flex:1">
+    <button style="padding:10px 14px">Enviar</button>
   </form>
- </div>
-</aside>
+</div></aside>
 
-<!-- Modal Foto -->
-<div id="photoModal" class="modal hidden">
- <div class="panel-content">
-  <button id="closePhoto" class="secondary" style="float:right; padding:6px 10px;">✕</button>
-  <h2 style="text-align:left; margin-bottom:0;">Recuerdo</h2>
-  <img id="bigPhoto" alt="Recuerdo Ampliado">
+<aside id="photosPanel" class="drawer hidden"><div class="sheet">
+  <div class="sheet-head"><h2>📸 Nuestros recuerdos</h2><button class="ghost" data-close="photosPanel">✕</button></div>
+  <div class="photos" id="photos"></div>
+  <p id="photosEmpty" class="small" style="text-align:center;margin-top:12px">Aún no hay fotos. Añade la primera ❤️</p>
+  <div class="row"><label class="ghost" style="display:grid;place-items:center;border-radius:14px;padding:10px;cursor:pointer;border:1px solid rgba(255,255,255,.1);background:rgba(24,17,38,.85);font-size:13px;font-weight:600">Elegir foto<input id="photoFile" type="file" accept="image/*" class="hidden"></label></div>
+  <form id="photoUrlForm" style="display:flex;gap:6px;margin-top:8px">
+    <input id="photoUrl" class="field" placeholder="o pega un enlace de imagen…" style="margin:0;flex:1">
+    <button style="padding:10px 14px">➕</button>
+  </form>
+</div></aside>
+
+<aside id="letterPanel" class="drawer hidden"><div class="sheet">
+  <div class="sheet-head"><h2>💌 Para nosotros</h2><button class="ghost" data-close="letterPanel">✕</button></div>
+  <div id="letterBody" style="white-space:pre-wrap;font-size:14.5px;line-height:1.6;color:#f0e4f8"></div>
+  <p id="letterSign" class="small" style="text-align:right;margin-top:14px"></p>
+</div></aside>
+
+<aside id="secretPanel" class="drawer hidden"><div class="sheet">
+  <div class="sheet-head"><h2>🔮 Nuestro secreto</h2><button class="ghost" data-close="secretPanel">✕</button></div>
+  <div id="secretBody" style="white-space:pre-wrap;font-size:14.5px;line-height:1.6;color:#e6d4ff"></div>
+</div></aside>
+
+<aside id="momentsPanel" class="drawer hidden"><div class="sheet">
+  <div class="sheet-head"><h2>⏳ Nuestro tiempo</h2><button class="ghost" data-close="momentsPanel">✕</button></div>
+  <div class="game-card" id="counterBig" style="min-height:auto;padding:16px">…</div>
+  <h3>Nosotros</h3>
+  <input id="nameA" class="field" placeholder="Nombre de ella" style="margin-bottom:8px">
+  <input id="nameB" class="field" placeholder="Nombre de él" style="margin-bottom:8px">
+  <label class="small">Fecha en que empezó todo</label>
+  <input id="anniversary" class="field" type="date">
+  <label class="small">Música (enlace directo a un audio .mp3)</label>
+  <input id="musicUrl" class="field" placeholder="https://…/nuestra-cancion.mp3" style="margin-top:6px">
+  <h3>Carta</h3>
+  <textarea id="letterText" class="field" rows="5" placeholder="Escribe la carta…"></textarea>
+  <input id="letterSignature" class="field" placeholder="Firma" style="margin-top:0">
+  <h3>Secreto de la gruta</h3>
+  <textarea id="secretText" class="field" rows="3" placeholder="Mensaje secreto…"></textarea>
+  <button id="saveCouple" style="width:100%;margin-top:6px">Guardar</button>
+</div></aside>
+
+<aside id="gamePanel" class="drawer hidden"><div class="sheet">
+  <div class="sheet-head"><h2>🔥 Juego de dos</h2><button class="ghost" data-close="gamePanel">✕</button></div>
+  <p class="small">Elige un modo y deja que la química hable.</p>
   <div class="row">
-   <button id="prevPhoto" class="secondary">← Anterior</button>
-   <button id="nextPhoto" class="secondary">Siguiente →</button>
+    <button id="romanceMode">💖 Romántico</button>
+    <button id="spiceMode" style="background:linear-gradient(135deg,#ff2a6d,#b80058)">🌶️ Atrevido</button>
   </div>
- </div>
-</div>
+  <div id="gameBox" class="game-card">Toca un modo para empezar…</div>
+  <button id="nextCard" style="width:100%;margin-top:8px">Siguiente reto ✨</button>
+</div></aside>
+
+<div id="photoModal" class="modal hidden"><div class="sheet">
+  <button id="closePhoto" class="ghost" style="float:right;padding:6px 11px">✕</button>
+  <h2 style="text-align:left">Recuerdo</h2>
+  <img id="bigPhoto" alt="Recuerdo ampliado">
+  <div class="row"><button id="prevPhoto" class="ghost">← Anterior</button><button id="nextPhoto" class="ghost">Siguiente →</button></div>
+</div></div>
 
 <div id="toast" class="hidden"></div>
-<video id="music" src="Tutu.mp4.mp4" loop playsinline preload="auto" style="display:none"></video>
 
 <script type="module">
 import * as THREE from 'three';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
- getFirestore, collection, addDoc, query, orderBy, onSnapshot,
- serverTimestamp, doc, setDoc, updateDoc, getDoc
+  getFirestore, collection, addDoc, deleteDoc, doc, getDoc, getDocs,
+  limit, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-const firebaseConfig={
- apiKey:'AIzaSyDW96MUsBSTY2M0iNlmB0SxbA209dia8u4',
- authDomain:'hectomi.firebaseapp.com',
- projectId:'hectomi',
- storageBucket:'hectomi.firebasestorage.app',
- messagingSenderId:'622508139794',
- appId:'1:622508139794:web:4b6843ba819c4c7234bfcb'
-};
-const allowed=['LHmsjRcxNHPtOVk2vVTT8uLaasb2','EgHqdi5sisWtNctCEPgOLsmYut23'];
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-const $=id=>document.getElementById(id);
-let user=null,unsubs=[],toastTimer,photoIndex=0;
-const keys={},clock=new THREE.Clock();
-
-function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3500)}
-function showPanel(id){['photosPanel','letterPanel','messagesPanel','menuPanel','gamePanel'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
-function clearSubs(){unsubs.forEach(f=>f());unsubs=[]}
-
-$('menuToggleBtn').onclick=()=>{
-  const panel=$('menuPanel');
-  panel.classList.toggle('hidden');
-  ['photosPanel','letterPanel','messagesPanel','gamePanel'].forEach(x=>$(x).classList.add('hidden'));
+/* ============================================================
+   CONFIGURACIÓN — pega aquí tu API key de Firebase
+   (Firebase Console → Configuración del proyecto → Tus apps → SDK)
+   ============================================================ */
+const FIREBASE_CONFIG = {
+  apiKey: 'PEGA_AQUI_TU_API_KEY_DE_FIREBASE',
+  authDomain: 'hectomi.firebaseapp.com',
+  projectId: 'hectomi',
+  storageBucket: 'hectomi.firebasestorage.app',
+  messagingSenderId: '622508139794',
+  appId: '1:622508139794:web:4b6843ba819c4c7234bfcb'
 };
 
-$('gameBtn').onclick=()=>showPanel('gamePanel');
-$('photosBtn').onclick=()=>showPanel('photosPanel');
-$('letterBtn').onclick=()=>showPanel('letterPanel');
-$('messagesBtn').onclick=()=>showPanel('messagesPanel');
+const ALLOWED = ['LHmsjRcxNHPtOVk2vVTT8uLaasb2', 'EgHqdi5sisWtNctCEPgOLsmYut23'];
+const NOHEMI_EMAIL = 'dnohe1206@gmail.com';
 
-/* Banco de Preguntas y Retos (Románticos y Atrevidos) */
-const romanceQuestions=[
- "Si pudieras viajar conmigo ahora mismo a cualquier lugar del mundo, ¿a dónde irías?",
- "Dime tres cosas pequeñas de mí que te enamoran todos los días.",
- "Describe en una sola frase qué sentiste la primera vez que nos besamos.",
- "Si tuvieras que prepararme una cena romántica sorpresa, ¿qué me cocinarías?"
-];
-const spiceQuestions=[
- "Si estuviéramos solos en la Cueva Íntima ahora mismo, ¿qué te gustaría hacerme?",
- "Dime cuál es tu fantasía más atrevida conmigo que aún no hayamos cumplido.",
- "Mándale un susurro o un mensaje secreto a tu pareja describiendo cómo te trae loco/a.",
- "Si pudieras quitarme una sola prenda de ropa con los ojos vendados, ¿por dónde empezarías?",
- "Confiesa algo travieso que hayas pensado de mí hoy cuando no te estaba viendo."
-];
-let currentMode = romanceQuestions;
-$('romanceMode').onclick=()=>{ currentMode=romanceQuestions; nextGameCard(); };
-$('spiceMode').onclick=()=>{ currentMode=spiceQuestions; nextGameCard(); };
-$('nextCard').onclick=nextGameCard;
+const $ = (id) => document.getElementById(id);
+const fbApp = initializeApp(FIREBASE_CONFIG);
+const auth = getAuth(fbApp);
+const db = getFirestore(fbApp);
 
-function nextGameCard(){
- const randomCard = currentMode[Math.floor(Math.random()*currentMode.length)];
- $('gameBox').textContent = randomCard;
-}
+let user = null;
+let toastTimer = null;
+let subs = [];
 
-let voicePC=null,voiceStream=null,voiceUnsubs=[],voiceBusy=false;
-const voiceRef=()=>doc(db,'voiceSessions','main');
-
-async function activateVoice(){
- if(!user||voiceBusy)return;
- try{
-  voiceBusy=true;$('voiceBtn').textContent='Conectando…';
-  voiceStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
-  voicePC=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
-  voiceStream.getTracks().forEach(track=>voicePC.addTrack(track,voiceStream));
-
-  voicePC.ontrack=async event=>{
-   $('remoteAudio').srcObject=event.streams[0];
-   try{await $('remoteAudio').play()}catch{toast('Toca la pantalla para escuchar.')}
-  };
-
-  voicePC.onconnectionstatechange=()=>{
-   if(!voicePC)return;
-   if(voicePC.connectionState==='connected'){
-    $('voiceBtn').textContent='🎙️ Conectado';toast('¡Voz conectada! ❤️');
-   }else if(['failed','disconnected','closed'].includes(voicePC.connectionState)){
-    $('voiceBtn').textContent='🎙️ Reintentar';toast('Voz interrumpida.');
-   }
-  };
-
-  const sessionSnap=await getDoc(voiceRef());
-  if(sessionSnap.exists()&&sessionSnap.data().status==='calling'&&sessionSnap.data().callerUid!==user.uid&&sessionSnap.data().calleeUid===user.uid&&sessionSnap.data().offer){
-   const data=sessionSnap.data();
-   await voicePC.setRemoteDescription(data.offer);
-   const answer=await voicePC.createAnswer();
-   await voicePC.setLocalDescription(answer);
-   await updateDoc(voiceRef(),{answer:{type:answer.type,sdp:answer.sdp},status:'connected',updatedAt:serverTimestamp()});
-   listenVoiceCandidates('callerCandidates');
-  }else{
-   const otherUid=allowed.find(uid=>uid!==user.uid);
-   const offer=await voicePC.createOffer();
-   await voicePC.setLocalDescription(offer);
-   await setDoc(voiceRef(),{callerUid:user.uid,calleeUid:otherUid,offer:{type:offer.type,sdp:offer.sdp},answer:null,status:'calling',updatedAt:serverTimestamp()});
-   listenVoiceCandidates('calleeCandidates');
-   const unsub=onSnapshot(voiceRef(),async snap=>{
-    if(!snap.exists()||!voicePC)return;
-    const data=snap.data();
-    if(data.answer&&!voicePC.currentRemoteDescription)await voicePC.setRemoteDescription(data.answer);
-   });
-   voiceUnsubs.push(unsub);
-  }
-
-  const ownCandidates=sessionSnap.exists()&&sessionSnap.data().status==='calling'&&sessionSnap.data().callerUid!==user.uid?'calleeCandidates':'callerCandidates';
-  voicePC.onicecandidate=event=>{
-   if(!event.candidate||!user)return;
-   addDoc(collection(db,'voiceSessions','main',ownCandidates),{
-    candidate:event.candidate.candidate,sdpMid:event.candidate.sdpMid,sdpMLineIndex:event.candidate.sdpMLineIndex,authorUid:user.uid
-   }).catch(()=>{});
-  };
-  $('voiceBtn').textContent='🎙️ Activa';
- }catch(err){
-  console.error(err);voiceBusy=false;$('voiceBtn').textContent='🎙️ Voz';toast('Micrófono no disponible.');
- }
-}
-
-function listenVoiceCandidates(collectionName){
- const unsub=onSnapshot(collection(db,'voiceSessions','main',collectionName),snapshot=>{
-  snapshot.docChanges().forEach(async change=>{
-   if(change.type!=='added'||!voicePC)return;
-   const data=change.doc.data();
-   if(data.authorUid===user?.uid)return;
-   try{await voicePC.addIceCandidate({candidate:data.candidate,sdpMid:data.sdpMid,sdpMLineIndex:data.sdpMLineIndex})}catch(e){}
-  });
- });
- voiceUnsubs.push(unsub);
-}
-
-$('voiceBtn').onclick=activateVoice;
-
-$('loginForm').onsubmit=async e=>{
- e.preventDefault();$('loginStatus').textContent='Entrando…';
- try{await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value)}
- catch(err){$('loginStatus').textContent='Correo o contraseña incorrectos.';}
+const couple = {
+  nameA: 'Nohemi',
+  nameB: 'Héctor',
+  anniversary: '2026-09-11',
+  letter: 'Mi amor ❤️\n\nEste mundo secreto lo diseñé solo para nosotros dos. Un espacio sin reglas externas, donde podemos escapar, jugar, hablarnos sin filtros y sentirnos cerca sin importar los kilómetros.\n\nTe amo con toda el alma.',
+  letterSignature: 'Siempre tuyo',
+  secret: 'Si encontraste esta gruta, es porque caminaste hasta el rincón más escondido de nuestro mundo. Aquí guardo lo que no me atrevo a decir en voz alta: te deseo, te pienso y te elijo todos los días.',
+  musicUrl: ''
 };
 
-onAuthStateChanged(auth,async u=>{
- clearSubs();user=u;
- if(!u){$('login').classList.remove('hidden');['top','controls','pad'].forEach(x=>$(x).classList.add('hidden'));return}
- if(!allowed.includes(u.uid)){await signOut(auth);$('loginStatus').textContent='Cuenta no autorizada.';return}
- $('login').classList.add('hidden');
- ['top','controls','pad'].forEach(x=>$(x).classList.remove('hidden'));
- $('who').textContent=u.email==='dnohe1206@gmail.com'?'Nohemi':'Héctor';
- startWorld();
- startMessages();
- startPresence();
- startPlayerSync();
- publishMyPosition(true);
- try{await $('music').play();$('musicBtn').textContent='♫ Pausa'}catch{$('musicBtn').textContent='♫ Música'}
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
+}
+
+function meName() {
+  return user && user.email === NOHEMI_EMAIL ? couple.nameA : couple.nameB;
+}
+function partnerUid() {
+  return ALLOWED.find((u) => !user || u !== user.uid);
+}
+
+/* ---------------------------- UI ---------------------------- */
+const PANELS = ['menuPanel', 'chatPanel', 'photosPanel', 'letterPanel', 'secretPanel', 'momentsPanel', 'gamePanel'];
+function showPanel(id) {
+  PANELS.forEach((p) => $(p).classList.add('hidden'));
+  if (id) $(id).classList.remove('hidden');
+}
+document.querySelectorAll('[data-close]').forEach((b) => {
+  b.addEventListener('click', () => $(b.dataset.close).classList.add('hidden'));
 });
 
-const startDate=new Date(2026,8,11);
-function counter(){
- let t=Math.max(0,Date.now()-startDate.getTime());
- const d=Math.floor(t/86400000);t%=86400000;
- const h=String(Math.floor(t/3600000)).padStart(2,'0');t%=3600000;
- const m=String(Math.floor(t/60000)).padStart(2,'0');t%=60000;
- const s=String(Math.floor(t/1000)).padStart(2,'0');
- $('counter').textContent=`❤️ ${d} días · ${h}:${m}:${s}`;
+/* --------------------- juego de preguntas --------------------- */
+const romanceQuestions = [
+  'Si pudieras viajar conmigo ahora mismo a cualquier lugar del mundo, ¿a dónde irías?',
+  'Dime tres cosas pequeñas de mí que te enamoran todos los días.',
+  'Describe en una sola frase qué sentiste la primera vez que nos besamos.',
+  'Si tuvieras que prepararme una cena romántica sorpresa, ¿qué me cocinarías?',
+  '¿Cuál es tu recuerdo favorito de nosotros dos hasta hoy?'
+];
+const spiceQuestions = [
+  'Si estuviéramos solos en la Cueva Íntima ahora mismo, ¿qué te gustaría hacerme?',
+  'Dime cuál es tu fantasía más atrevida conmigo que aún no hayamos cumplido.',
+  'Mándale un susurro a tu pareja describiendo cómo te trae loco/a.',
+  'Si pudieras quitarme una sola prenda con los ojos vendados, ¿por dónde empezarías?',
+  'Confiesa algo travieso que hayas pensado de mí hoy cuando no te estaba viendo.'
+];
+let deck = romanceQuestions;
+function nextCard() {
+  $('gameBox').textContent = deck[Math.floor(Math.random() * deck.length)];
 }
-counter();setInterval(counter,1000);
+$('romanceMode').addEventListener('click', () => { deck = romanceQuestions; nextCard(); });
+$('spiceMode').addEventListener('click', () => { deck = spiceQuestions; nextCard(); });
+$('nextCard').addEventListener('click', nextCard);
 
-let scene,camera,renderer,orbit,player,partner,started=false,lastPositionSent=0;
+/* ============================================================
+   MUNDO 3D
+   ============================================================ */
+const canvas = $('world');
+const LAKE = { x: -46, z: 8, r: 33 };
+const WATER_LEVEL = -0.9;
+const PADS = [
+  { x: 18, z: -18, r: 27 },
+  { x: 38, z: 24, r: 19 },
+  { x: 64, z: -48, r: 31 },
+  { x: -4, z: -96, r: 23 }
+];
 
-function startPlayerSync(){
- if(!user||!player||!partner)return;
- const otherUid=allowed.find(uid=>uid!==user.uid);
- if(!otherUid)return;
- const unsubscribe=onSnapshot(doc(db,'players',otherUid),snapshot=>{
-  if(!snapshot.exists()||!partner)return;
-  const p=snapshot.data();
-  if(typeof p.x==='number'&&typeof p.y==='number'&&typeof p.z==='number')partner.position.set(p.x,p.y,p.z);
-  if(typeof p.rotationY==='number')partner.rotation.y=p.rotationY;
- });
- unsubs.push(unsubscribe);
-}
+const REGIONS = [
+  { name: 'Casa de Hectomi', x: 18, z: -18, r: 20 },
+  { name: 'Jardín de rosas', x: 38, z: 24, r: 17 },
+  { name: 'Lago Sereno', x: LAKE.x, z: LAKE.z, r: 32 },
+  { name: 'Cascada secreta', x: -76, z: 8, r: 16 },
+  { name: 'Ciudad de las luces', x: 64, z: -48, r: 28 },
+  { name: 'Mirador de la luna', x: -4, z: -96, r: 19 },
+  { name: 'Bosque de los susurros', x: -18, z: -46, r: 30 }
+];
 
-async function publishMyPosition(force=false){
- if(!user||!player)return;
- const now=Date.now();
- if(!force&&now-lastPositionSent<250)return;
- lastPositionSent=now;
- try{
-  await setDoc(doc(db,'players',user.uid),{
-   x:player.position.x,y:player.position.y,z:player.position.z,rotationY:player.rotation.y,updatedAt:serverTimestamp()
-  },{merge:true});
- }catch(e){}
-}
+const POIS = [
+  { label: 'Leer la carta', x: 38, z: 24, r: 8, panel: 'letterPanel' },
+  { label: 'Ver nuestros recuerdos', x: 15.6, z: -17.4, r: 6, panel: 'photosPanel' },
+  { label: 'Nuestro tiempo', x: -4, z: -94, r: 7, panel: 'momentsPanel' },
+  { label: 'Entrar a la gruta', x: -80, z: 13, r: 6, panel: 'secretPanel' },
+  { label: 'Recostarse en la cama', x: 15.6, z: -20.2, r: 4, pose: 'lie' },
+  { label: 'Sentarse en el banco', x: 42, z: 27, r: 4.5, pose: 'sit' }
+];
 
-function startWorld(){
- if(started)return;started=true;
- renderer=new THREE.WebGLRenderer({canvas:$('world'),antialias:true});
- renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
- renderer.setSize(innerWidth,innerHeight);
- renderer.shadowMap.enabled=true;
- scene=new THREE.Scene();
- scene.background=new THREE.Color('#04060f');
- scene.fog=new THREE.FogExp2('#04060f',.006);
- camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,400);
- camera.position.set(0,5,10);
- orbit=new OrbitControls(camera,renderer.domElement);
- orbit.enableDamping=true;orbit.maxPolarAngle=Math.PI*.48;
- orbit.minDistance=2.5;orbit.maxDistance=24;orbit.target.set(0,1,0);
- scene.add(new THREE.HemisphereLight(0xe0bfff,0x1f142b,2.4));
- const moon=new THREE.DirectionalLight('#ffb3d9',2.4);moon.position.set(-20,30,15);scene.add(moon);
-
- const mat=(c,r=.75,m=0.1)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
- function box(x,y,z,sx,sy,sz,c){const o=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat(c));o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o}
- function ball(x,y,z,r,c){const o=new THREE.Mesh(new THREE.SphereGeometry(r,16,12),mat(c));o.position.set(x,y,z);o.castShadow=true;scene.add(o);return o}
- function path(x,z,len,w,angle=0){const o=box(x,.04,z,w,.05,len,'#4d4158');o.rotation.y=angle;return o}
-
- /* Terreno Extendido y Hermoso */
- const terrain=new THREE.Mesh(new THREE.PlaneGeometry(300,300),mat('#142a22'));
- terrain.rotation.x=-Math.PI/2;terrain.receiveShadow=true;scene.add(terrain);
- path(0,0,70,2.6);path(10,-12,35,1.8,-.5);path(-10,-12,35,1.8,.5);path(0,22,35,1.8,.2);
-
- /* Lago Mágico Ampliado */
- const lake=new THREE.Mesh(new THREE.CircleGeometry(16,64),new THREE.MeshStandardMaterial({color:'#144366',metalness:.45,roughness:.1}));
- lake.rotation.x=-Math.PI/2;lake.position.set(28,.07,-16);scene.add(lake);
-
- /* Cueva Íntima (Nueva zona secreta) */
- box(35,2,-45,12,5,10,'#382035');
- box(35,1,-40,3,3,2,'#1a0d1b'); // Entrada de la cueva
-
- /* Laberinto de Rosas (Nueva zona para explorar) */
- for(let i=-20; i<=20; i+=6){
-  box(i,1, -55, 5, 2, 0.8, '#5c223c');
- }
-
- /* Casa y Dormitorio Principal */
- box(-14,1.5,-6,10,3,8,'#9c6d8a');box(-14,3.25,-6,10.7,.4,8.7,'#261830');
- box(-16,2,-2,1.5,1.1,.1,'#7cd8e6');box(-12,2,-2,1.5,1.1,.1,'#7cd8e6');
- box(-14,1,-1.9,1.2,1.9,.15,'#231526');box(-14,.1,-1.8,2.2,.15,.8,'#b892ab');
-
- box(-14,1.3,-20,8,2.6,7,'#593b56');box(-14,2.75,-20,8.5,.3,7.5,'#24172e');
-
- /* Bosque Frondoso */
- for(let i=0;i<220;i++){
-  const x=(Math.random()-.5)*200,z=(Math.random()-.5)*200;
-  if(Math.abs(x)<8&&Math.abs(z)<28)continue;
-  const h=1.2+Math.random()*1.8;
-  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.25,h,8),mat('#3b2920'));
-  trunk.position.set(x,h/2,z);scene.add(trunk);
-  ball(x,h+1,z,.9+Math.random()*.9,['#12382c','#1b4d3c','#163a2f','#224d38'][i%4]);
- }
-
- /* Avatares más estilizados y definidos */
- function makePerson(bodyColor,hairColor){
-  const g=new THREE.Group();
-  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.8,4,8),mat(bodyColor));body.position.y=.8;g.add(body);
-  const head=new THREE.Mesh(new THREE.SphereGeometry(.24,16,12),mat('#dfb098'));head.position.y=1.52;g.add(head);
-  const hair=new THREE.Mesh(new THREE.SphereGeometry(.26,16,10,0,Math.PI*2,0,Math.PI*.65),mat(hairColor));hair.position.y=1.59;g.add(hair);
-  for(const s of [-1,1]){const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.07,.45,3,6),mat(bodyColor));arm.position.set(s*.35,.85,0);g.add(arm);}
-  return g;
- }
- player=makePerson('#cc7a9c','#241622');player.position.set(0,0,2);scene.add(player);
- partner=makePerson('#6b9bc9','#1e1526');partner.position.set(1.3,0,2);scene.add(partner);
-
- const places={
-  inicio:[0,0,2],bosque:[-40,0,-30],laberinto:[0,0,-50],
-  cueva:[35,0,-42],lago:[25,0,-14],cascada:[45,0,-25],
-  mirador:[-35,0,20],casa:[-14,0,0],dormitorio:[-14,0,-16]
- };
- document.querySelectorAll('[data-place]').forEach(b=>b.onclick=()=>{
-  const p=places[b.dataset.place];
-  player.position.set(...p);orbit.target.set(p[0],1,p[2]);camera.position.set(p[0]+3,4,p[2]+7);
-  $('menuPanel').classList.add('hidden');
- });
-
- function animate(){
-  requestAnimationFrame(animate);
-  const dt=Math.min(clock.getDelta(),.05);
-  const dir=new THREE.Vector3(
-   (keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0),
-   0,
-   (keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)
-  );
-  if(dir.lengthSq()){
-   dir.normalize().multiplyScalar(4.5*dt);
-   player.position.add(dir);
-   player.position.x=THREE.MathUtils.clamp(player.position.x,-130,130);
-   player.position.z=THREE.MathUtils.clamp(player.position.z,-130,130);
-   player.rotation.y=Math.atan2(dir.x,dir.z);
-   orbit.target.lerp(new THREE.Vector3(player.position.x,1,player.position.z),.12);
-  }
-  publishMyPosition();
-  orbit.update();
-  renderer.render(scene,camera);
- }
- animate();
- addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
-}
-
-addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
-addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-document.querySelectorAll('[data-key]').forEach(b=>{
- const k=b.dataset.key;
- b.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true});
- b.addEventListener('pointerup',e=>{e.preventDefault();keys[k]=false});
+const PLACES = {
+  plaza: { label: '🌹 Jardín', x: 38, z: 24 },
+  casa: { label: '🏡 Casa', x: 18, z: -10 },
+  dormitorio: { label: '🛏️ Dormitorio', x: 18, z: -18 },
+  lago: { label: '🌙 Lago', x: -40, z: 12 },
+  cascada: { label: '💧 Cascada', x: -76, z: 12 },
+  gruta: { label: '🔮 Gruta', x: -80, z: 15 },
+  ciudad: { label: '✨ Ciudad', x: 60, z: -44 },
+  mirador: { label: '🌌 Mirador', x: -4, z: -92 },
+  bosque: { label: '🌲 Bosque', x: -18, z: -46 }
+};
+Object.entries(PLACES).forEach(([key, p]) => {
+  const b = document.createElement('button');
+  b.className = 'ghost';
+  b.textContent = p.label;
+  b.addEventListener('click', () => { teleport(p.x, p.z); showPanel(null); });
+  $('placesGrid').appendChild(b);
 });
 
-const photoFiles=['foto1.jpeg','foto2.jpeg','foto3.jpeg','foto4.jpeg'];
-function openPhoto(i){photoIndex=(i+4)%4;$('bigPhoto').src=photoFiles[photoIndex];$('photoModal').classList.remove('hidden')}
-document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).classList.add('hidden'));
-document.querySelectorAll('[data-photo]').forEach(b=>b.onclick=()=>openPhoto(Number(b.dataset.photo)));
-$('closePhoto').onclick=()=>$('photoModal').classList.add('hidden');
-$('prevPhoto').onclick=()=>openPhoto(photoIndex-1);
-$('nextPhoto').onclick=()=>openPhoto(photoIndex+1);
-
-$('musicBtn').onclick=async()=>{
- try{
-  if($('music').paused){await $('music').play();$('musicBtn').textContent='♫ Pausa'}
-  else{$('music').pause();$('musicBtn').textContent='♫ Música'}
- }catch{toast('No se pudo reproducir la música.')}
-};
-
-$('messageForm').onsubmit=async e=>{
- e.preventDefault();
- const text=$('messageInput').value.trim();
- if(!text||!user)return;
- try{
-  const isNohemi=user.email==='dnohe1206@gmail.com';
-  await addDoc(collection(db,'messages'),{
-   text,authorUid:user.uid,
-   authorName:isNohemi?'Nohemi':'Héctor',
-   createdAt:serverTimestamp()
-  });
-  $('messageInput').value='';
- }catch{toast('No se pudo enviar el mensaje.')}
-};
-
-function startMessages(){
- unsubs.push(onSnapshot(query(collection(db,'messages'),orderBy('createdAt','asc')),snap=>{
-  const el=$('messages');el.replaceChildren();
-  snap.forEach(d=>{
-   const m=d.data(),b=document.createElement('div');b.className='bubble '+(m.authorUid===user.uid?'mine':'');
-   const text=document.createElement('div');text.textContent=m.text||'';
-   const meta=document.createElement('div');meta.className='small';
-   meta.style.marginTop='3px';meta.style.opacity='0.6';
-   meta.textContent=(m.authorName||'Pareja')+' · '+(m.createdAt?.toDate?m.createdAt.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}):'ahora');
-   b.append(text,meta);el.append(b);
-  });
-  el.scrollTop=el.scrollHeight;
- },()=>toast('Chat no disponible.')));
+/* ------------------------- terreno ------------------------- */
+function hash2(x, y) {
+  const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
+  return n - Math.floor(n);
+}
+function vnoise(x, y) {
+  const xi = Math.floor(x), yi = Math.floor(y);
+  const xf = x - xi, yf = y - yi;
+  const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+  const a = hash2(xi, yi), b = hash2(xi + 1, yi), c = hash2(xi, yi + 1), d = hash2(xi + 1, yi + 1);
+  return (a * (1 - u) + b * u) * (1 - v) + (c * (1 - u) + d * u) * v;
+}
+function fbm(x, y) {
+  let sum = 0, amp = 0.5, f = 1;
+  for (let i = 0; i < 4; i += 1) { sum += vnoise(x * f, y * f) * amp; f *= 2.03; amp *= 0.5; }
+  return sum;
+}
+function rawHeight(x, z) {
+  let h = 1.9 + fbm(x * 0.0125, z * 0.0125) * 9.5 + fbm(x * 0.048, z * 0.048) * 1.5;
+  const d = Math.hypot(x, z);
+  const ring = Math.max(0, (d - 110) / 56);
+  h += Math.pow(ring, 1.7) * 36 * (0.45 + fbm(x * 0.021 + 4, z * 0.021 + 9) * 0.95);
+  const ld = Math.hypot(x - LAKE.x, z - LAKE.z);
+  const basin = Math.max(0, 1 - ld / (LAKE.r + 14));
+  h -= Math.pow(basin, 1.35) * 12.5;
+  return h;
+}
+const PADS_Y = PADS.map((p) => rawHeight(p.x, p.z) + 0.35);
+function heightAt(x, z) {
+  let h = rawHeight(x, z);
+  for (let i = 0; i < PADS.length; i += 1) {
+    const p = PADS[i];
+    const d = Math.hypot(x - p.x, z - p.z);
+    if (d < p.r) {
+      const k = Math.min(1, Math.max(0, (d - p.r * 0.55) / (p.r * 0.45)));
+      const w = 1 - k * k * (3 - 2 * k);
+      h += (PADS_Y[i] - h) * w;
+    }
+  }
+  return h;
 }
 
-function startPresence(){
- const other=allowed.find(x=>x!==user.uid),ref=doc(db,'presence',user.uid);
- const beat=()=>setDoc(ref,{online:true,lastSeen:serverTimestamp()},{merge:true}).catch(()=>{});
- beat();const timer=setInterval(beat,30000);
- unsubs.push(()=>clearInterval(timer));
- unsubs.push(onSnapshot(doc(db,'presence',other),s=>{
-  const d=s.data(),recent=d?.lastSeen?.toDate&&Date.now()-d.lastSeen.toDate().getTime()<90000;
-  $('presence').textContent=recent?'● En línea':'● Desconectado';
- },()=>{$('presence').textContent='Presencia oculta'}));
+function createTerrain() {
+  const geo = new THREE.PlaneGeometry(340, 340, 150, 150);
+  geo.rotateX(-Math.PI / 2);
+  const pos = geo.attributes.position;
+  const colors = new Float32Array(pos.count * 3);
+  const sand = new THREE.Color('#d9c7a1');
+  const grass = new THREE.Color('#6d8f52');
+  const deep = new THREE.Color('#4d6b3d');
+  const rock = new THREE.Color('#8b8377');
+  const snow = new THREE.Color('#eef3f6');
+  const tmp = new THREE.Color();
+  for (let i = 0; i < pos.count; i += 1) {
+    const x = pos.getX(i), z = pos.getZ(i);
+    const h = heightAt(x, z);
+    pos.setY(i, h);
+    const n = fbm(x * 0.08 + 40, z * 0.08 - 20);
+    if (h < 0.6) tmp.copy(sand);
+    else if (h < 2.4) tmp.copy(sand).lerp(grass, (h - 0.6) / 1.8);
+    else if (h < 9) tmp.copy(grass).lerp(deep, n * 0.7);
+    else if (h < 21) tmp.copy(deep).lerp(rock, Math.min(1, (h - 9) / 11));
+    else tmp.copy(rock).lerp(snow, Math.min(1, (h - 21) / 9));
+    tmp.offsetHSL(0, 0, (n - 0.5) * 0.06);
+    colors[i * 3] = tmp.r; colors[i * 3 + 1] = tmp.g; colors[i * 3 + 2] = tmp.b;
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95 }));
+  mesh.receiveShadow = true;
+  return mesh;
 }
 
-$('logoutBtn').onclick=async()=>{
- try{if(user)await setDoc(doc(db,'presence',user.uid),{online:false,lastSeen:serverTimestamp()},{merge:true})}catch{}
- await signOut(auth);
-};
+function createWater() {
+  const mat = new THREE.ShaderMaterial({
+    transparent: true,
+    uniforms: {
+      uTime: { value: 0 },
+      uDeep: { value: new THREE.Color('#123a4d') },
+      uShallow: { value: new THREE.Color('#5fb3c4') }
+    },
+    vertexShader: `
+      uniform float uTime;
+      varying vec3 vLocal;
+      varying vec3 vWorld;
+      void main(){
+        vec3 p = position;
+        p.z += sin(p.x * 0.32 + uTime * 1.3) * 0.13 + cos(p.y * 0.37 + uTime * 1.05) * 0.11;
+        vLocal = p;
+        vec4 wp = modelMatrix * vec4(p, 1.0);
+        vWorld = wp.xyz;
+        gl_Position = projectionMatrix * viewMatrix * wp;
+      }`,
+    fragmentShader: `
+      uniform float uTime;
+      uniform vec3 uDeep;
+      uniform vec3 uShallow;
+      varying vec3 vLocal;
+      varying vec3 vWorld;
+      void main(){
+        float band = sin(vLocal.x * 0.55 + vLocal.y * 0.42) * 0.5 + 0.5;
+        vec3 col = mix(uDeep, uShallow, band * 0.75 + 0.12);
+        vec3 viewDir = normalize(cameraPosition - vWorld);
+        float fres = pow(1.0 - max(viewDir.y, 0.0), 3.0);
+        col = mix(col, vec3(0.86, 0.93, 0.99), fres * 0.55);
+        float sp = smoothstep(0.88, 1.0, sin(vLocal.x * 8.5 + uTime * 1.9) * sin(vLocal.y * 7.5 - uTime * 1.4));
+        col += sp * 0.35;
+        gl_FragColor = vec4(col, 0.9);
+      }`
+  });
+  const mesh = new THREE.Mesh(new THREE.CircleGeometry(LAKE.r + 12, 64), mat);
+  mesh.rotation.x = -Math.PI / 2;
+  mesh.position.set(LAKE.x, WATER_LEVEL, LAKE.z);
+  return mesh;
+}
+
+let colliders = [];
+let lanternMats = [];
+let waterfallMat = null;
+let mist = null;
+
+function addCollider(x, z, w, d, h) {
+  colliders.push({ x, z, hw: w / 2, hd: d / 2, h });
+}
+const std = (color, roughness = 0.9, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
+
+function seeded(seed) {
+  let s = seed;
+  return () => { s = (s * 1664525 + 1013904223) % 4294967296; return s / 4294967296; };
+}
+
+function createPaths(scene) {
+  const routes = [
+    [[18, -18], [26, 0], [34, 14], [38, 24]],
+    [[38, 24], [46, 4], [56, -22], [64, -44]],
+    [[18, -18], [4, -30], [-14, -44], [-30, -72], [-14, -90], [-4, -96]],
+    [[18, -18], [0, 0], [-16, 14], [-30, 18], [-34, 12]],
+    [[-34, 12], [-52, 16], [-68, 12], [-80, 8]]
+  ];
+  const mat = new THREE.MeshStandardMaterial({ color: '#b3a08b', roughness: 1, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  routes.forEach((route) => {
+    const curve = new THREE.CatmullRomCurve3(route.map(([x, z]) => new THREE.Vector3(x, 0, z)));
+    const N = 80, pos = [], uv = [], idx = [];
+    for (let i = 0; i <= N; i += 1) {
+      const t = i / N;
+      const p = curve.getPoint(t);
+      const tan = curve.getTangent(t).setY(0).normalize();
+      const left = new THREE.Vector3(-tan.z, 0, tan.x).multiplyScalar(1.75);
+      const y = heightAt(p.x, p.z) + 0.07;
+      pos.push(p.x + left.x, y, p.z + left.z, p.x - left.x, y, p.z - left.z);
+      uv.push(0, t * 12, 1, t * 12);
+    }
+    for (let i = 0; i < N; i += 1) {
+      const a = i * 2;
+      idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    g.setIndex(idx);
+    g.computeVertexNormals();
+    scene.add(new THREE.Mesh(g, mat));
+  });
+}
+
+function createForest(scene) {
+  const rnd = seeded(20240521);
+  const trunkGeo = new THREE.CylinderGeometry(0.32, 0.52, 4.4, 5);
+  const leafGeo = new THREE.IcosahedronGeometry(1, 1);
+  const trunkMat = std('#4a3527', 0.95);
+  const leafMat = std('#3f6b3f', 0.9);
+  const blocked = [
+    { x: 18, z: -18, r: 26 }, { x: 38, z: 24, r: 20 }, { x: 64, z: -48, r: 30 },
+    { x: -4, z: -96, r: 22 }, { x: LAKE.x, z: LAKE.z, r: LAKE.r + 8 }, { x: -80, z: 8, r: 14 }
+  ];
+  const spots = [];
+  let guard = 0;
+  while (spots.length < 180 && guard < 3000) {
+    guard += 1;
+    const x = (rnd() - 0.5) * 230, z = (rnd() - 0.5) * 230;
+    const h = heightAt(x, z);
+    if (h < 1.4 || h > 24) continue;
+    if (blocked.some((b) => Math.hypot(x - b.x, z - b.z) < b.r)) continue;
+    if (rnd() > (Math.hypot(x + 20, z + 45) < 60 ? 1 : 0.55)) continue;
+    spots.push({ x, z, h, s: 0.7 + rnd() * 0.85, r: rnd() * Math.PI * 2 });
+  }
+  const trunks = new THREE.InstancedMesh(trunkGeo, trunkMat, spots.length);
+  const leaves = new THREE.InstancedMesh(leafGeo, leafMat, spots.length * 3);
+  const d = new THREE.Object3D();
+  let li = 0;
+  spots.forEach((sp, i) => {
+    d.position.set(sp.x, sp.h + 2.1 * sp.s, sp.z);
+    d.scale.setScalar(sp.s);
+    d.rotation.set(0, sp.r, 0);
+    d.updateMatrix();
+    trunks.setMatrixAt(i, d.matrix);
+    for (let k = 0; k < 3; k += 1) {
+      d.position.set(sp.x + Math.cos(sp.r + k * 2.1) * 0.5 * sp.s, sp.h + (4.0 + k * 1.15) * sp.s, sp.z + Math.sin(sp.r + k * 2.1) * 0.5 * sp.s);
+      const ls = (2.0 - k * 0.42) * sp.s;
+      d.scale.set(ls, ls * 0.85, ls);
+      d.rotation.set(0, sp.r + k, 0);
+      d.updateMatrix();
+      leaves.setMatrixAt(li, d.matrix);
+      li += 1;
+    }
+    addCollider(sp.x, sp.z, 0.9, 0.9, 5);
+  });
+  trunks.instanceMatrix.needsUpdate = true;
+  leaves.instanceMatrix.needsUpdate = true;
+  scene.add(trunks, leaves);
+}
+
+function createGarden(scene) {
+  const cx = 38, cz = 24, base = heightAt(cx, cz);
+  const plaza = new THREE.Mesh(new THREE.CylinderGeometry(9, 9.4, 0.4, 32), std('#cbbba4', 0.95));
+  plaza.position.set(cx, base + 0.1, cz);
+  plaza.receiveShadow = true;
+  scene.add(plaza);
+
+  const hedge = std('#3d6b45', 0.95);
+  for (let i = 0; i < 16; i += 1) {
+    const a = (i / 16) * Math.PI * 2;
+    const h = new THREE.Mesh(new THREE.BoxGeometry(2.1, 1.0, 1.0), hedge);
+    h.position.set(cx + Math.cos(a) * 9.5, base + 0.6, cz + Math.sin(a) * 9.5);
+    h.rotation.y = -a;
+    scene.add(h);
+  }
+  const arch = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.22, 8, 28, Math.PI), std('#f0e6dc', 0.7));
+  arch.position.set(cx, base + 2.6, cz - 9.5);
+  scene.add(arch);
+
+  const rnd = seeded(77123);
+  const count = 160;
+  const roses = new THREE.InstancedMesh(new THREE.SphereGeometry(0.16, 7, 5), std('#c9354f', 0.55), count);
+  const bushes = new THREE.InstancedMesh(new THREE.SphereGeometry(0.42, 7, 5), hedge, count);
+  const d = new THREE.Object3D();
+  for (let i = 0; i < count; i += 1) {
+    const a = rnd() * Math.PI * 2, r = 2.5 + rnd() * 6, y = base + 0.35 + rnd() * 1.1;
+    d.position.set(cx + Math.cos(a) * r, y, cz + Math.sin(a) * r);
+    d.scale.setScalar(0.8 + rnd() * 0.6);
+    d.rotation.set(rnd(), rnd() * 6, rnd());
+    d.updateMatrix();
+    roses.setMatrixAt(i, d.matrix);
+    d.position.set(cx + Math.cos(a) * r, y - 0.25, cz + Math.sin(a) * r);
+    d.scale.set(1.2, 0.9, 1.2);
+    d.updateMatrix();
+    bushes.setMatrixAt(i, d.matrix);
+  }
+  roses.instanceMatrix.needsUpdate = true;
+  bushes.instanceMatrix.needsUpdate = true;
+  scene.add(roses, bushes);
+
+  const bench = new THREE.Group();
+  const seat = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.16, 0.7), std('#a89c8d'));
+  const back = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.6, 0.14), std('#a89c8d'));
+  back.position.set(0, 0.36, -0.28);
+  bench.add(seat, back);
+  bench.position.set(cx + 4.4, base + 0.42, cz + 3.2);
+  bench.rotation.y = -0.7;
+  scene.add(bench);
+}
+
+function createHouse(scene) {
+  const cx = 18, cz = -18, base = heightAt(cx, cz), W = 11, D = 9, H = 3.2;
+  const wall = std('#f2e6da', 0.92);
+  const wood = std('#6b4a3a', 0.85);
+  const floor = new THREE.Mesh(new THREE.BoxGeometry(W, 0.3, D), std('#8d6a52', 0.85));
+  floor.position.set(cx, base + 0.2, cz);
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  const t = 0.35;
+  const walls = [
+    { g: [W * 0.36, H, t], p: [cx - W * 0.32, base + H / 2, cz + D / 2] },
+    { g: [W * 0.36, H, t], p: [cx + W * 0.32, base + H / 2, cz + D / 2] },
+    { g: [W * 0.28, 0.9, t], p: [cx, base + H - 0.45, cz + D / 2] },
+    { g: [W, H, t], p: [cx, base + H / 2, cz - D / 2] },
+    { g: [t, H, D], p: [cx - W / 2, base + H / 2, cz] },
+    { g: [t, H, D], p: [cx + W / 2, base + H / 2, cz] }
+  ];
+  walls.forEach((w) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w.g[0], w.g[1], w.g[2]), wall);
+    m.position.set(w.p[0], w.p[1], w.p[2]);
+    m.castShadow = true;
+    m.receiveShadow = true;
+    scene.add(m);
+  });
+  addCollider(cx - W * 0.32, cz + D / 2, W * 0.36, t, H);
+  addCollider(cx + W * 0.32, cz + D / 2, W * 0.36, t, H);
+  addCollider(cx, cz - D / 2, W, t, H);
+  addCollider(cx - W / 2, cz, t, D, H);
+  addCollider(cx + W / 2, cz, t, D, H);
+
+  const roofA = new THREE.Mesh(new THREE.BoxGeometry(W + 1.4, 0.28, D * 0.82), std('#8c4a3c', 0.9));
+  roofA.position.set(cx, base + H + 1.15, cz + D * 0.24);
+  roofA.rotation.x = 0.52;
+  const roofB = roofA.clone();
+  roofB.position.z = cz - D * 0.24;
+  roofB.rotation.x = -0.52;
+  scene.add(roofA, roofB);
+
+  const bed = new THREE.Group();
+  const bedParts = [
+    [new THREE.BoxGeometry(2.4, 0.32, 3.4), wood, 0.45, 0],
+    [new THREE.BoxGeometry(2.28, 0.28, 3.26), std('#f6e9ea', 0.95), 0.72, 0],
+    [new THREE.BoxGeometry(2.3, 0.16, 2.1), std('#c98b9c', 0.95), 0.88, 0.45],
+    [new THREE.BoxGeometry(1.7, 0.2, 0.6), std('#fff7f4', 0.95), 0.9, -1.15],
+    [new THREE.BoxGeometry(2.5, 1.4, 0.16), wood, 0.9, -1.75]
+  ];
+  bedParts.forEach(([geo, mat, y, z]) => {
+    const part = new THREE.Mesh(geo, mat);
+    part.position.set(0, y, z);
+    part.castShadow = true;
+    bed.add(part);
+  });
+  bed.position.set(cx - 2.7, base + 0.34, cz - 1.4);
+  bed.rotation.y = Math.PI / 2;
+  scene.add(bed);
+
+  const rug = new THREE.Mesh(new THREE.CircleGeometry(2.2, 22), std('#a8756f', 0.98));
+  rug.rotation.x = -Math.PI / 2;
+  rug.position.set(cx + 0.6, base + 0.37, cz + 0.6);
+  scene.add(rug);
+
+  const table = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.12, 14), wood);
+  table.position.set(cx + 2.6, base + 1.0, cz - 2.6);
+  const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 1.0, 8), wood);
+  leg.position.set(cx + 2.6, base + 0.52, cz - 2.6);
+  scene.add(table, leg);
+
+  const candle = new THREE.PointLight('#ffb469', 1.1, 10, 2);
+  candle.position.set(cx + 2.6, base + 1.5, cz - 2.6);
+  scene.add(candle);
+
+  const step = new THREE.Mesh(new THREE.BoxGeometry(3, 0.35, 1.6), std('#c9b8a2', 0.95));
+  step.position.set(cx, base + 0.2, cz + D / 2 + 0.9);
+  scene.add(step);
+}
+
+function createCity(scene) {
+  const cx = 64, cz = -48, base = heightAt(cx, cz);
+  const rnd = seeded(4242);
+  const plaza = new THREE.Mesh(new THREE.CylinderGeometry(15, 15.5, 0.5, 36), std('#cdbfa8', 0.95));
+  plaza.position.set(cx, base + 0.12, cz);
+  plaza.receiveShadow = true;
+  scene.add(plaza);
+
+  const walls = ['#efe2d2', '#f2dcc6', '#e4d3c6', '#f6e8d8'];
+  const roofs = ['#8d4a3f', '#6d4a45', '#9a5a44'];
+  for (let i = 0; i < 7; i += 1) {
+    const a = (i / 7) * Math.PI * 2 + 0.3;
+    const r = 21 + rnd() * 5;
+    const w = 6 + rnd() * 4, d = 6 + rnd() * 4;
+    const floors = 1 + Math.floor(rnd() * 3);
+    const h = 3.2 * floors + 1.6;
+    const x = cx + Math.cos(a) * r, z = cz + Math.sin(a) * r, y = heightAt(x, z);
+    const body = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), std(walls[i % walls.length], 0.92));
+    body.position.set(x, y + h / 2, z);
+    body.rotation.y = -a;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    scene.add(body);
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(Math.max(w, d) * 0.78, 2.2, 4), std(roofs[i % roofs.length], 0.9));
+    roof.position.set(x, y + h + 1.0, z);
+    roof.rotation.y = -a + Math.PI / 4;
+    scene.add(roof);
+    addCollider(x, z, w, d, h);
+  }
+
+  const fountain = new THREE.Group();
+  fountain.add(new THREE.Mesh(new THREE.CylinderGeometry(3, 3.2, 0.75, 24), std('#cfc2b0', 0.9)));
+  const water = new THREE.Mesh(new THREE.CylinderGeometry(2.75, 2.75, 0.1, 24), new THREE.MeshStandardMaterial({ color: '#5fb3c4', roughness: 0.15, metalness: 0.35, transparent: true, opacity: 0.9 }));
+  water.position.y = 0.42;
+  const column = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.5, 2.4, 12), std('#d8ccbb', 0.85));
+  column.position.y = 1.2;
+  fountain.add(water, column);
+  fountain.position.set(cx, base + 0.3, cz);
+  scene.add(fountain);
+
+  const glow = new THREE.PointLight('#ffc07a', 1.6, 34, 2);
+  glow.position.set(cx, base + 5, cz);
+  scene.add(glow);
+}
+
+function createLookout(scene) {
+  const cx = -4, cz = -96, base = heightAt(cx, cz);
+  const deck = new THREE.Mesh(new THREE.CylinderGeometry(6, 6, 0.4, 24), std('#8a6a4e', 0.9));
+  deck.position.set(cx, base + 0.5, cz);
+  deck.receiveShadow = true;
+  scene.add(deck);
+  const post = std('#6f5540', 0.9);
+  for (let i = 0; i < 14; i += 1) {
+    const a = (i / 14) * Math.PI * 2;
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 1.1, 6), post);
+    m.position.set(cx + Math.cos(a) * 5.6, base + 1.2, cz + Math.sin(a) * 5.6);
+    scene.add(m);
+  }
+  const rail = new THREE.Mesh(new THREE.TorusGeometry(5.6, 0.07, 6, 36), post);
+  rail.rotation.x = Math.PI / 2;
+  rail.position.set(cx, base + 1.75, cz);
+  scene.add(rail);
+  const bench = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.14, 0.7), std('#7d6047', 0.9));
+  bench.position.set(cx, base + 1.05, cz - 2.4);
+  scene.add(bench);
+}
+
+function createWaterfall(scene) {
+  const x = -80, z = 8, base = heightAt(x, z);
+  const cliff = new THREE.Mesh(new THREE.ConeGeometry(13, 22, 7), std('#7c7568', 0.98));
+  cliff.position.set(x - 6, base + 7, z);
+  cliff.rotation.y = 0.4;
+  cliff.castShadow = true;
+  scene.add(cliff);
+  addCollider(x - 6, z, 16, 16, 22);
+
+  waterfallMat = new THREE.ShaderMaterial({
+    transparent: true,
+    side: THREE.DoubleSide,
+    uniforms: { uTime: { value: 0 } },
+    vertexShader: `
+      varying vec2 vUv;
+      void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+    fragmentShader: `
+      uniform float uTime;
+      varying vec2 vUv;
+      void main(){
+        float wave = sin(vUv.x * 9.0 + vUv.y * 2.0) * 0.5;
+        float stripe = sin(vUv.y * 90.0 - uTime * 12.0 + wave * 3.0);
+        float streak = smoothstep(0.2, 1.0, sin(vUv.x * 46.0) * 0.5 + 0.5);
+        float flow = smoothstep(0.15, 0.9, stripe * 0.5 + 0.5) * (0.65 + streak * 0.45);
+        vec3 col = mix(vec3(0.55, 0.76, 0.86), vec3(0.95, 0.98, 1.0), flow);
+        float edge = smoothstep(0.0, 0.12, vUv.x) * smoothstep(1.0, 0.88, vUv.x);
+        gl_FragColor = vec4(col, (0.55 + flow * 0.4) * edge * 0.96);
+      }`
+  });
+  const fall = new THREE.Mesh(new THREE.PlaneGeometry(7, 17), waterfallMat);
+  fall.position.set(x + 1.5, base + 7.4, z);
+  fall.rotation.y = Math.PI / 2;
+  scene.add(fall);
+
+  const mistPos = new Float32Array(70 * 3);
+  for (let i = 0; i < 70; i += 1) {
+    mistPos[i * 3] = x + 2 + (Math.random() - 0.5) * 6;
+    mistPos[i * 3 + 1] = base + Math.random() * 3;
+    mistPos[i * 3 + 2] = z + (Math.random() - 0.5) * 7;
+  }
+  const mg = new THREE.BufferGeometry();
+  mg.setAttribute('position', new THREE.BufferAttribute(mistPos, 3));
+  mist = new THREE.Points(mg, new THREE.PointsMaterial({ color: '#e8f6ff', size: 0.7, transparent: true, opacity: 0.5, depthWrite: false }));
+  scene.add(mist);
+
+  const crystalMat = new THREE.MeshStandardMaterial({ color: '#c9a8ff', emissive: '#8e5cff', emissiveIntensity: 1.1, roughness: 0.2, metalness: 0.4 });
+  const grotto = new THREE.Group();
+  for (let i = 0; i < 6; i += 1) {
+    const c = new THREE.Mesh(new THREE.ConeGeometry(0.22 + Math.random() * 0.2, 1 + Math.random() * 1.4, 5), crystalMat);
+    c.position.set((Math.random() - 0.5) * 3.4, 0.5, (Math.random() - 0.5) * 3);
+    c.rotation.z = (Math.random() - 0.5) * 0.4;
+    grotto.add(c);
+  }
+  const glow = new THREE.PointLight('#a97bff', 1.4, 15, 2);
+  glow.position.set(0, 1.6, 0);
+  grotto.add(glow);
+  grotto.position.set(x - 2.2, base + 0.2, z + 5.4);
+  scene.add(grotto);
+}
+
+function createSky(scene) {
+  const starsPos = new Float32Array(1400 * 3);
+  for (let i = 0; i < 1400; i += 1) {
+    const r = 260 + Math.random() * 40;
+    const th = Math.random() * Math.PI * 2;
+    const ph = Math.acos(Math.random() * 0.92);
+    starsPos[i * 3] = r * Math.sin(ph) * Math.cos(th);
+    starsPos[i * 3 + 1] = r * Math.cos(ph) + 20;
+    starsPos[i * 3 + 2] = r * Math.sin(ph) * Math.sin(th);
+  }
+  const sg = new THREE.BufferGeometry();
+  sg.setAttribute('position', new THREE.BufferAttribute(starsPos, 3));
+  const stars = new THREE.Points(sg, new THREE.PointsMaterial({ color: '#ffffff', size: 1.4, transparent: true, opacity: 0.9, depthWrite: false }));
+  scene.add(stars);
+
+  const moon = new THREE.Mesh(new THREE.SphereGeometry(9, 24, 18), new THREE.MeshBasicMaterial({ color: '#fff4e0' }));
+  scene.add(moon);
+
+  const hemi = new THREE.HemisphereLight('#e0bfff', '#1f142b', 1.6);
+  scene.add(hemi);
+  const sun = new THREE.DirectionalLight('#ffe6c9', 1.9);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024);
+  sun.shadow.camera.near = 1;
+  sun.shadow.camera.far = 120;
+  sun.shadow.camera.left = -40;
+  sun.shadow.camera.right = 40;
+  sun.shadow.camera.top = 40;
+  sun.shadow.camera.bottom = -40;
+  scene.add(sun);
+  const sunTarget = new THREE.Object3D();
+  scene.add(sunTarget);
+  sun.target = sunTarget;
+
+  const palette = [
+    { t: 0.00, top: '#05060f', bot: '#0b0a1c', hemi: 0.5, sun: 0.15, sunCol: '#b9c6ff' },
+    { t: 0.20, top: '#1b1838', bot: '#8a5563', hemi: 0.85, sun: 0.7, sunCol: '#ffb59a' },
+    { t: 0.30, top: '#7fa6d6', bot: '#f7d5b4', hemi: 1.5, sun: 2.0, sunCol: '#ffe0bd' },
+    { t: 0.62, top: '#63a3dd', bot: '#cfe6f5', hemi: 2.0, sun: 2.4, sunCol: '#fff6e6' },
+    { t: 0.80, top: '#5b5a9c', bot: '#f0a37d', hemi: 1.5, sun: 1.8, sunCol: '#ffc9a0' },
+    { t: 0.90, top: '#0d1030', bot: '#2a2140', hemi: 0.7, sun: 0.35, sunCol: '#c8b6ff' },
+    { t: 1.00, top: '#05060f', bot: '#0b0a1c', hemi: 0.5, sun: 0.15, sunCol: '#b9c6ff' }
+  ];
+  const cTop = new THREE.Color(), cBot = new THREE.Color(), cA = new THREE.Color(), cB = new THREE.Color();
+  const cSunA = new THREE.Color(), cSunB = new THREE.Color();
+
+  function update(t, center) {
+    let i = 0;
+    while (i < palette.length - 2 && t > palette[i + 1].t) i += 1;
+    const a = palette[i], b = palette[i + 1];
+    const k = Math.min(1, Math.max(0, (t - a.t) / (b.t - a.t)));
+    cA.set(a.top); cB.set(b.top); cTop.copy(cA).lerp(cB, k);
+    cA.set(a.bot); cB.set(b.bot); cBot.copy(cA).lerp(cB, k);
+    scene.background = cTop.clone();
+    if (scene.fog) scene.fog.color.copy(cBot);
+    hemi.intensity = a.hemi + (b.hemi - a.hemi) * k;
+    sun.intensity = a.sun + (b.sun - a.sun) * k;
+    cSunA.set(a.sunCol); cSunB.set(b.sunCol);
+    sun.color.copy(cSunA).lerp(cSunB, k);
+
+    const ang = (t - 0.25) * Math.PI * 2;
+    const elev = Math.sin(ang);
+    moon.position.set(center.x + Math.cos(ang) * 150, 30 + elev * 110, center.z + Math.sin(ang) * 60);
+    sun.position.set(center.x + Math.cos(ang) * 90, 40 + elev * 90, center.z + Math.sin(ang) * 50);
+    sunTarget.position.set(center.x, 0, center.z);
+    stars.material.opacity = Math.max(0, Math.min(0.95, 1 - elev * 2.2));
+    moon.material.color.set(elev < 0 ? '#fff4e0' : '#f3e6d6');
+    return { elevation: elev };
+  }
+  return { update };
+}
+
+/* ------------------------ personajes ------------------------ */
+function createCharacter(opts = {}) {
+  const {
+    top = '#f5eae4', bottom = '#3a3148', accent = '#c98b7a', skin = '#eac6a8',
+    hair = '#2b1c16', dress = false, longHair = false
+  } = opts;
+  const group = new THREE.Group();
+  const body = new THREE.Group();
+  group.add(body);
+  const M = (c, r = 0.85) => new THREE.MeshStandardMaterial({ color: c, roughness: r });
+  const skinM = M(skin, 0.7), hairM = M(hair, 0.9), topM = M(top), botM = M(bottom);
+  const add = (parent, geo, mat, pos) => {
+    const m = new THREE.Mesh(geo, mat);
+    if (pos) m.position.set(pos[0], pos[1], pos[2]);
+    m.castShadow = true;
+    parent.add(m);
+    return m;
+  };
+
+  add(body, new THREE.CapsuleGeometry(0.145, 0.1, 4, 10), botM, [0, 0.92, 0]);
+  if (dress) {
+    const skirt = add(body, new THREE.ConeGeometry(0.31, 0.62, 16, 1, true), topM, [0, 0.72, 0]);
+    skirt.material.side = THREE.DoubleSide;
+  }
+  const torso = new THREE.Group();
+  torso.position.set(0, 1.02, 0);
+  body.add(torso);
+  add(torso, new THREE.CapsuleGeometry(0.175, 0.3, 6, 12), topM, [0, 0.2, 0]);
+  add(torso, new THREE.CylinderGeometry(0.1, 0.12, 0.09, 10), skinM, [0, 0.42, 0]);
+
+  const head = new THREE.Group();
+  head.position.set(0, 0.46, 0);
+  torso.add(head);
+  add(head, new THREE.SphereGeometry(0.126, 18, 14), skinM, [0, 0.1, 0]).scale.set(0.94, 1.05, 0.98);
+  add(head, new THREE.SphereGeometry(0.133, 16, 12), hairM, [0, 0.135, -0.008]);
+  if (longHair) add(head, new THREE.CapsuleGeometry(0.085, 0.24, 4, 10), hairM, [0, 0.02, -0.09]).scale.set(1.05, 1, 0.7);
+  const eyeGeo = new THREE.SphereGeometry(0.016, 8, 6);
+  const eyeM = M('#20161a', 0.3);
+  add(head, eyeGeo, eyeM, [-0.045, 0.105, 0.108]);
+  add(head, eyeGeo, eyeM, [0.045, 0.105, 0.108]);
+  add(head, new THREE.SphereGeometry(0.014, 8, 6), M(accent, 0.5), [0, 0.045, 0.118]);
+
+  const makeArm = (s) => {
+    const sh = new THREE.Group();
+    sh.position.set(s * 0.205, 0.36, 0);
+    sh.rotation.z = -s * 0.1;
+    torso.add(sh);
+    add(sh, new THREE.CapsuleGeometry(0.062, 0.2, 4, 10), topM, [0, -0.13, 0]);
+    const el = new THREE.Group();
+    el.position.set(0, -0.27, 0);
+    sh.add(el);
+    add(el, new THREE.CapsuleGeometry(0.052, 0.2, 4, 10), skinM, [0, -0.12, 0]);
+    return { sh, el };
+  };
+  const makeLeg = (s) => {
+    const hip = new THREE.Group();
+    hip.position.set(s * 0.093, 0.88, 0);
+    body.add(hip);
+    add(hip, new THREE.CapsuleGeometry(0.083, 0.24, 4, 10), dress ? skinM : botM, [0, -0.19, 0]);
+    const kn = new THREE.Group();
+    kn.position.set(0, -0.4, 0);
+    hip.add(kn);
+    add(kn, new THREE.CapsuleGeometry(0.066, 0.26, 4, 10), dress ? skinM : botM, [0, -0.17, 0]);
+    add(kn, new THREE.BoxGeometry(0.1, 0.07, 0.2), botM, [0, -0.36, 0.04]);
+    return { hip, kn };
+  };
+  const lA = makeArm(-1), rA = makeArm(1), lL = makeLeg(-1), rL = makeLeg(1);
+  let phase = 0, state = 'idle';
+
+  return {
+    group,
+    setState(s) { state = s; },
+    update(dt) {
+      const rate = state === 'run' ? 11 : state === 'walk' ? 8 : state === 'sit' ? 0.6 : 1.6;
+      phase += dt * rate;
+      const p = phase;
+      const t = { tx: 0, hx: 0, lth: 0, rth: 0, lkn: -0.06, rkn: -0.06, la: 0.06, ra: 0.06, le: -0.22, re: -0.22, by: 0, brx: 0 };
+      if (state === 'walk' || state === 'run') {
+        const amp = state === 'run' ? 0.95 : 0.55;
+        const kA = state === 'run' ? 1.25 : 0.75;
+        const sw = Math.sin(p);
+        t.lth = sw * amp; t.rth = -sw * amp;
+        t.lkn = -0.12 - Math.max(0, -sw) * kA;
+        t.rkn = -0.12 - Math.max(0, sw) * kA;
+        t.la = -sw * amp * 0.85; t.ra = sw * amp * 0.85;
+        t.le = -0.35 - Math.abs(sw) * 0.5; t.re = -0.35 - Math.abs(sw) * 0.5;
+        t.tx = state === 'run' ? -0.22 : -0.06;
+        t.by = Math.abs(Math.sin(p)) * (state === 'run' ? 0.06 : 0.03);
+      } else if (state === 'sit') {
+        t.by = -0.42; t.lth = t.rth = -1.45; t.lkn = t.rkn = 1.4;
+        t.la = t.ra = 0.18; t.le = t.re = -0.6;
+      } else if (state === 'lie') {
+        t.by = 0.24; t.brx = -Math.PI / 2; t.la = 0.5; t.ra = -0.5;
+        t.lkn = t.rkn = -0.14; t.hx = 0.3;
+      } else if (state === 'hug') {
+        t.la = t.ra = -1.42; t.le = t.re = -0.55; t.tx = -0.1;
+      } else {
+        t.by = Math.sin(p) * 0.012;
+        t.tx = Math.sin(p * 0.9) * 0.02;
+        t.hx = Math.sin(p * 0.6) * 0.03;
+      }
+      const a = Math.min(1, dt * 12);
+      const L = (o, k, v) => { o[k] += (v - o[k]) * a; };
+      L(lL.hip.rotation, 'x', t.lth); L(rL.hip.rotation, 'x', t.rth);
+      L(lL.kn.rotation, 'x', t.lkn); L(rL.kn.rotation, 'x', t.rkn);
+      L(lA.sh.rotation, 'x', t.la); L(rA.sh.rotation, 'x', t.ra);
+      L(lA.el.rotation, 'x', t.le); L(rA.el.rotation, 'x', t.re);
+      L(torso.rotation, 'x', t.tx); L(head.rotation, 'x', t.hx);
+      L(body.position, 'y', t.by - 0.085);
+      L(body.rotation, 'x', t.brx);
+    }
+  };
+}
+
+/* --------------------- estado del mundo --------------------- */
+let scene, camera, renderer, sky, water, selfChar, otherChar, selfPos, otherTarget, otherRot = 0;
+let clock = new THREE.Clock();
+let raf = null;
+let started = false;
+let timeOfDay = 0.34;
+let yaw = 1.41, pitch = 0.3, dist = 8.4;
+let hop = 0, velY = 0;
+let pose = null, poseUntil = 0;
+let lastSent = 0;
+const input = { x: 0, y: 0, run: false };
+const keys = {};
+
+function initWorld() {
+  if (started) return;
+  started = true;
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: window.devicePixelRatio < 2, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.1;
+
+  scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0xbcd4e0, 80, 280);
+  camera = new THREE.PerspectiveCamera(56, window.innerWidth / window.innerHeight, 0.1, 720);
+
+  scene.add(createTerrain());
+  water = createWater();
+  scene.add(water);
+  sky = createSky(scene);
+  createPaths(scene);
+  createForest(scene);
+  createGarden(scene);
+  createHouse(scene);
+  createCity(scene);
+  createLookout(scene);
+  createWaterfall(scene);
+
+  selfChar = createCharacter({ top: '#f5eae4', bottom: '#3a3148', accent: '#c98b7a', dress: true, longHair: true });
+  selfPos = new THREE.Vector3(-8, heightAt(-8, 14), 14);
+  selfChar.group.position.copy(selfPos);
+  selfChar.group.rotation.y = -1.73;
+  scene.add(selfChar.group);
+
+  otherChar = createCharacter({ top: '#2f3a52', bottom: '#2a2a33', accent: '#8fa7c9', hair: '#3a2a22' });
+  otherChar.group.visible = false;
+  scene.add(otherChar.group);
+  otherTarget = new THREE.Vector3();
+
+  window.addEventListener('resize', onResize);
+  animate();
+}
+
+function onResize() {
+  if (!renderer) return;
+  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+}
+
+function teleport(x, z) {
+  if (!selfPos) return;
+  selfPos.set(x, heightAt(x, z), z);
+  pose = null;
+  toast('Te llevé a un nuevo rincón ❤️');
+}
+
+function resolveCollisions(p) {
+  const r = 0.42;
+  for (let i = 0; i < colliders.length; i += 1) {
+    const c = colliders[i];
+    const dx = p.x - c.x, dz = p.z - c.z;
+    const ox = c.hw + r - Math.abs(dx);
+    const oz = c.hd + r - Math.abs(dz);
+    if (ox > 0 && oz > 0) {
+      if (ox < oz) p.x += Math.sign(dx || 1) * ox;
+      else p.z += Math.sign(dz || 1) * oz;
+    }
+  }
+  const d = Math.hypot(p.x, p.z);
+  if (d > 132) { p.x = (p.x / d) * 132; p.z = (p.z / d) * 132; }
+}
+
+let regionTimer = 0, nearTimer = 0, nearKey = null;
+
+function animate() {
+  raf = requestAnimationFrame(animate);
+  const dt = Math.min(0.05, clock.getDelta());
+  const now = performance.now();
+
+  timeOfDay = (timeOfDay + dt / 520) % 1;
+  sky.update(timeOfDay, selfPos);
+  water.material.uniforms.uTime.value += dt;
+  if (waterfallMat) waterfallMat.uniforms.uTime.value += dt;
+  if (mist) mist.rotation.y += dt * 0.05;
+
+  const mx = input.x + ((keys.d || keys.arrowright ? 1 : 0) - (keys.a || keys.arrowleft ? 1 : 0));
+  const my = input.y + ((keys.s || keys.arrowdown ? 1 : 0) - (keys.w || keys.arrowup ? 1 : 0));
+  const mag = Math.min(1, Math.hypot(mx, my));
+  const running = input.run || keys.shift;
+
+  if (mag > 0.1) {
+    if (pose && now > poseUntil) pose = null;
+    const fwd = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+    const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
+    const dir = new THREE.Vector3().addScaledVector(fwd, -my).addScaledVector(right, mx);
+    if (dir.lengthSq() > 0) dir.normalize();
+    const speed = (running ? 6.2 : 3.1) * mag;
+    selfPos.x += dir.x * speed * dt;
+    selfPos.z += dir.z * speed * dt;
+    resolveCollisions(selfPos);
+    const targetRot = Math.atan2(dir.x, dir.z);
+    let diff = targetRot - selfChar.group.rotation.y;
+    while (diff > Math.PI) diff -= Math.PI * 2;
+    while (diff < -Math.PI) diff += Math.PI * 2;
+    selfChar.group.rotation.y += diff * Math.min(1, dt * 10);
+    if (!pose) selfChar.setState(speed > 4.2 ? 'run' : 'walk');
+  } else if (!pose || now > poseUntil) {
+    if (pose) pose = null;
+    selfChar.setState('idle');
+  }
+
+  if (velY !== 0 || hop > 0) {
+    velY -= 16 * dt;
+    hop = Math.max(0, hop + velY * dt);
+    if (hop === 0) velY = 0;
+  }
+  selfPos.y = heightAt(selfPos.x, selfPos.z) + hop;
+  selfChar.group.position.copy(selfPos);
+  selfChar.update(dt);
+
+  if (otherChar.group.visible) {
+    const g = otherChar.group;
+    g.position.x += (otherTarget.x - g.position.x) * Math.min(1, dt * 6);
+    g.position.z += (otherTarget.z - g.position.z) * Math.min(1, dt * 6);
+    g.position.y = heightAt(g.position.x, g.position.z);
+    let rd = otherRot - g.rotation.y;
+    while (rd > Math.PI) rd -= Math.PI * 2;
+    while (rd < -Math.PI) rd += Math.PI * 2;
+    g.rotation.y += rd * Math.min(1, dt * 6);
+    otherChar.update(dt);
+  }
+
+  const focus = new THREE.Vector3(selfPos.x, selfPos.y + 1.28, selfPos.z);
+  const off = new THREE.Vector3(
+    Math.sin(yaw) * Math.cos(pitch),
+    Math.sin(pitch),
+    Math.cos(yaw) * Math.cos(pitch)
+  ).multiplyScalar(dist);
+  const desired = focus.clone().add(off);
+  desired.y = Math.max(desired.y, heightAt(desired.x, desired.z) + 1.1);
+  camera.position.lerp(desired, 1 - Math.pow(0.0015, dt));
+  camera.lookAt(focus);
+
+  if (now - regionTimer > 400) {
+    regionTimer = now;
+    let name = 'Sendero de Hectomi';
+    let best = 1e9;
+    REGIONS.forEach((r) => {
+      const d = Math.hypot(selfPos.x - r.x, selfPos.z - r.z);
+      if (d < r.r && d < best) { best = d; name = r.name; }
+    });
+    if ($('region').textContent !== name) $('region').textContent = name;
+  }
+
+  if (now - nearTimer > 250) {
+    nearTimer = now;
+    let found = null, bestD = 1e9;
+    POIS.forEach((p) => {
+      const d = Math.hypot(selfPos.x - p.x, selfPos.z - p.z);
+      if (d < p.r && d < bestD) { bestD = d; found = p; }
+    });
+    if (otherChar.group.visible) {
+      const dp = Math.hypot(selfPos.x - otherChar.group.position.x, selfPos.z - otherChar.group.position.z);
+      if (dp < 2.8 && dp < bestD) { found = { label: 'Abrazar', pose: 'hug' }; bestD = dp; }
+    }
+    const key = found ? found.label : null;
+    if (key !== nearKey) {
+      nearKey = key;
+      const btn = $('nearBtn');
+      if (found) { btn.textContent = found.label; btn.classList.remove('hidden'); }
+      else btn.classList.add('hidden');
+      nearAction = found;
+    }
+  }
+
+  if (now - lastSent > 250) { lastSent = now; publishPosition(); }
+
+  const hours = Math.floor(timeOfDay * 24);
+  const mins = Math.floor((timeOfDay * 24 - hours) * 60);
+  const label = timeOfDay < 0.2 || timeOfDay >= 0.88 ? 'Noche' : timeOfDay < 0.3 ? 'Amanecer' : timeOfDay < 0.74 ? 'Día' : 'Atardecer';
+  $('clock').textContent = `${label} · ${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+
+  renderer.render(scene, camera);
+}
+
+let nearAction = null;
+$('nearBtn').addEventListener('click', () => {
+  if (!nearAction) return;
+  if (nearAction.panel) { showPanel(nearAction.panel); fillPanels(); }
+  if (nearAction.pose) {
+    pose = nearAction.pose;
+    poseUntil = performance.now() + 120000;
+    selfChar.setState(nearAction.pose);
+    toast(nearAction.pose === 'hug' ? 'Un abrazo para ti ❤️' : 'Respira… estamos aquí.');
+  }
+});
+
+/* -------------------- controles táctiles -------------------- */
+const stick = $('stick'), knob = $('knob');
+let stickRect = null, stickId = null;
+function stickMove(e) {
+  if (e.pointerId !== stickId || !stickRect) return;
+  const r = stickRect.width / 2;
+  let dx = e.clientX - (stickRect.left + r);
+  let dy = e.clientY - (stickRect.top + r);
+  const len = Math.hypot(dx, dy);
+  const max = r * 0.7;
+  if (len > max) { dx = (dx / len) * max; dy = (dy / len) * max; }
+  knob.style.transform = `translate(${dx}px, ${dy}px)`;
+  input.x = dx / max;
+  input.y = dy / max;
+  input.run = Math.hypot(input.x, input.y) > 0.85;
+}
+stick.addEventListener('pointerdown', (e) => {
+  e.preventDefault();
+  stickId = e.pointerId;
+  stickRect = stick.getBoundingClientRect();
+  stick.setPointerCapture(stickId);
+  stickMove(e);
+});
+stick.addEventListener('pointermove', stickMove);
+function stickEnd(e) {
+  if (e.pointerId !== stickId) return;
+  stickId = null;
+  input.x = 0; input.y = 0; input.run = false;
+  knob.style.transform = 'translate(0,0)';
+}
+stick.addEventListener('pointerup', stickEnd);
+stick.addEventListener('pointercancel', stickEnd);
+
+let dragId = null, lastX = 0, lastY = 0, pinchStart = 0;
+canvas.addEventListener('pointerdown', (e) => {
+  if (dragId !== null) return;
+  dragId = e.pointerId;
+  lastX = e.clientX;
+  lastY = e.clientY;
+  canvas.setPointerCapture(dragId);
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (e.pointerId !== dragId) return;
+  yaw -= (e.clientX - lastX) * 0.006;
+  pitch = Math.max(0.08, Math.min(1.0, pitch + (e.clientY - lastY) * 0.004));
+  lastX = e.clientX;
+  lastY = e.clientY;
+});
+canvas.addEventListener('pointerup', (e) => { if (e.pointerId === dragId) dragId = null; });
+canvas.addEventListener('pointercancel', (e) => { if (e.pointerId === dragId) dragId = null; });
+canvas.addEventListener('wheel', (e) => {
+  dist = Math.max(4, Math.min(12, dist + e.deltaY * 0.0025));
+}, { passive: true });
+canvas.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 2) {
+    pinchStart = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  }
+}, { passive: true });
+canvas.addEventListener('touchmove', (e) => {
+  if (e.touches.length === 2 && pinchStart) {
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+    dist = Math.max(4, Math.min(12, dist - (d - pinchStart) * 0.02));
+    pinchStart = d;
+  }
+}, { passive: true });
+canvas.addEventListener('touchend', () => { pinchStart = 0; });
+canvas.addEventListener('dblclick', () => { if (hop <= 0.01) velY = 5.4; });
+
+window.addEventListener('keydown', (e) => {
+  const k = e.key.toLowerCase();
+  keys[k] = true;
+  if (k === ' ') { e.preventDefault(); if (hop <= 0.01) velY = 5.4; }
+  if (k === 'escape') showPanel(null);
+});
+window.addEventListener('keyup', (e) => { keys[e.key.toLowerCase()] = false; });
+window.addEventListener('blur', () => {
+  Object.keys(keys).forEach((k) => { keys[k] = false; });
+  input.x = 0; input.y = 0;
+  knob.style.transform = 'translate(0,0)';
+});
+
+/* ============================================================
+   FIREBASE: chat, presencia, posiciones, pareja, fotos, voz
+   ============================================================ */
+function publishPosition() {
+  if (!user || !selfPos) return;
+  setDoc(doc(db, 'players', user.uid), {
+    x: +selfPos.x.toFixed(2),
+    y: +selfPos.y.toFixed(2),
+    z: +selfPos.z.toFixed(2),
+    rotationY: +selfChar.group.rotation.y.toFixed(2),
+    updatedAt: serverTimestamp()
+  }, { merge: true }).catch(() => {});
+}
+
+function startRealtime() {
+  startChat();
+  startPresence();
+  startPartnerPositions();
+  loadCouple();
+  startPhotos();
+}
+
+function startChat() {
+  const q = query(collection(db, 'messages'), orderBy('createdAt', 'asc'), limit(120));
+  subs.push(onSnapshot(q, (snap) => {
+    const box = $('messages');
+    box.replaceChildren();
+    snap.forEach((d) => {
+      const m = d.data();
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble' + (m.authorUid === user.uid ? ' mine' : '');
+      const text = document.createElement('div');
+      text.textContent = m.text || '';
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      const when = m.createdAt && m.createdAt.toDate ? m.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'ahora';
+      meta.textContent = `${m.authorName || 'Pareja'} · ${when}`;
+      bubble.append(text, meta);
+      box.append(bubble);
+    });
+    box.scrollTop = box.scrollHeight;
+  }, () => toast('El chat no está disponible.')));
+}
+
+$('messageForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = $('messageInput').value.trim();
+  if (!text || !user) return;
+  try {
+    await addDoc(collection(db, 'messages'), {
+      text,
+      authorUid: user.uid,
+      authorName: meName(),
+      createdAt: serverTimestamp()
+    });
+    $('messageInput').value = '';
+  } catch (err) {
+    toast('No se pudo enviar el mensaje.');
+  }
+});
+
+function startPresence() {
+  const mine = doc(db, 'presence', user.uid);
+  const beat = () => setDoc(mine, { online: true, lastSeen: serverTimestamp() }, { merge: true }).catch(() => {});
+  beat();
+  const timer = setInterval(beat, 25000);
+  subs.push(() => clearInterval(timer));
+  subs.push(onSnapshot(doc(db, 'presence', partnerUid()), (snap) => {
+    const d = snap.data();
+    const recent = d && d.lastSeen && d.lastSeen.toDate && Date.now() - d.lastSeen.toDate().getTime() < 90000;
+    $('presence').textContent = recent ? 'En línea' : 'Desconectado/a';
+    $('pdot').className = 'dot' + (recent ? '' : ' off');
+  }, () => { $('presence').textContent = 'Presencia oculta'; }));
+}
+
+function startPartnerPositions() {
+  subs.push(onSnapshot(doc(db, 'players', partnerUid()), (snap) => {
+    if (!snap.exists() || !otherChar) return;
+    const p = snap.data();
+    if (typeof p.x !== 'number' || typeof p.z !== 'number') return;
+    otherChar.group.visible = true;
+    otherTarget.set(p.x, 0, p.z);
+    otherRot = typeof p.rotationY === 'number' ? p.rotationY : 0;
+  }, () => {}));
+}
+
+async function loadCouple() {
+  const ref = doc(db, 'couple', 'config');
+  try {
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      Object.assign(couple, snap.data());
+    } else {
+      await setDoc(ref, {
+        nameA: couple.nameA,
+        nameB: couple.nameB,
+        anniversary: couple.anniversary,
+        letter: couple.letter,
+        letterSignature: couple.letterSignature,
+        secret: couple.secret,
+        musicUrl: couple.musicUrl
+      });
+    }
+  } catch (err) {
+    /* sin permisos: seguimos con los valores locales */
+  }
+  fillPanels();
+  const unsub = onSnapshot(ref, (snap) => {
+    if (snap.exists()) { Object.assign(couple, snap.data()); fillPanels(); }
+  }, () => {});
+  subs.push(unsub);
+  applyMusic();
+}
+
+function fillPanels() {
+  $('who').textContent = meName();
+  $('letterBody').textContent = couple.letter || 'Escribe la carta en “Nuestro tiempo”.';
+  $('letterSign').textContent = couple.letterSignature || '';
+  $('secretBody').textContent = couple.secret || 'Aquí aparecerá el secreto cuando lo escribas.';
+  $('nameA').value = couple.nameA || '';
+  $('nameB').value = couple.nameB || '';
+  $('anniversary').value = couple.anniversary || '';
+  $('musicUrl').value = couple.musicUrl || '';
+  $('letterText').value = couple.letter || '';
+  $('letterSignature').value = couple.letterSignature || '';
+  $('secretText').value = couple.secret || '';
+  updateCounter();
+}
+
+$('saveCouple').addEventListener('click', async () => {
+  const data = {
+    nameA: $('nameA').value.trim() || 'Ella',
+    nameB: $('nameB').value.trim() || 'Él',
+    anniversary: $('anniversary').value || couple.anniversary,
+    musicUrl: $('musicUrl').value.trim(),
+    letter: $('letterText').value,
+    letterSignature: $('letterSignature').value.trim(),
+    secret: $('secretText').value
+  };
+  try {
+    await setDoc(doc(db, 'couple', 'config'), data, { merge: true });
+    Object.assign(couple, data);
+    fillPanels();
+    applyMusic();
+    toast('Guardado ❤️');
+  } catch (err) {
+    toast('No se pudo guardar.');
+  }
+});
+
+/* ----------------------------- música ----------------------------- */
+let musicEl = null;
+function applyMusic() {
+  if (!musicEl) {
+    musicEl = new Audio();
+    musicEl.loop = true;
+    musicEl.preload = 'auto';
+  }
+  if (couple.musicUrl && musicEl.src !== couple.musicUrl) {
+    musicEl.src = couple.musicUrl;
+  }
+}
+$('musicBtn').addEventListener('click', async () => {
+  if (!couple.musicUrl) { toast('Añade el enlace de la música en “Nuestro tiempo”.'); return; }
+  applyMusic();
+  try {
+    if (musicEl.paused) { await musicEl.play(); $('musicBtn').textContent = '⏸ Música'; }
+    else { musicEl.pause(); $('musicBtn').textContent = '♫ Música'; }
+  } catch (err) {
+    toast('No se pudo reproducir la música.');
+  }
+});
+
+/* ----------------------------- fotos ----------------------------- */
+let photos = [];
+let photoIndex = 0;
+
+function startPhotos() {
+  const q = query(collection(db, 'photos'), orderBy('created', 'desc'));
+  subs.push(onSnapshot(q, (snap) => {
+    photos = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    renderPhotos();
+  }, () => toast('No se pudieron cargar las fotos.')));
+}
+
+function renderPhotos() {
+  const grid = $('photos');
+  grid.replaceChildren();
+  photos.forEach((p, i) => {
+    const box = document.createElement('div');
+    box.className = 'photo';
+    const img = document.createElement('img');
+    img.src = p.url;
+    img.alt = p.title || 'Recuerdo';
+    img.loading = 'lazy';
+    img.addEventListener('click', () => openPhoto(i));
+    const del = document.createElement('button');
+    del.className = 'del ghost';
+    del.textContent = '✕';
+    del.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      await deleteDoc(doc(db, 'photos', p.id));
+    });
+    box.append(img, del);
+    grid.append(box);
+  });
+  $('photosEmpty').classList.toggle('hidden', photos.length > 0);
+}
+
+function openPhoto(i) {
+  if (!photos.length) return;
+  photoIndex = (i + photos.length) % photos.length;
+  $('bigPhoto').src = photos[photoIndex].url;
+  $('photoModal').classList.remove('hidden');
+}
+$('closePhoto').addEventListener('click', () => $('photoModal').classList.add('hidden'));
+$('prevPhoto').addEventListener('click', () => openPhoto(photoIndex - 1));
+$('nextPhoto').addEventListener('click', () => openPhoto(photoIndex + 1));
+
+function resizeImage(file, max = 900) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * scale);
+      c.height = Math.round(img.height * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL('image/jpeg', 0.72));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+$('photoFile').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    const url = await resizeImage(file);
+    await addDoc(collection(db, 'photos'), { url, title: 'Nuestro recuerdo', created: serverTimestamp() });
+    toast('Foto guardada ❤️');
+  } catch (err) {
+    toast('No se pudo subir la foto.');
+  }
+  e.target.value = '';
+});
+
+$('photoUrlForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const url = $('photoUrl').value.trim();
+  if (!url) return;
+  try {
+    await addDoc(collection(db, 'photos'), { url, title: 'Nuestro recuerdo', created: serverTimestamp() });
+    $('photoUrl').value = '';
+  } catch (err) {
+    toast('No se pudo guardar el enlace.');
+  }
+});
+
+/* ----------------------------- voz ----------------------------- */
+let pc = null, localStream = null, voiceRole = null, voiceSubs = [];
+const remoteAudio = new Audio();
+remoteAudio.autoplay = true;
+
+async function clearCandidates() {
+  for (const name of ['callerCandidates', 'calleeCandidates']) {
+    try {
+      const snap = await getDocs(collection(db, 'voiceSessions', 'main', name));
+      await Promise.all(snap.docs.map((d) => deleteDoc(d.ref)));
+    } catch (err) { /* sin permisos o vacío */ }
+  }
+}
+
+function listenCandidates(name) {
+  const unsub = onSnapshot(collection(db, 'voiceSessions', 'main', name), (snap) => {
+    snap.docChanges().forEach((change) => {
+      if (change.type !== 'added' || !pc) return;
+      const data = change.doc.data();
+      if (data.authorUid === user.uid) return;
+      pc.addIceCandidate(data.candidate).catch(() => {});
+    });
+  }, () => {});
+  voiceSubs.push(unsub);
+}
+
+async function hangUp() {
+  voiceSubs.forEach((f) => f());
+  voiceSubs = [];
+  if (pc) { pc.close(); pc = null; }
+  if (localStream) { localStream.getTracks().forEach((t) => t.stop()); localStream = null; }
+  try { await deleteDoc(doc(db, 'voiceSessions', 'main')); } catch (err) { /* ok */ }
+  $('voiceBtn').textContent = '🎙️ Voz';
+}
+
+$('voiceBtn').addEventListener('click', async () => {
+  if (pc) { await hangUp(); toast('Voz cerrada.'); return; }
+  try {
+    $('voiceBtn').textContent = '⏳ …';
+    localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+    pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+    localStream.getTracks().forEach((t) => pc.addTrack(t, localStream));
+    pc.ontrack = (event) => {
+      remoteAudio.srcObject = event.streams[0];
+      remoteAudio.play().catch(() => toast('Toca la pantalla para escuchar.'));
+    };
+
+    const ref = doc(db, 'voiceSessions', 'main');
+    const snap = await getDoc(ref);
+    const data = snap.exists() ? snap.data() : null;
+
+    if (data && data.status === 'calling' && data.callerUid === partnerUid()) {
+      voiceRole = 'callee';
+      await clearCandidates();
+      await pc.setRemoteDescription(data.offer);
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      await updateDoc(ref, { answer: { type: answer.type, sdp: answer.sdp }, status: 'connected', updatedAt: serverTimestamp() });
+      listenCandidates('callerCandidates');
+      toast('Llamada aceptada ❤️');
+    } else {
+      voiceRole = 'caller';
+      await clearCandidates();
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      await setDoc(ref, {
+        callerUid: user.uid,
+        calleeUid: partnerUid(),
+        offer: { type: offer.type, sdp: offer.sdp },
+        answer: null,
+        status: 'calling',
+        updatedAt: serverTimestamp()
+      });
+      listenCandidates('calleeCandidates');
+      voiceSubs.push(onSnapshot(ref, (s) => {
+        const d = s.data();
+        if (d && d.answer && pc && !pc.currentRemoteDescription) {
+          pc.setRemoteDescription(d.answer).catch(() => {});
+        }
+      }, () => {}));
+      toast('Llamada iniciada, esperando a tu amor…');
+    }
+
+    pc.onicecandidate = (event) => {
+      if (!event.candidate) return;
+      const bucket = voiceRole === 'caller' ? 'callerCandidates' : 'calleeCandidates';
+      addDoc(collection(db, 'voiceSessions', 'main', bucket), {
+        candidate: event.candidate.toJSON(),
+        authorUid: user.uid
+      }).catch(() => {});
+    };
+    pc.onconnectionstatechange = () => {
+      if (!pc) return;
+      if (pc.connectionState === 'connected') { $('voiceBtn').textContent = '🔴 Voz activa'; toast('¡Voz conectada! ❤️'); }
+      if (['failed', 'disconnected'].includes(pc.connectionState)) { $('voiceBtn').textContent = '🎙️ Reintentar'; }
+    };
+    $('voiceBtn').textContent = '🔴 Voz activa';
+  } catch (err) {
+    toast('Micrófono no disponible.');
+    await hangUp();
+  }
+});
+
+/* -------------------------- contador -------------------------- */
+function updateCounter() {
+  const parts = (couple.anniversary || '').split('-').map(Number);
+  const start = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : new Date();
+  let t = Math.max(0, Date.now() - start.getTime());
+  const d = Math.floor(t / 86400000);
+  t %= 86400000;
+  const h = String(Math.floor(t / 3600000)).padStart(2, '0'); t %= 3600000;
+  const m = String(Math.floor(t / 60000)).padStart(2, '0'); t %= 60000;
+  const s = String(Math.floor(t / 1000)).padStart(2, '0');
+  const text = `❤️ ${d} días · ${h}:${m}:${s}`;
+  $('counter').textContent = text;
+  $('counterBig').textContent = text;
+}
+setInterval(() => { if (user) updateCounter(); }, 1000);
+
+/* ---------------------------- sesión ---------------------------- */
+$('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  $('loginStatus').textContent = 'Entrando…';
+  try {
+    await signInWithEmailAndPassword(auth, $('email').value.trim(), $('password').value);
+  } catch (err) {
+    $('loginStatus').textContent = 'Correo o contraseña incorrectos.';
+  }
+});
+
+$('logoutBtn').addEventListener('click', async () => {
+  await hangUp();
+  if (user) {
+    try { await setDoc(doc(db, 'presence', user.uid), { online: false, lastSeen: serverTimestamp() }, { merge: true }); } catch (err) { /* ok */ }
+  }
+  await signOut(auth);
+});
+
+onAuthStateChanged(auth, async (u) => {
+  subs.forEach((f) => f());
+  subs = [];
+  user = u;
+  if (!u) {
+    $('login').classList.remove('hidden');
+    ['top', 'bar', 'stick', 'nearBtn'].forEach((id) => $(id).classList.add('hidden'));
+    $('boot').classList.add('hidden');
+    return;
+  }
+  if (ALLOWED.indexOf(u.uid) === -1) {
+    await signOut(auth);
+    $('loginStatus').textContent = 'Esta cuenta no está autorizada.';
+    return;
+  }
+  $('login').classList.add('hidden');
+  $('boot').classList.remove('hidden');
+  ['top', 'bar', 'stick'].forEach((id) => $(id).classList.remove('hidden'));
+  $('who').textContent = meName();
+
+  initWorld();
+  startRealtime();
+  publishPosition();
+  fillPanels();
+  $('boot').classList.add('hidden');
+  if (couple.musicUrl) {
+    applyMusic();
+    musicEl.play().then(() => { $('musicBtn').textContent = '⏸ Música'; }).catch(() => {});
+  }
+});
 </script>
 </body>
 </html>
