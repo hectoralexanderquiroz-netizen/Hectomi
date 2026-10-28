@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Hectomi ❤️ Nuestro Mundo Privado</title>
+<title>Hectomi ❤️ Nuestro Mundo Íntimo</title>
 
 <script type="importmap">
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
@@ -11,14 +11,14 @@
 
 <style>
 :root {
-  --bg-glass: rgba(16, 12, 30, 0.85);
-  --border-glass: rgba(255, 255, 255, 0.12);
-  --accent-pink: #fa579b;
-  --accent-purple: #8b45b8;
+  --bg-glass: rgba(15, 10, 25, 0.88);
+  --border-glass: rgba(255, 255, 255, 0.15);
+  --accent-pink: #ff4785;
+  --accent-purple: #9b38cc;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body { margin: 0; overflow: hidden; background: #05070f; color: white; font-family: system-ui, -apple-system, sans-serif; }
+body { margin: 0; overflow: hidden; background: #03050a; color: white; font-family: system-ui, -apple-system, sans-serif; }
 button, input, textarea { font: inherit; }
 
 button {
@@ -28,32 +28,51 @@ button {
   padding: 10px 16px;
   color: white;
   cursor: pointer;
-  font-weight: 500;
-  box-shadow: 0 4px 15px rgba(250, 87, 155, 0.3);
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(255, 71, 133, 0.35);
   transition: transform 0.1s ease;
 }
-button:active { transform: scale(0.96); }
-button.secondary { background: rgba(25, 20, 40, 0.8); box-shadow: none; border-color: rgba(255,255,255,0.08); }
+button:active { transform: scale(0.95); }
+button.secondary { background: rgba(25, 18, 40, 0.85); box-shadow: none; border-color: rgba(255,255,255,0.1); }
 
 .hidden { display: none !important; }
 #world { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; }
 
-/* Panel de Login */
-#login { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: radial-gradient(circle at center, #2a1538 0%, #05070f 100%); }
-.login-card { width: min(380px, 100%); background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 24px; padding: 24px; backdrop-filter: blur(20px); box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center; }
-h1 { font-size: 32px; margin: 0 0 6px; background: linear-gradient(to right, #ff9ac8, #d29ac5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-h2 { font-size: 18px; margin: 0 0 10px; color: #f0e6f6; }
-p { line-height: 1.4; color: #c4b5d0; font-size: 14px; }
-.small { font-size: 12px; color: #9a88a8; }
-.field { display: block; width: 100%; padding: 12px 16px; margin: 10px 0 16px; background: rgba(10, 8, 20, 0.9); color: white; border: 1px solid var(--border-glass); border-radius: 12px; outline: none; }
+/* Login */
+#login { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 20px; background: radial-gradient(circle at center, #2e103d 0%, #03050a 100%); }
+.login-card { width: min(380px, 100%); background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 24px; padding: 24px; backdrop-filter: blur(25px); box-shadow: 0 25px 60px rgba(0,0,0,0.7); text-align: center; }
+h1 { font-size: 32px; margin: 0 0 6px; background: linear-gradient(to right, #ff9ac8, #e0a3ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h2 { font-size: 18px; margin: 0 0 10px; color: #f2e6f8; }
+p { line-height: 1.4; color: #d0c2dc; font-size: 14px; }
+.small { font-size: 12px; color: #9e8bb0; }
+.field { display: block; width: 100%; padding: 12px 16px; margin: 10px 0 16px; background: rgba(8, 6, 15, 0.95); color: white; border: 1px solid var(--border-glass); border-radius: 12px; outline: none; }
 .field:focus { border-color: var(--accent-pink); }
 
-/* Barra Superior Limpia */
+/* Barra Superior */
 .top { position: fixed; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; z-index: 10; pointer-events: none; gap: 8px; }
 .top > * { pointer-events: auto; }
-.brand { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 14px; padding: 8px 12px; font-size: 11px; backdrop-filter: blur(10px); }
+.brand { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 14px; padding: 8px 12px; font-size: 11px; backdrop-filter: blur(12px); }
 
-/* Controles Inferiores Flotantes (Optimizados para Celular) */
+/* Menú Desplegable de Lugares y Exploración */
+#menuPanel {
+  position: fixed;
+  bottom: 75px;
+  left: 12px;
+  right: 12px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: 20px;
+  padding: 14px;
+  z-index: 25;
+  backdrop-filter: blur(25px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+}
+#menuPanel button { font-size: 12px; padding: 10px 6px; text-align: center; }
+
+/* Controles Inferiores Libres */
 .controls-bar {
   position: fixed;
   left: 12px;
@@ -70,58 +89,43 @@ p { line-height: 1.4; color: #c4b5d0; font-size: 14px; }
 .controls-bar::-webkit-scrollbar { display: none; }
 .controls-bar button { white-space: nowrap; flex-shrink: 0; padding: 10px 14px; font-size: 13px; }
 
-/* Menú Desplegable de Opciones Extra */
-#menuPanel {
-  position: fixed;
-  bottom: 75px;
-  left: 12px;
-  right: 12px;
-  background: var(--bg-glass);
-  border: 1px solid var(--border-glass);
-  border-radius: 20px;
-  padding: 14px;
-  z-index: 25;
-  backdrop-filter: blur(20px);
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-#menuPanel button { font-size: 12px; padding: 10px 6px; text-align: center; }
-
-/* Joystick / Pad Táctil Discreto */
+/* Joystick Táctil Discreto */
 #pad { position: fixed; right: 16px; bottom: 85px; z-index: 15; display: grid; grid-template-columns: 40px 40px 40px; gap: 3px; opacity: 0.85; }
-#pad button { padding: 8px 0; background: rgba(23, 16, 39, 0.7); border-radius: 8px; font-size: 12px; touch-action: none; }
+#pad button { padding: 8px 0; background: rgba(20, 12, 35, 0.8); border-radius: 8px; font-size: 12px; touch-action: none; }
 
-/* Paneles Laterales / Modales Estilizados */
-.drawer { position: fixed; inset: 12px; margin: auto; width: min(400px, 100%); max-height: 82vh; z-index: 50; display: flex; flex-direction: column; }
-.panel-content { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; padding: 20px; backdrop-filter: blur(25px); overflow-y: auto; max-height: 82vh; box-shadow: 0 25px 50px rgba(0,0,0,0.7); }
+/* Paneles Laterales y Modales */
+.drawer { position: fixed; inset: 12px; margin: auto; width: min(400px, 100%); max-height: 85vh; z-index: 50; display: flex; flex-direction: column; }
+.panel-content { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; padding: 20px; backdrop-filter: blur(30px); overflow-y: auto; max-height: 85vh; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
+
 .photos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-.photos img { width: 100%; height: 110px; object-fit:cover; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-glass); }
+.photos img { width: 100%; height: 110px; object-fit: cover; border-radius: 12px; cursor: pointer; border: 1px solid var(--border-glass); }
 
 .messages { display: flex; flex-direction: column; gap: 8px; max-height: 200px; overflow-y: auto; margin: 12px 0; padding-right: 4px; }
 .bubble { background: rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 12px; font-size: 13px; word-break: break-word; }
-.mine { align-self: flex-end; background: linear-gradient(135deg, #a73c7f, #6b2d75); }
+.mine { align-self: flex-end; background: linear-gradient(135deg, #b83280, #7a2291); }
 
-.modal { position: fixed; inset: 0; z-index: 100; background: rgba(3, 2, 11, 0.85); backdrop-filter: blur(10px); display: grid; place-items: center; padding: 16px; }
+.modal { position: fixed; inset: 0; z-index: 100; background: rgba(3, 2, 10, 0.88); backdrop-filter: blur(12px); display: grid; place-items: center; padding: 16px; }
 .modal .panel-content { width: min(380px, 100%); text-align: center; }
 #bigPhoto { display: block; width: 100%; max-height: 55vh; object-fit: contain; margin: 12px 0; border-radius: 12px; }
 
-#toast { position: fixed; z-index: 200; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(20, 15, 32, 0.95); border: 1px solid var(--border-glass); border-radius: 14px; padding: 10px 18px; font-size: 13px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 90vw; text-align: center; }
+#toast { position: fixed; z-index: 200; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(18, 12, 32, 0.95); border: 1px solid var(--border-glass); border-radius: 14px; padding: 10px 18px; font-size: 13px; backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.6); max-width: 90vw; text-align: center; }
 
 .row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
 .row button { flex: 1; }
+
+.game-card { background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); border-radius: 14px; padding: 14px; margin: 10px 0; font-size: 15px; color: #ffcae5; min-height: 70px; display: grid; place-items: center; text-align: center; }
 </style>
 </head>
 
 <body>
 <canvas id="world"></canvas>
 
-<!-- Pantalla de Login -->
+<!-- Login -->
 <div id="login">
  <div class="login-card">
   <h1>Hectomi ❤️</h1>
-  <p>Nuestro mundo privado y secreto.</p>
-  <p class="small" style="margin-top:6px;">Inicia sesión con tu cuenta autorizada.</p>
+  <p>Nuestro mundo privado, secreto y sin censura.</p>
+  <p class="small" style="margin-top:6px;">Inicia sesión con tu cuenta.</p>
   <form id="loginForm">
    <input id="email" class="field" type="email" placeholder="Correo electrónico" required autocomplete="username">
    <input id="password" class="field" type="password" placeholder="Contraseña" required autocomplete="current-password">
@@ -137,40 +141,56 @@ p { line-height: 1.4; color: #c4b5d0; font-size: 14px; }
  <div class="brand" id="counter" style="font-weight:600;">❤️ Cargando…</div>
 </div>
 
-<!-- Menú Desplegable Oculto -->
+<!-- Menú de Lugares y Exploración -->
 <div id="menuPanel" class="hidden">
  <button data-place="inicio">🌹 Plaza</button>
  <button data-place="bosque">🌲 Bosque</button>
- <button data-place="jardin">🌷 Jardín</button>
- <button data-place="lago">🌙 Lago</button>
+ <button data-place="laberinto">🌀 Laberinto</button>
+ <button data-place="cueva">🔥 Cueva Íntima</button>
+ <button data-place="lago">🌙 Lago Mágico</button>
  <button data-place="cascada">💧 Cascada</button>
  <button data-place="mirador">✨ Mirador</button>
  <button data-place="casa">🏡 Casa</button>
  <button data-place="dormitorio">🛏️ Dormitorio</button>
- <button data-place="camaExterior">❤️ Cama</button>
 </div>
 
-<!-- Controles Inferiores (No tapan la pantalla) -->
+<!-- Controles Libres Inferiores -->
 <nav id="controls" class="controls-bar hidden">
- <button id="menuToggleBtn" class="secondary">📍 Lugares</button>
+ <button id="menuToggleBtn" class="secondary">🌍 Explorar</button>
+ <button id="gameBtn">🔥 Juego Íntimo</button>
  <button id="photosBtn" class="secondary">📸 Fotos</button>
  <button id="letterBtn" class="secondary">💌 Carta</button>
  <button id="messagesBtn" class="secondary">💬 Chat</button>
  <button id="musicBtn" class="secondary">♫ Música</button>
- <button id="dateBtn">❤️ Momento</button>
  <button id="voiceBtn" class="secondary">🎙️ Voz</button>
  <button id="logoutBtn" class="secondary">Salir</button>
 </nav>
 
 <audio id="remoteAudio" autoplay playsinline></audio>
 
-<!-- Joystick Táctil Compacto -->
+<!-- Joystick Táctil -->
 <div id="pad" class="hidden">
  <span></span><button data-key="w">▲</button><span></span>
  <button data-key="a">◀</button><button data-key="s">▼</button><button data-key="d">▶</button>
 </div>
 
-<!-- Paneles / Drawers -->
+<!-- Panel de Juegos Íntimos y Atrevidos -->
+<aside id="gamePanel" class="drawer hidden">
+ <div class="panel-content">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+   <h2>🔥 Juego de Dos</h2><button data-close="gamePanel" class="secondary" style="padding:6px 10px;">✕</button>
+  </div>
+  <p class="small" style="margin-top:6px;">Elige una categoría para jugar y encender la química:</p>
+  <div class="row">
+   <button id="romanceMode">💖 Conexión Romántica</button>
+   <button id="spiceMode" style="background:linear-gradient(135deg, #ff2a6d, #b80058);">🌶️ Modo Atrevido</button>
+  </div>
+  <div id="gameBox" class="game-card">Toca un modo para empezar la partida...</div>
+  <button id="nextCard" style="width:100%; margin-top:6px;">Siguiente reto / pregunta ✨</button>
+ </div>
+</aside>
+
+<!-- Paneles de Fotos, Carta y Chat -->
 <aside id="photosPanel" class="drawer hidden">
  <div class="panel-content">
   <div style="display:flex;justify-content:space-between;align-items:center">
@@ -192,8 +212,8 @@ p { line-height: 1.4; color: #c4b5d0; font-size: 14px; }
    <h2>💌 Para Nosotros</h2><button data-close="letterPanel" class="secondary" style="padding:6px 10px;">✕</button>
   </div>
   <p style="margin-top:10px;">Mi amor ❤️</p>
-  <p>Este espacio lo construí pensando en cada detalle nuestro. Es un refugio exclusivo donde podemos encontrarnos, conversar y compartir momentos especiales sin importar la distancia.</p>
-  <p>Te amo muchísimo. ❤️</p>
+  <p>Este mundo secreto lo diseñé solo para nosotros dos. Un espacio sin reglas externas, donde podemos escapar, jugar, hablarnos sin filtros y sentirnos cerca sin importar los kilómetros.</p>
+  <p>Te amo con toda el alma. ❤️</p>
  </div>
 </aside>
 
@@ -204,13 +224,13 @@ p { line-height: 1.4; color: #c4b5d0; font-size: 14px; }
   </div>
   <div id="messages" class="messages"></div>
   <form id="messageForm" style="display:flex;gap:6px; margin-top:4px;">
-   <input id="messageInput" class="field" maxlength="500" placeholder="Escribe algo bonito…" required style="margin:0; flex:1;">
+   <input id="messageInput" class="field" maxlength="500" placeholder="Escribe algo bonito o travieso…" required style="margin:0; flex:1;">
    <button style="padding:10px 14px;">Enviar</button>
   </form>
  </div>
 </aside>
 
-<!-- Modales -->
+<!-- Modal Foto -->
 <div id="photoModal" class="modal hidden">
  <div class="panel-content">
   <button id="closePhoto" class="secondary" style="float:right; padding:6px 10px;">✕</button>
@@ -219,27 +239,6 @@ p { line-height: 1.4; color: #c4b5d0; font-size: 14px; }
   <div class="row">
    <button id="prevPhoto" class="secondary">← Anterior</button>
    <button id="nextPhoto" class="secondary">Siguiente →</button>
-  </div>
- </div>
-</div>
-
-<div id="dateModal" class="modal hidden">
- <div class="panel-content">
-  <h2 id="dateTitle">❤️ Momento Juntos</h2>
-  <p id="dateText">¿Quieres compartir un momento especial con tu pareja?</p>
-  <div id="dateChoices" class="row">
-   <button id="acceptDate">Sí, juntos ❤️</button>
-   <button id="rejectDate" class="secondary">Ahora no</button>
-  </div>
-  <div id="romanceChoices" class="hidden">
-   <p class="small">Elige una atmósfera o pose:</p>
-   <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:10px;">
-    <button data-pose="hug" class="secondary">🤗 Abrazo</button>
-    <button data-pose="kiss" class="secondary">💋 Beso</button>
-    <button data-pose="sit" class="secondary">🌙 Sentarse</button>
-    <button data-pose="cuddle" class="secondary">❤️ Acurrucarse</button>
-   </div>
-   <button id="finishDate" class="secondary" style="width:100%; margin-top:10px;">Terminar momento</button>
   </div>
  </div>
 </div>
@@ -268,19 +267,47 @@ const firebaseConfig={
 const allowed=['LHmsjRcxNHPtOVk2vVTT8uLaasb2','EgHqdi5sisWtNctCEPgOLsmYut23'];
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id);
-let user=null,unsubs=[],toastTimer,inviteId=null,photoIndex=0,romantic=false;
+let user=null,unsubs=[],toastTimer,photoIndex=0;
 const keys={},clock=new THREE.Clock();
 
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3500)}
-function showPanel(id){['photosPanel','letterPanel','messagesPanel','menuPanel'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
+function showPanel(id){['photosPanel','letterPanel','messagesPanel','menuPanel','gamePanel'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function clearSubs(){unsubs.forEach(f=>f());unsubs=[]}
 
-/* Toggle del menú de lugares */
 $('menuToggleBtn').onclick=()=>{
   const panel=$('menuPanel');
   panel.classList.toggle('hidden');
-  ['photosPanel','letterPanel','messagesPanel'].forEach(x=>$(x).classList.add('hidden'));
+  ['photosPanel','letterPanel','messagesPanel','gamePanel'].forEach(x=>$(x).classList.add('hidden'));
 };
+
+$('gameBtn').onclick=()=>showPanel('gamePanel');
+$('photosBtn').onclick=()=>showPanel('photosPanel');
+$('letterBtn').onclick=()=>showPanel('letterPanel');
+$('messagesBtn').onclick=()=>showPanel('messagesPanel');
+
+/* Banco de Preguntas y Retos (Románticos y Atrevidos) */
+const romanceQuestions=[
+ "Si pudieras viajar conmigo ahora mismo a cualquier lugar del mundo, ¿a dónde irías?",
+ "Dime tres cosas pequeñas de mí que te enamoran todos los días.",
+ "Describe en una sola frase qué sentiste la primera vez que nos besamos.",
+ "Si tuvieras que prepararme una cena romántica sorpresa, ¿qué me cocinarías?"
+];
+const spiceQuestions=[
+ "Si estuviéramos solos en la Cueva Íntima ahora mismo, ¿qué te gustaría hacerme?",
+ "Dime cuál es tu fantasía más atrevida conmigo que aún no hayamos cumplido.",
+ "Mándale un susurro o un mensaje secreto a tu pareja describiendo cómo te trae loco/a.",
+ "Si pudieras quitarme una sola prenda de ropa con los ojos vendados, ¿por dónde empezarías?",
+ "Confiesa algo travieso que hayas pensado de mí hoy cuando no te estaba viendo."
+];
+let currentMode = romanceQuestions;
+$('romanceMode').onclick=()=>{ currentMode=romanceQuestions; nextGameCard(); };
+$('spiceMode').onclick=()=>{ currentMode=spiceQuestions; nextGameCard(); };
+$('nextCard').onclick=nextGameCard;
+
+function nextGameCard(){
+ const randomCard = currentMode[Math.floor(Math.random()*currentMode.length)];
+ $('gameBox').textContent = randomCard;
+}
 
 let voicePC=null,voiceStream=null,voiceUnsubs=[],voiceBusy=false;
 const voiceRef=()=>doc(db,'voiceSessions','main');
@@ -301,9 +328,9 @@ async function activateVoice(){
   voicePC.onconnectionstatechange=()=>{
    if(!voicePC)return;
    if(voicePC.connectionState==='connected'){
-    $('voiceBtn').textContent='🎙️ Conectado';toast('¡Voz conectada con éxito! ❤️');
+    $('voiceBtn').textContent='🎙️ Conectado';toast('¡Voz conectada! ❤️');
    }else if(['failed','disconnected','closed'].includes(voicePC.connectionState)){
-    $('voiceBtn').textContent='🎙️ Reintentar';toast('Conexión de voz interrumpida.');
+    $('voiceBtn').textContent='🎙️ Reintentar';toast('Voz interrumpida.');
    }
   };
 
@@ -338,7 +365,7 @@ async function activateVoice(){
   };
   $('voiceBtn').textContent='🎙️ Activa';
  }catch(err){
-  console.error(err);voiceBusy=false;$('voiceBtn').textContent='🎙️ Voz';toast('No se pudo activar el micrófono.');
+  console.error(err);voiceBusy=false;$('voiceBtn').textContent='🎙️ Voz';toast('Micrófono no disponible.');
  }
 }
 
@@ -372,7 +399,6 @@ onAuthStateChanged(auth,async u=>{
  startWorld();
  startMessages();
  startPresence();
- startInvites();
  startPlayerSync();
  publishMyPosition(true);
  try{await $('music').play();$('musicBtn').textContent='♫ Pausa'}catch{$('musicBtn').textContent='♫ Música'}
@@ -423,62 +449,72 @@ function startWorld(){
  renderer.setSize(innerWidth,innerHeight);
  renderer.shadowMap.enabled=true;
  scene=new THREE.Scene();
- scene.background=new THREE.Color('#070b16');
- scene.fog=new THREE.FogExp2('#070b16',.007);
+ scene.background=new THREE.Color('#04060f');
+ scene.fog=new THREE.FogExp2('#04060f',.006);
  camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,400);
  camera.position.set(0,5,10);
  orbit=new OrbitControls(camera,renderer.domElement);
  orbit.enableDamping=true;orbit.maxPolarAngle=Math.PI*.48;
- orbit.minDistance=2.5;orbit.maxDistance=22;orbit.target.set(0,1,0);
- scene.add(new THREE.HemisphereLight(0xdbe7ff,0x2b1d33,2.2));
- const moon=new THREE.DirectionalLight('#ffcce6',2.2);moon.position.set(-15,25,12);scene.add(moon);
+ orbit.minDistance=2.5;orbit.maxDistance=24;orbit.target.set(0,1,0);
+ scene.add(new THREE.HemisphereLight(0xe0bfff,0x1f142b,2.4));
+ const moon=new THREE.DirectionalLight('#ffb3d9',2.4);moon.position.set(-20,30,15);scene.add(moon);
 
- const mat=(c,r=.8,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
+ const mat=(c,r=.75,m=0.1)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
  function box(x,y,z,sx,sy,sz,c){const o=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat(c));o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o}
  function ball(x,y,z,r,c){const o=new THREE.Mesh(new THREE.SphereGeometry(r,16,12),mat(c));o.position.set(x,y,z);o.castShadow=true;scene.add(o);return o}
- function path(x,z,len,w,angle=0){const o=box(x,.04,z,w,.05,len,'#5d5366');o.rotation.y=angle;return o}
+ function path(x,z,len,w,angle=0){const o=box(x,.04,z,w,.05,len,'#4d4158');o.rotation.y=angle;return o}
 
- const terrain=new THREE.Mesh(new THREE.PlaneGeometry(240,240),mat('#1d362c'));
+ /* Terreno Extendido y Hermoso */
+ const terrain=new THREE.Mesh(new THREE.PlaneGeometry(300,300),mat('#142a22'));
  terrain.rotation.x=-Math.PI/2;terrain.receiveShadow=true;scene.add(terrain);
- path(0,0,60,2.4);path(8,-9,28,1.8,-.5);path(-9,-9,28,1.8,.5);path(0,18,30,1.8,.2);path(24,-14,22,1.6,.5);path(-26,13,25,1.7,-.4);
+ path(0,0,70,2.6);path(10,-12,35,1.8,-.5);path(-10,-12,35,1.8,.5);path(0,22,35,1.8,.2);
 
- const lake=new THREE.Mesh(new THREE.CircleGeometry(13,64),new THREE.MeshStandardMaterial({color:'#1b4f6b',metalness:.4,roughness:.15}));
- lake.rotation.x=-Math.PI/2;lake.position.set(23,.07,-13);scene.add(lake);
+ /* Lago Mágico Ampliado */
+ const lake=new THREE.Mesh(new THREE.CircleGeometry(16,64),new THREE.MeshStandardMaterial({color:'#144366',metalness:.45,roughness:.1}));
+ lake.rotation.x=-Math.PI/2;lake.position.set(28,.07,-16);scene.add(lake);
 
- box(-12,1.5,-5,9,3,7,'#a47893');box(-12,3.25,-5,9.7,.4,7.7,'#2e1f37');
- box(-14,2,-1.4,1.5,1.1,.1,'#7cd8e6');box(-10,2,-1.4,1.5,1.1,.1,'#7cd8e6');
- box(-12,1,-1.35,1.2,1.9,.15,'#2b1a2e');box(-12,.1,-1.2,2.2,.15,.8,'#c49eb6');
+ /* Cueva Íntima (Nueva zona secreta) */
+ box(35,2,-45,12,5,10,'#382035');
+ box(35,1,-40,3,3,2,'#1a0d1b'); // Entrada de la cueva
 
- box(-12,1.3,-17,7,2.6,6,'#63425e');box(-12,2.75,-17,7.5,.3,6.5,'#2c1e33');
-
- box(15,.3,-2,4,.45,4.8,'#754b65');box(15,.56,-2,3.8,.18,4.6,'#e8ccdc');
- for(const x of [13,17])for(const z of [-4.2,.2])box(x,1.3,z,.12,2.2,.12,'#936b79');
- const canopy=box(15,2.45,-2,4.3,.12,4.7,'#b88cb8');canopy.material.transparent=true;canopy.material.opacity=.45;
-
- for(let i=0;i<180;i++){
-  const x=(Math.random()-.5)*160,z=(Math.random()-.5)*160;
-  if(Math.abs(x)<7&&Math.abs(z)<24)continue;
-  const h=1.2+Math.random()*1.5;
-  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.23,h,8),mat('#4a352c'));
-  trunk.position.set(x,h/2,z);scene.add(trunk);
-  ball(x,h+1,z,.8+Math.random()*.8,['#194435','#21543d','#274c3d','#2f5340'][i%4]);
+ /* Laberinto de Rosas (Nueva zona para explorar) */
+ for(let i=-20; i<=20; i+=6){
+  box(i,1, -55, 5, 2, 0.8, '#5c223c');
  }
 
+ /* Casa y Dormitorio Principal */
+ box(-14,1.5,-6,10,3,8,'#9c6d8a');box(-14,3.25,-6,10.7,.4,8.7,'#261830');
+ box(-16,2,-2,1.5,1.1,.1,'#7cd8e6');box(-12,2,-2,1.5,1.1,.1,'#7cd8e6');
+ box(-14,1,-1.9,1.2,1.9,.15,'#231526');box(-14,.1,-1.8,2.2,.15,.8,'#b892ab');
+
+ box(-14,1.3,-20,8,2.6,7,'#593b56');box(-14,2.75,-20,8.5,.3,7.5,'#24172e');
+
+ /* Bosque Frondoso */
+ for(let i=0;i<220;i++){
+  const x=(Math.random()-.5)*200,z=(Math.random()-.5)*200;
+  if(Math.abs(x)<8&&Math.abs(z)<28)continue;
+  const h=1.2+Math.random()*1.8;
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.25,h,8),mat('#3b2920'));
+  trunk.position.set(x,h/2,z);scene.add(trunk);
+  ball(x,h+1,z,.9+Math.random()*.9,['#12382c','#1b4d3c','#163a2f','#224d38'][i%4]);
+ }
+
+ /* Avatares más estilizados y definidos */
  function makePerson(bodyColor,hairColor){
   const g=new THREE.Group();
-  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.3,.75,4,8),mat(bodyColor));body.position.y=.8;g.add(body);
-  const head=new THREE.Mesh(new THREE.SphereGeometry(.25,16,12),mat('#e2b29b'));head.position.y=1.5;g.add(head);
-  const hair=new THREE.Mesh(new THREE.SphereGeometry(.27,16,10,0,Math.PI*2,0,Math.PI*.65),mat(hairColor));hair.position.y=1.57;g.add(hair);
-  for(const s of [-1,1]){const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.08,.4,3,6),mat(bodyColor));arm.position.set(s*.37,.85,0);g.add(arm);}
+  const body=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.8,4,8),mat(bodyColor));body.position.y=.8;g.add(body);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(.24,16,12),mat('#dfb098'));head.position.y=1.52;g.add(head);
+  const hair=new THREE.Mesh(new THREE.SphereGeometry(.26,16,10,0,Math.PI*2,0,Math.PI*.65),mat(hairColor));hair.position.y=1.59;g.add(hair);
+  for(const s of [-1,1]){const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.07,.45,3,6),mat(bodyColor));arm.position.set(s*.35,.85,0);g.add(arm);}
   return g;
  }
- player=makePerson('#d68fae','#2c1b2a');player.position.set(0,0,2);scene.add(player);
- partner=makePerson('#7aaadc','#25192e');partner.position.set(1.3,0,2);scene.add(partner);
+ player=makePerson('#cc7a9c','#241622');player.position.set(0,0,2);scene.add(player);
+ partner=makePerson('#6b9bc9','#1e1526');partner.position.set(1.3,0,2);scene.add(partner);
 
  const places={
-  inicio:[0,0,2],bosque:[-36,0,-25],jardin:[-5,0,10],
-  lago:[20,0,-1],cascada:[42,0,-21],mirador:[-32,0,18],
-  casa:[-12,0,0],dormitorio:[-12,0,-13],camaExterior:[15,0,1]
+  inicio:[0,0,2],bosque:[-40,0,-30],laberinto:[0,0,-50],
+  cueva:[35,0,-42],lago:[25,0,-14],cascada:[45,0,-25],
+  mirador:[-35,0,20],casa:[-14,0,0],dormitorio:[-14,0,-16]
  };
  document.querySelectorAll('[data-place]').forEach(b=>b.onclick=()=>{
   const p=places[b.dataset.place];
@@ -495,10 +531,10 @@ function startWorld(){
    (keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)
   );
   if(dir.lengthSq()){
-   dir.normalize().multiplyScalar(4*dt);
+   dir.normalize().multiplyScalar(4.5*dt);
    player.position.add(dir);
-   player.position.x=THREE.MathUtils.clamp(player.position.x,-100,100);
-   player.position.z=THREE.MathUtils.clamp(player.position.z,-100,100);
+   player.position.x=THREE.MathUtils.clamp(player.position.x,-130,130);
+   player.position.z=THREE.MathUtils.clamp(player.position.z,-130,130);
    player.rotation.y=Math.atan2(dir.x,dir.z);
    orbit.target.lerp(new THREE.Vector3(player.position.x,1,player.position.z),.12);
   }
@@ -520,9 +556,6 @@ document.querySelectorAll('[data-key]').forEach(b=>{
 
 const photoFiles=['foto1.jpeg','foto2.jpeg','foto3.jpeg','foto4.jpeg'];
 function openPhoto(i){photoIndex=(i+4)%4;$('bigPhoto').src=photoFiles[photoIndex];$('photoModal').classList.remove('hidden')}
-$('photosBtn').onclick=()=>showPanel('photosPanel');
-$('letterBtn').onclick=()=>showPanel('letterPanel');
-$('messagesBtn').onclick=()=>showPanel('messagesPanel');
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).classList.add('hidden'));
 document.querySelectorAll('[data-photo]').forEach(b=>b.onclick=()=>openPhoto(Number(b.dataset.photo)));
 $('closePhoto').onclick=()=>$('photoModal').classList.add('hidden');
@@ -533,7 +566,7 @@ $('musicBtn').onclick=async()=>{
  try{
   if($('music').paused){await $('music').play();$('musicBtn').textContent='♫ Pausa'}
   else{$('music').pause();$('musicBtn').textContent='♫ Música'}
- }catch{toast('No se pudo reproducir el audio.')}
+ }catch{toast('No se pudo reproducir la música.')}
 };
 
 $('messageForm').onsubmit=async e=>{
@@ -576,65 +609,6 @@ function startPresence(){
   $('presence').textContent=recent?'● En línea':'● Desconectado';
  },()=>{$('presence').textContent='Presencia oculta'}));
 }
-
-$('dateBtn').onclick=async()=>{
- try{
-  const other=allowed.find(x=>x!==user.uid);
-  const ref=await addDoc(collection(db,'invites'),{from:user.uid,to:other,status:'pending',createdAt:serverTimestamp()});
-  inviteId=ref.id;
-  $('dateTitle').textContent='❤️ Momento Solicitado';
-  $('dateText').textContent='Esperando respuesta de tu pareja…';
-  $('dateChoices').classList.add('hidden');
-  $('romanceChoices').classList.remove('hidden');
-  $('dateModal').classList.remove('hidden');
- }catch{toast('No se pudo enviar la invitación.')}
-};
-
-function startInvites(){
- unsubs.push(onSnapshot(query(collection(db,'invites'),orderBy('createdAt','desc')),snap=>{
-  for(const d of snap.docs){
-   const v=d.data();
-   if(v.to===user.uid&&v.status==='pending'){
-    inviteId=d.id;
-    $('dateTitle').textContent='❤️ Invitación Recibida';
-    $('dateText').textContent='¿Quieres compartir un momento romántico?';
-    $('dateChoices').classList.remove('hidden');
-    $('romanceChoices').classList.add('hidden');
-    $('dateModal').classList.remove('hidden');break;
-   }
-   if(v.status==='ended'&&d.id===inviteId){$('dateModal').classList.add('hidden');inviteId=null;romantic=false}
-  }
- }));
-}
-
-$('acceptDate').onclick=async()=>{
- if(!inviteId)return;
- try{
-  await updateDoc(doc(db,'invites',inviteId),{status:'accepted'});
-  romantic=true;$('dateChoices').classList.add('hidden');$('romanceChoices').classList.remove('hidden');
-  $('dateTitle').textContent='❤️ Nuestro Momento';$('dateText').textContent='Disfruten de este espacio juntos.';
- }catch{}
-};
-
-$('rejectDate').onclick=async()=>{
- if(inviteId)try{await updateDoc(doc(db,'invites',inviteId),{status:'declined'})}catch{}
- $('dateModal').classList.add('hidden');inviteId=null;
-};
-
-document.querySelectorAll('[data-pose]').forEach(b=>b.onclick=()=>{
- const messages={
-  hug:'🤗 Un abrazo cálido compartido.',
-  kiss:'💋 Un beso tierno.',
-  sit:'🌙 Sentados contemplando el paisaje.',
-  cuddle:'❤️ Acurrucados con calma.'
- };
- toast(messages[b.dataset.pose]);
-});
-
-$('finishDate').onclick=async()=>{
- if(inviteId)try{await updateDoc(doc(db,'invites',inviteId),{status:'ended'})}catch{}
- romantic=false;inviteId=null;$('dateModal').classList.add('hidden');toast('Momento finalizado ❤️');
-};
 
 $('logoutBtn').onclick=async()=>{
  try{if(user)await setDoc(doc(db,'presence',user.uid),{online:false,lastSeen:serverTimestamp()},{merge:true})}catch{}
