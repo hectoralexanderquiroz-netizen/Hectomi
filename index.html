@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -61,8 +60,8 @@ p{line-height:1.5}
 <div id="login">
  <div class="panel login">
   <h1>Hectomi ❤️</h1>
-  <p>Un mundo secreto para nosotros.</p>
-  <p class="small">Inicia sesión con una de las cuentas autorizadas.</p>
+  <p>Nuestro espacio especial en el mundo.</p>
+  <p class="small">Inicia sesión con tu cuenta autorizada.</p>
   <form id="loginForm">
    <input id="email" class="field" type="email" placeholder="Correo electrónico" required autocomplete="username">
    <input id="password" class="field" type="password" placeholder="Contraseña" required autocomplete="current-password">
@@ -92,13 +91,13 @@ p{line-height:1.5}
  <button id="photosBtn" class="secondary">📸 Fotos</button>
  <button id="letterBtn" class="secondary">💌 Carta</button>
  <button id="messagesBtn" class="secondary">💬 Mensajes</button>
-<button id="musicBtn" class="secondary">♫ Música</button>
-<button id="dateBtn">❤️ Momento juntos</button>
-<button id="voiceBtn" class="secondary">🎙️ Activar voz</button>
-<button id="muteBtn" class="secondary" disabled>🔇 Silenciar micrófono</button>
-<button id="logoutBtn" class="secondary">Salir</button>
+ <button id="musicBtn" class="secondary">♫ Música</button>
+ <button id="dateBtn">❤️ Momento juntos</button>
+ <button id="voiceBtn" class="secondary">🎙️ Activar voz</button>
+ <button id="muteBtn" class="secondary" disabled>🔇 Silenciar micrófono</button>
+ <button id="logoutBtn" class="secondary">Salir</button>
 </nav>
- <audio id="remoteAudio" autoplay playsinline></audio>
+<audio id="remoteAudio" autoplay playsinline></audio>
 
 <div id="pad" class="hidden">
  <span></span><button data-key="w">▲</button><span></span>
@@ -123,11 +122,11 @@ p{line-height:1.5}
 <aside id="letterPanel" class="drawer hidden">
  <section class="panel">
   <div style="display:flex;justify-content:space-between;gap:8px">
-   <h2>💌 Para mi preciosa</h2><button data-close="letterPanel" class="secondary">✕</button>
+   <h2>💌 Para nosotros</h2><button data-close="letterPanel" class="secondary">✕</button>
   </div>
-  <p>Mi amor, Nohemi ❤️</p>
-  <p>Este mundo es un pequeño regalo para ti. Quiero que caminemos por cada rincón, que encontremos lugares bonitos y que sigamos construyendo recuerdos juntos.</p>
-  <p>Gracias por formar parte de mi vida. Te amo. ❤️</p>
+  <p>Mi amor ❤️</p>
+  <p>Este espacio lo construí pensando en cada detalle de nosotros. Es un refugio donde la distancia no cuenta y donde siempre podemos encontrarnos, reírnos y compartir un momento juntos.</p>
+  <p>Gracias por cada risa, por tu paciencia y por todo lo bonito que vivimos día a día. Te amo muchísimo. ❤️</p>
  </section>
 </aside>
 
@@ -158,13 +157,13 @@ p{line-height:1.5}
 <div id="dateModal" class="modal hidden">
  <section class="panel">
   <h2 id="dateTitle">❤️ Nuestro momento</h2>
-  <p id="dateText">Elijan un momento para compartir. Todo debe ser cómodo para ambos.</p>
+  <p id="dateText">Elijan un momento para compartir con total comodidad.</p>
   <div id="dateChoices" class="row">
    <button id="acceptDate">Sí, juntos ❤️</button>
    <button id="rejectDate" class="secondary">Ahora no</button>
   </div>
   <div id="romanceChoices" class="hidden">
-   <p class="small">Elijan una pose romántica. Pueden detenerla cuando quieran.</p>
+   <p class="small">Seleccionen una pose para el momento:</p>
    <div class="row">
     <button data-pose="hug">🤗 Abrazo</button>
     <button data-pose="kiss">💋 Beso</button>
@@ -178,19 +177,16 @@ p{line-height:1.5}
 </div>
 
 <div id="toast" class="hidden"></div>
-
-<!-- Se reproduce la pista de audio del archivo de video, sin mostrar el video. -->
 <video id="music" src="Tutu.mp4.mp4" loop playsinline preload="auto" style="display:none"></video>
 
 <script type="module">
 import * as THREE from 'three';
- import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
- getFirestore,collection,addDoc,query,orderBy,onSnapshot,
- serverTimestamp,doc,setDoc,updateDoc,getDoc
+ getFirestore, collection, addDoc, query, orderBy, onSnapshot,
+ serverTimestamp, doc, setDoc, updateDoc, getDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 const firebaseConfig={
@@ -206,244 +202,104 @@ const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
 const $=id=>document.getElementById(id);
 let user=null,unsubs=[],toastTimer,inviteId=null,photoIndex=0,romantic=false;
 const keys={},clock=new THREE.Clock();
+
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),3500)}
 function showPanel(id){['photosPanel','letterPanel','messagesPanel'].forEach(x=>$(x).classList.add('hidden'));$(id).classList.remove('hidden')}
 function clearSubs(){unsubs.forEach(f=>f());unsubs=[]}
- /* VOZ EN TIEMPO REAL */
-let voicePC = null;
-let voiceStream = null;
-let voiceUnsubs = [];
-let voiceBusy = false;
-let voiceMuted = false;
 
-const voiceRef = () => doc(db, 'voiceSessions', 'main');
+let voicePC=null,voiceStream=null,voiceUnsubs=[],voiceBusy=false,voiceMuted=false;
+const voiceRef=()=>doc(db,'voiceSessions','main');
 
-function stopVoiceLocal() {
-  voiceUnsubs.forEach(fn => fn());
-  voiceUnsubs = [];
+function stopVoiceLocal(){
+ voiceUnsubs.forEach(fn=>fn());voiceUnsubs=[];
+ if(voicePC)voicePC.close();voicePC=null;
+ if(voiceStream)voiceStream.getTracks().forEach(track=>track.stop());
+ voiceStream=null;$('remoteAudio').srcObject=null;voiceBusy=false;voiceMuted=false;
+ $('muteBtn').disabled=true;$('muteBtn').textContent='🔇 Silenciar micrófono';
+}
 
-  if (voicePC) voicePC.close();
-  voicePC = null;
+async function activateVoice(){
+ if(!user||voiceBusy)return;
+ try{
+  voiceBusy=true;$('voiceBtn').textContent='Conectando…';
+  voiceStream=await navigator.mediaDevices.getUserMedia({audio:true,video:false});
+  voicePC=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
+  voiceStream.getTracks().forEach(track=>voicePC.addTrack(track,voiceStream));
 
-  if (voiceStream) {
-    voiceStream.getTracks().forEach(track => track.stop());
+  voicePC.ontrack=async event=>{
+   $('remoteAudio').srcObject=event.streams[0];
+   try{await $('remoteAudio').play()}catch{toast('Toca la pantalla para escuchar.')}
+  };
+
+  voicePC.onconnectionstatechange=()=>{
+   if(!voicePC)return;
+   if(voicePC.connectionState==='connected'){
+    $('voiceBtn').textContent='🎙️ Voz conectada';$('muteBtn').disabled=false;toast('¡Voz conectada con éxito! ❤️');
+   }else if(['failed','disconnected','closed'].includes(voicePC.connectionState)){
+    $('voiceBtn').textContent='🎙️ Reintentar voz';toast('La conexión de voz se interrumpió.');
+   }
+  };
+
+  const sessionSnap=await getDoc(voiceRef());
+  if(sessionSnap.exists()&&sessionSnap.data().status==='calling'&&sessionSnap.data().callerUid!==user.uid&&sessionSnap.data().calleeUid===user.uid&&sessionSnap.data().offer){
+   const data=sessionSnap.data();
+   await voicePC.setRemoteDescription(data.offer);
+   const answer=await voicePC.createAnswer();
+   await voicePC.setLocalDescription(answer);
+   await updateDoc(voiceRef(),{answer:{type:answer.type,sdp:answer.sdp},status:'connected',updatedAt:serverTimestamp()});
+   listenVoiceCandidates('callerCandidates');
+  }else{
+   const otherUid=allowed.find(uid=>uid!==user.uid);
+   const offer=await voicePC.createOffer();
+   await voicePC.setLocalDescription(offer);
+   await setDoc(voiceRef(),{callerUid:user.uid,calleeUid:otherUid,offer:{type:offer.type,sdp:offer.sdp},answer:null,status:'calling',updatedAt:serverTimestamp()});
+   listenVoiceCandidates('calleeCandidates');
+   const unsub=onSnapshot(voiceRef(),async snap=>{
+    if(!snap.exists()||!voicePC)return;
+    const data=snap.data();
+    if(data.answer&&!voicePC.currentRemoteDescription)await voicePC.setRemoteDescription(data.answer);
+   });
+   voiceUnsubs.push(unsub);
   }
-  voiceStream = null;
 
-  $('remoteAudio').srcObject = null;
-  voiceBusy = false;
-  voiceMuted = false;
-  $('muteBtn').disabled = true;
-  $('muteBtn').textContent = '🔇 Silenciar micrófono';
+  const ownCandidates=sessionSnap.exists()&&sessionSnap.data().status==='calling'&&sessionSnap.data().callerUid!==user.uid?'calleeCandidates':'callerCandidates';
+  voicePC.onicecandidate=event=>{
+   if(!event.candidate||!user)return;
+   addDoc(collection(db,'voiceSessions','main',ownCandidates),{
+    candidate:event.candidate.candidate,sdpMid:event.candidate.sdpMid,sdpMLineIndex:event.candidate.sdpMLineIndex,authorUid:user.uid
+   }).catch(err=>console.error('ICE:',err));
+  };
+  $('voiceBtn').textContent='🎙️ Voz iniciada';$('muteBtn').disabled=false;
+ }catch(err){
+  console.error('Error de voz:', err);stopVoiceLocal();$('voiceBtn').textContent='🎙️ Activar voz';toast('No se pudo activar la voz.');
+ }
 }
 
-async function activateVoice() {
-  if (!user || voiceBusy) return;
-
-  try {
-    voiceBusy = true;
-    $('voiceBtn').textContent = 'Conectando…';
-
-    // Solicita permiso para usar el micrófono.
-    voiceStream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: false
-    });
-
-    voicePC = new RTCPeerConnection({
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' }
-      ]
-    });
-
-    voiceStream.getTracks().forEach(track => {
-      voicePC.addTrack(track, voiceStream);
-    });
-   const ownCandidatesRef = () =>
-  collection(
-    db,
-    'voiceSessions',
-    'main',
-    voicePC && voicePC.__role === 'callee'
-      ? 'calleeCandidates'
-      : 'callerCandidates'
-  );
-
-    voicePC.ontrack = async event => {
-      $('remoteAudio').srcObject = event.streams[0];
-      try {
-        await $('remoteAudio').play();
-      } catch {
-        toast('Toca la pantalla para escuchar a tu pareja.');
-      }
-    };
-
-    voicePC.onconnectionstatechange = () => {
-      if (!voicePC) return;
-
-      if (voicePC.connectionState === 'connected') {
-        $('voiceBtn').textContent = '🎙️ Voz conectada';
-        $('muteBtn').disabled = false;
-        toast('¡Ya pueden hablar! ❤️');
-      } else if (
-        ['failed', 'disconnected', 'closed'].includes(
-          voicePC.connectionState
-        )
-      ) {
-        $('voiceBtn').textContent = '🎙️ Reintentar voz';
-        toast('La conexión de voz se interrumpió.');
-      }
-    };
-
-    const sessionSnap = await getDoc(voiceRef());
-
-    // Si la otra persona ya inició la llamada, responder.
-    if (
-      sessionSnap.exists() &&
-      sessionSnap.data().status === 'calling' &&
-      sessionSnap.data().callerUid !== user.uid &&
-      sessionSnap.data().calleeUid === user.uid &&
-      sessionSnap.data().offer
-    ) {
-      const data = sessionSnap.data();
-
-      await voicePC.setRemoteDescription(data.offer);
-
-      const answer = await voicePC.createAnswer();
-      await voicePC.setLocalDescription(answer);
-
-      await updateDoc(voiceRef(), {
-        answer: {
-          type: answer.type,
-          sdp: answer.sdp
-        },
-        status: 'connected',
-        updatedAt: serverTimestamp()
-      });
-
-      listenVoiceCandidates('callerCandidates');
-    } else {
-      // Crear una llamada nueva para la otra cuenta autorizada.
-      const otherUid = allowed.find(uid => uid !== user.uid);
-
-      const offer = await voicePC.createOffer();
-      await voicePC.setLocalDescription(offer);
-
-      await setDoc(voiceRef(), {
-        callerUid: user.uid,
-        calleeUid: otherUid,
-        offer: {
-          type: offer.type,
-          sdp: offer.sdp
-        },
-        answer: null,
-        status: 'calling',
-        updatedAt: serverTimestamp()
-      });
-
-      listenVoiceCandidates('calleeCandidates');
-
-      const unsub = onSnapshot(voiceRef(), async snap => {
-        if (!snap.exists() || !voicePC) return;
-
-        const data = snap.data();
-
-        if (
-          data.answer &&
-          !voicePC.currentRemoteDescription
-        ) {
-          await voicePC.setRemoteDescription(data.answer);
-        }
-      });
-
-      voiceUnsubs.push(unsub);
-    }
-
-    // Publicar los candidatos de conexión de este dispositivo.
-    const ownCandidates =
-      sessionSnap.exists() &&
-      sessionSnap.data().status === 'calling' &&
-      sessionSnap.data().callerUid !== user.uid
-        ? 'calleeCandidates'
-        : 'callerCandidates';
-
-    voicePC.onicecandidate = event => {
-      if (!event.candidate || !user) return;
-
-      addDoc(
-        collection(db, 'voiceSessions', 'main', ownCandidates),
-        {
-          candidate: event.candidate.candidate,
-          sdpMid: event.candidate.sdpMid,
-          sdpMLineIndex: event.candidate.sdpMLineIndex,
-          authorUid: user.uid
-        }
-      ).catch(err => console.error('ICE:', err));
-    };
-
-    $('voiceBtn').textContent = '🎙️ Voz iniciada';
-    $('muteBtn').disabled = false;
-
-  } catch (err) {
-    console.error('Error de voz:', err);
-    stopVoiceLocal();
-    $('voiceBtn').textContent = '🎙️ Activar voz';
-    toast('No se pudo activar la voz. Revisa el micrófono y Firestore.');
-  }
-}
-
-function listenVoiceCandidates(collectionName) {
-  const unsub = onSnapshot(
-    collection(db, 'voiceSessions', 'main', collectionName),
-    snapshot => {
-      snapshot.docChanges().forEach(async change => {
-        if (change.type !== 'added' || !voicePC) return;
-
-        const data = change.doc.data();
-
-        // Ignorar los candidatos publicados por este mismo usuario.
-        if (data.authorUid === user?.uid) return;
-
-        try {
-          await voicePC.addIceCandidate({
-            candidate: data.candidate,
-            sdpMid: data.sdpMid,
-            sdpMLineIndex: data.sdpMLineIndex
-          });
-        } catch (err) {
-          console.error('No se pudo añadir candidato ICE:', err);
-        }
-      });
-    },
-    err => console.error('Error escuchando candidatos:', err)
-  );
-
-  voiceUnsubs.push(unsub);
-}
-
-$('voiceBtn').onclick = activateVoice;
-
-$('muteBtn').onclick = () => {
-  if (!voiceStream) return;
-
-  voiceMuted = !voiceMuted;
-
-  voiceStream.getAudioTracks().forEach(track => {
-    track.enabled = !voiceMuted;
+function listenVoiceCandidates(collectionName){
+ const unsub=onSnapshot(collection(db,'voiceSessions','main',collectionName),snapshot=>{
+  snapshot.docChanges().forEach(async change=>{
+   if(change.type!=='added'||!voicePC)return;
+   const data=change.doc.data();
+   if(data.authorUid===user?.uid)return;
+   try{await voicePC.addIceCandidate({candidate:data.candidate,sdpMid:data.sdpMid,sdpMLineIndex:data.sdpMLineIndex})}catch(err){console.error(err)}
   });
+ });
+ voiceUnsubs.push(unsub);
+}
 
-  $('muteBtn').textContent = voiceMuted
-    ? '🔊 Activar micrófono'
-    : '🔇 Silenciar micrófono';
+$('voiceBtn').onclick=activateVoice;
+$('muteBtn').onclick=()=>{
+ if(!voiceStream)return;
+ voiceMuted=!voiceMuted;
+ voiceStream.getAudioTracks().forEach(track=>track.enabled=!voiceMuted);
+ $('muteBtn').textContent=voiceMuted?'🔊 Activar micrófono':'🔇 Silenciar micrófono';
 };
-
-// Al salir de la sesión, detener el micrófono local.
-window.addEventListener('pagehide', stopVoiceLocal);
+window.addEventListener('pagehide',stopVoiceLocal);
 
 $('loginForm').onsubmit=async e=>{
  e.preventDefault();$('loginStatus').textContent='Entrando…';
  try{await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value)}
- catch(err){$('loginStatus').textContent=err.code==='auth/invalid-credential'?'Correo o contraseña incorrectos.':'No se pudo entrar. Comprueba tu conexión y Firebase.'}
+ catch(err){$('loginStatus').textContent=err.code==='auth/invalid-credential'?'Correo o contraseña incorrectos.':'No se pudo entrar.'}
 };
 
 onAuthStateChanged(auth,async u=>{
@@ -454,16 +310,15 @@ onAuthStateChanged(auth,async u=>{
  ['top','controls','hint','pad'].forEach(x=>$(x).classList.remove('hidden'));
  $('who').textContent=u.email||'';
  startWorld();
-startMessages();
-startPresence();
-startInvites();
-startPlayerSync();
-publishMyPosition(true);
+ startMessages();
+ startPresence();
+ startInvites();
+ startPlayerSync();
+ publishMyPosition(true);
  try{await $('music').play();$('musicBtn').textContent='♫ Pausar'}
- catch{$('musicBtn').textContent='♫ Reproducir';toast('Pulsa Música para escuchar Tutu.')}
+ catch{$('musicBtn').textContent='♫ Reproducir';toast('Pulsa Música para escuchar.')}
 });
 
-/* Contador de pareja */
 const startDate=new Date(2026,8,11);
 function counter(){
  let t=Math.max(0,Date.now()-startDate.getTime());
@@ -475,65 +330,33 @@ function counter(){
 }
 counter();setInterval(counter,1000);
 
-/* Mundo abierto */
-let scene,camera,renderer,orbit,player,partner,started=false;
- let lastPositionSent = 0;
+let scene,camera,renderer,orbit,player,partner,started=false,lastPositionSent=0;
 
-function startPlayerSync() {
-  if (!user || !player || !partner) return;
-
-  const otherUid = allowed.find(uid => uid !== user.uid);
-  if (!otherUid) return;
-
-  const unsubscribe = onSnapshot(
-    doc(db, 'players', otherUid),
-    snapshot => {
-      if (!snapshot.exists() || !partner) return;
-
-      const p = snapshot.data();
-
-      if (
-        typeof p.x !== 'number' ||
-        typeof p.y !== 'number' ||
-        typeof p.z !== 'number'
-      ) return;
-
-      partner.position.set(p.x, p.y, p.z);
-
-      if (typeof p.rotationY === 'number') {
-        partner.rotation.y = p.rotationY;
-      }
-    },
-    error => {
-      console.error('Error sincronizando personaje:', error);
-      toast('No se pudo sincronizar el personaje. Revisa Firebase.');
-    }
-  );
-
-  unsubs.push(unsubscribe);
+function startPlayerSync(){
+ if(!user||!player||!partner)return;
+ const otherUid=allowed.find(uid=>uid!==user.uid);
+ if(!otherUid)return;
+ const unsubscribe=onSnapshot(doc(db,'players',otherUid),snapshot=>{
+  if(!snapshot.exists()||!partner)return;
+  const p=snapshot.data();
+  if(typeof p.x==='number'&&typeof p.y==='number'&&typeof p.z==='number')partner.position.set(p.x,p.y,p.z);
+  if(typeof p.rotationY==='number')partner.rotation.y=p.rotationY;
+ });
+ unsubs.push(unsubscribe);
 }
 
-async function publishMyPosition(force = false) {
-  if (!user || !player) return;
-
-  const now = Date.now();
-  if (!force && now - lastPositionSent < 250) return;
-
-  lastPositionSent = now;
-
-  try {
-    await setDoc(doc(db, 'players', user.uid), {
-      x: player.position.x,
-      y: player.position.y,
-      z: player.position.z,
-      rotationY: player.rotation.y,
-      updatedAt: serverTimestamp()
-    }, { merge: true });
-    } catch (error) {
-    console.error('Error publicando posición:', error);
-    toast('Error Firebase: ' + error.code);
-  }
+async function publishMyPosition(force=false){
+ if(!user||!player)return;
+ const now=Date.now();
+ if(!force&&now-lastPositionSent<250)return;
+ lastPositionSent=now;
+ try{
+  await setDoc(doc(db,'players',user.uid),{
+   x:player.position.x,y:player.position.y,z:player.position.z,rotationY:player.rotation.y,updatedAt:serverTimestamp()
+  },{merge:true});
+ }catch(error){console.error(error)}
 }
+
 function startWorld(){
  if(started)return;started=true;
  renderer=new THREE.WebGLRenderer({canvas:$('world'),antialias:true});
@@ -552,122 +375,44 @@ function startWorld(){
  const moon=new THREE.DirectionalLight('#ffe0f0',2.4);moon.position.set(-15,25,12);scene.add(moon);
 
  const mat=(c,r=.85,m=0)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
- function box(x,y,z,sx,sy,sz,c){
-  const o=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat(c));
-  o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o;
- }
- function ball(x,y,z,r,c){
-  const o=new THREE.Mesh(new THREE.SphereGeometry(r,18,14),mat(c));
-  o.position.set(x,y,z);o.castShadow=true;scene.add(o);return o;
- }
- function path(x,z,len,w,angle=0){
-  const o=box(x,.04,z,w,.05,len,'#74677a');o.rotation.y=angle;return o;
- }
+ function box(x,y,z,sx,sy,sz,c){const o=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat(c));o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;scene.add(o);return o}
+ function ball(x,y,z,r,c){const o=new THREE.Mesh(new THREE.SphereGeometry(r,18,14),mat(c));o.position.set(x,y,z);o.castShadow=true;scene.add(o);return o}
+ function path(x,z,len,w,angle=0){const o=box(x,.04,z,w,.05,len,'#74677a');o.rotation.y=angle;return o}
 
  const terrain=new THREE.Mesh(new THREE.PlaneGeometry(240,240),mat('#244438'));
  terrain.rotation.x=-Math.PI/2;terrain.receiveShadow=true;scene.add(terrain);
- path(0,0,60,2.4);
- path(8,-9,28,1.8,-.5);
- path(-9,-9,28,1.8,.5);
- path(0,18,30,1.8,.2);
- path(24,-14,22,1.6,.5);
- path(-26,13,25,1.7,-.4);
+ path(0,0,60,2.4);path(8,-9,28,1.8,-.5);path(-9,-9,28,1.8,.5);path(0,18,30,1.8,.2);path(24,-14,22,1.6,.5);path(-26,13,25,1.7,-.4);
 
- /* Lago extenso */
  const lake=new THREE.Mesh(new THREE.CircleGeometry(13,72),new THREE.MeshStandardMaterial({color:'#27658b',metalness:.35,roughness:.18}));
  lake.rotation.x=-Math.PI/2;lake.position.set(23,.07,-13);scene.add(lake);
- for(let i=0;i<42;i++){
-  const a=i/42*Math.PI*2;
-  ball(23+Math.cos(a)*13.1,.17,-13+Math.sin(a)*13.1,.18,i%2?'#ffb7d9':'#c6dfcc');
- }
- /* Casa y jardín propio */
- box(-12,1.5,-5,9,3,7,'#b78da5');
- box(-12,3.25,-5,9.7,.4,7.7,'#3c2947');
- box(-14,2,-1.4,1.5,1.1,.1,'#8be1ef');
- box(-10,2,-1.4,1.5,1.1,.1,'#8be1ef');
- box(-12,1,-1.35,1.2,1.9,.15,'#38243b');
- box(-12,.1,-1.2,2.2,.15,.8,'#d9b5cb');
+ for(let i=0;i<42;i++){const a=i/42*Math.PI*2;ball(23+Math.cos(a)*13.1,.17,-13+Math.sin(a)*13.1,.18,i%2?'#ffb7d9':'#c6dfcc');}
 
- /* Dormitorio independiente */
- box(-12,1.3,-17,7,2.6,6,'#76506e');
- box(-12,2.75,-17,7.5,.3,6.5,'#392740');
- box(-12,.35,-17,3.5,.5,4.3,'#986c8e');
- box(-12,.65,-17,3.25,.2,4.1,'#f3dfeb');
- box(-13,.82,-18.5,1.1,.3,.6,'#fff5fa');
- box(-11,.82,-18.5,1.1,.3,.6,'#fff5fa');
- box(-12,1.15,-19,3.4,.15,.15,'#e9bad7');
+ box(-12,1.5,-5,9,3,7,'#b78da5');box(-12,3.25,-5,9.7,.4,7.7,'#3c2947');
+ box(-14,2,-1.4,1.5,1.1,.1,'#8be1ef');box(-10,2,-1.4,1.5,1.1,.1,'#8be1ef');
+ box(-12,1,-1.35,1.2,1.9,.15,'#38243b');box(-12,.1,-1.2,2.2,.15,.8,'#d9b5cb');
 
- /* Cama exterior bajo una pérgola */
- box(15,.3,-2,4,.45,4.8,'#8b5a79');
- box(15,.56,-2,3.8,.18,4.6,'#f5dfec');
- box(14,.74,-3.5,1.1,.28,.6,'#fff5fa');
- box(16,.74,-3.5,1.1,.28,.6,'#fff5fa');
+ box(-12,1.3,-17,7,2.6,6,'#76506e');box(-12,2.75,-17,7.5,.3,6.5,'#392740');
+ box(-12,.35,-17,3.5,.5,4.3,'#986c8e');box(-12,.65,-17,3.25,.2,4.1,'#f3dfeb');
+
+ box(15,.3,-2,4,.45,4.8,'#8b5a79');box(15,.56,-2,3.8,.18,4.6,'#f5dfec');
  for(const x of [13,17])for(const z of [-4.2,.2])box(x,1.3,z,.12,2.2,.12,'#a77e8b');
- const canopy=box(15,2.45,-2,4.3,.12,4.7,'#c99fc9');
- canopy.material.transparent=true;canopy.material.opacity=.45;
+ const canopy=box(15,2.45,-2,4.3,.12,4.7,'#c99fc9');canopy.material.transparent=true;canopy.material.opacity=.45;
 
- /* Bosque, flores, colinas y pequeños caminos */
  for(let i=0;i<210;i++){
   const x=(Math.random()-.5)*170,z=(Math.random()-.5)*170;
   if(Math.abs(x)<7&&Math.abs(z)<24)continue;
-  if(Math.hypot(x-23,z+13)<15)continue;
-  if(Math.hypot(x+12,z+5)<7||Math.hypot(x+12,z+17)<6)continue;
   const h=1.2+Math.random()*1.5;
   const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12,.23,h,9),mat('#594034'));
   trunk.position.set(x,h/2,z);scene.add(trunk);
   ball(x,h+1,z,.8+Math.random()*.8,['#205542','#28684c','#315b48','#39654f'][i%4]);
-  if(i%3===0)ball(x+.5,h+1.2,z,.18,'#ff9ac8');
  }
- for(let i=0;i<230;i++){
-  const x=(Math.random()-.5)*95,z=(Math.random()-.5)*95;
-  if(Math.hypot(x-23,z+13)<14)continue;
-  ball(x,.14,z,.09+Math.random()*.08,['#ff8bbb','#ffdcf0','#ffe7a3','#c2a8ff'][i%4]);
- }
- /* Montañas al horizonte */
- for(let i=0;i<35;i++){
-  const x=-110+i*6.5;
-  const mountain=new THREE.Mesh(new THREE.ConeGeometry(8+Math.random()*8,15+Math.random()*17,5),mat(i%2?'#344760':'#293c50'));
-  mountain.position.set(x,7,-100-Math.random()*15);scene.add(mountain);
-  const far=new THREE.Mesh(new THREE.ConeGeometry(11,18,5),mat('#293951'));
-  far.position.set(x,8,100+Math.random()*12);scene.add(far);
- }
- /* Cascada */
- box(42,3,-30,9,6,4,'#465561');
- const water=new THREE.Mesh(new THREE.PlaneGeometry(4,6),new THREE.MeshStandardMaterial({color:'#8ce4fa',emissive:'#164f72',transparent:true,opacity:.8,side:THREE.DoubleSide}));
- water.position.set(42,3,-27.8);scene.add(water);
- const stream=new THREE.Mesh(new THREE.CircleGeometry(5,32),mat('#286d8b',.2,.25));
- stream.rotation.x=-Math.PI/2;stream.position.set(42,.08,-20);scene.add(stream);
- /* Puente y mirador */
- box(27,.5,-13,5,.2,1.8,'#9a7783');
- for(const x of [25,29])box(x,.9,-13,.12,.8,1.8,'#d6b4c3');
- box(-32,.3,18,8,.5,8,'#5e4e68');
- for(const x of [-35,-29])for(const z of [15,21]){
-  box(x,1,z,.12,1.5,.12,'#8f8197');
-  ball(x,1.9,z,.2,'#ffe5a9');
-  const light=new THREE.PointLight('#ffc7e4',1.3,8);light.position.set(x,2,z);scene.add(light);
- }
- /* Faroles */
- for(let i=0;i<40;i++){
-  const x=(Math.random()-.5)*65,z=(Math.random()-.5)*65;
-  box(x,.7,z,.08,1.4,.08,'#69586d');
-  ball(x,1.45,z,.12,'#ffe2ad');
-  const light=new THREE.PointLight('#ffc7df',.35,4);light.position.set(x,1.5,z);scene.add(light);
- }
- /* Cielo estrellado */
- const pos=[];
- for(let i=0;i<2000;i++)pos.push((Math.random()-.5)*300,Math.random()*85+10,(Math.random()-.5)*300);
- const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
- scene.add(new THREE.Points(sg,new THREE.PointsMaterial({color:'#fff0fa',size:.12})));
 
- /* Personajes estilizados */
  function makePerson(bodyColor,hairColor){
   const g=new THREE.Group();
   const body=new THREE.Mesh(new THREE.CapsuleGeometry(.3,.75,4,8),mat(bodyColor));body.position.y=.8;g.add(body);
   const head=new THREE.Mesh(new THREE.SphereGeometry(.25,18,14),mat('#e9bea8'));head.position.y=1.5;g.add(head);
   const hair=new THREE.Mesh(new THREE.SphereGeometry(.27,18,12,0,Math.PI*2,0,Math.PI*.65),mat(hairColor));hair.position.y=1.57;g.add(hair);
-  for(const s of [-1,1]){
-   const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.08,.4,3,6),mat(bodyColor));arm.position.set(s*.37,.85,0);g.add(arm);
-  }
+  for(const s of [-1,1]){const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.08,.4,3,6),mat(bodyColor));arm.position.set(s*.37,.85,0);g.add(arm);}
   return g;
  }
  player=makePerson('#e5a0c0','#3a2338');player.position.set(0,0,2);scene.add(player);
@@ -680,10 +425,7 @@ function startWorld(){
  };
  document.querySelectorAll('[data-place]').forEach(b=>b.onclick=()=>{
   const p=places[b.dataset.place];
-  player.position.set(...p);
-  orbit.target.set(p[0],1,p[2]);
-  camera.position.set(p[0]+3,4,p[2]+7);
-  toast('Explora este lugar a tu ritmo ❤️');
+  player.position.set(...p);orbit.target.set(p[0],1,p[2]);camera.position.set(p[0]+3,4,p[2]+7);
  });
 
  function animate(){
@@ -702,31 +444,22 @@ function startWorld(){
    player.rotation.y=Math.atan2(dir.x,dir.z);
    orbit.target.lerp(new THREE.Vector3(player.position.x,1,player.position.z),.12);
   }
-
   publishMyPosition();
-
   orbit.update();
   renderer.render(scene,camera);
  }
  animate();
- addEventListener('resize',()=>{
-  camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);
- });
+ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 }
-/* Controles de movimiento */
+
 addEventListener('keydown',e=>keys[e.key.toLowerCase()]=true);
 addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
 document.querySelectorAll('[data-key]').forEach(b=>{
  const k=b.dataset.key;
- const down=e=>{e.preventDefault();keys[k]=true};
- const up=e=>{e.preventDefault();keys[k]=false};
- b.addEventListener('pointerdown',down);
- b.addEventListener('pointerup',up);
- b.addEventListener('pointercancel',up);
- b.addEventListener('pointerleave',up);
+ b.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true});
+ b.addEventListener('pointerup',e=>{e.preventDefault();keys[k]=false});
 });
 
-/* Fotos */
 const photoFiles=['foto1.jpeg','foto2.jpeg','foto3.jpeg','foto4.jpeg'];
 function openPhoto(i){photoIndex=(i+4)%4;$('bigPhoto').src=photoFiles[photoIndex];$('photoModal').classList.remove('hidden')}
 $('photosBtn').onclick=()=>showPanel('photosPanel');
@@ -737,30 +470,30 @@ document.querySelectorAll('[data-photo]').forEach(b=>b.onclick=()=>openPhoto(Num
 $('closePhoto').onclick=()=>$('photoModal').classList.add('hidden');
 $('prevPhoto').onclick=()=>openPhoto(photoIndex-1);
 $('nextPhoto').onclick=()=>openPhoto(photoIndex+1);
-addEventListener('keydown',e=>{if(e.key==='Escape'){$('photoModal').classList.add('hidden');$('dateModal').classList.add('hidden')}});
 
-/* Música desde Tutu.mp4.mp4 */
 $('musicBtn').onclick=async()=>{
  try{
   if($('music').paused){await $('music').play();$('musicBtn').textContent='♫ Pausar'}
   else{$('music').pause();$('musicBtn').textContent='♫ Reproducir'}
- }catch{toast('No se pudo reproducir Tutu.mp4.mp4. Revisa el nombre y que el archivo esté en la raíz de GitHub.')}
+ }catch{toast('No se pudo reproducir la música.')}
 };
 
-/* Mensajes en tiempo real */
 $('messageForm').onsubmit=async e=>{
  e.preventDefault();
  const text=$('messageInput').value.trim();
  if(!text||!user)return;
  try{
+  // Identifica el nombre basándose en el correo registrado
+  const isNohemi=user.email==='dnohe1206@gmail.com';
   await addDoc(collection(db,'messages'),{
    text,authorUid:user.uid,
-   authorName:user.email==='dnohe1206@gmail.com'?'Nohemi':'Héctor',
+   authorName:isNohemi?'Nohemi':'Héctor',
    createdAt:serverTimestamp()
   });
   $('messageInput').value='';
- }catch{toast('No se pudo enviar. Revisa las reglas de Firestore.')}
+ }catch{toast('No se pudo enviar el mensaje.')}
 };
+
 function startMessages(){
  unsubs.push(onSnapshot(query(collection(db,'messages'),orderBy('createdAt','asc')),snap=>{
   const el=$('messages');el.replaceChildren();
@@ -772,10 +505,9 @@ function startMessages(){
    b.append(text,meta);el.append(b);
   });
   el.scrollTop=el.scrollHeight;
- },()=>toast('Mensajes no disponibles. Revisa Firestore.')));
+ },()=>toast('Mensajes no disponibles.')));
 }
 
-/* Presencia aproximada */
 function startPresence(){
  const other=allowed.find(x=>x!==user.uid),ref=doc(db,'presence',user.uid);
  const beat=()=>setDoc(ref,{online:true,lastSeen:serverTimestamp()},{merge:true}).catch(()=>{});
@@ -787,64 +519,66 @@ function startPresence(){
  },()=>{$('presence').textContent='Presencia no disponible'}));
 }
 
-/* Invitación romántica entre las dos cuentas */
 $('dateBtn').onclick=async()=>{
  try{
   const other=allowed.find(x=>x!==user.uid);
-  const ref=await addDoc(collection(db,'invites'),{
-   from:user.uid,to:other,status:'pending',createdAt:serverTimestamp()
-  });
+  const ref=await addDoc(collection(db,'invites'),{from:user.uid,to:other,status:'pending',createdAt:serverTimestamp()});
   inviteId=ref.id;
   $('dateTitle').textContent='❤️ Invitación enviada';
-  $('dateText').textContent='Esperando la respuesta de tu pareja.';
+  $('dateText').textContent='Esperando respuesta…';
   $('dateChoices').classList.add('hidden');
   $('romanceChoices').classList.remove('hidden');
   $('dateModal').classList.remove('hidden');
- }catch{toast('No se pudo enviar. Revisa las reglas de Firestore.')}
+ }catch{toast('No se pudo enviar la invitación.')}
 };
+
 function startInvites(){
  unsubs.push(onSnapshot(query(collection(db,'invites'),orderBy('createdAt','desc')),snap=>{
   for(const d of snap.docs){
    const v=d.data();
    if(v.to===user.uid&&v.status==='pending'){
     inviteId=d.id;
-    $('dateTitle').textContent='❤️ Tu pareja te invita';
-    $('dateText').textContent='¿Quieres compartir un momento romántico? Puedes decir que no.';
+    $('dateTitle').textContent='❤️ Invitación recibida';
+    $('dateText').textContent='¿Quieres compartir un momento romántico?';
     $('dateChoices').classList.remove('hidden');
     $('romanceChoices').classList.add('hidden');
     $('dateModal').classList.remove('hidden');break;
    }
    if(v.status==='ended'&&d.id===inviteId){$('dateModal').classList.add('hidden');inviteId=null;romantic=false}
   }
- },()=>toast('Invitaciones no disponibles. Revisa Firestore.')));
+ }));
 }
+
 $('acceptDate').onclick=async()=>{
  if(!inviteId)return;
  try{
   await updateDoc(doc(db,'invites',inviteId),{status:'accepted'});
   romantic=true;$('dateChoices').classList.add('hidden');$('romanceChoices').classList.remove('hidden');
-  $('dateTitle').textContent='❤️ Nuestro momento';$('dateText').textContent='Elijan una pose romántica y deténganla cuando quieran.';
- }catch{toast('No se pudo aceptar la invitación.')}
+  $('dateTitle').textContent='❤️ Nuestro momento';$('dateText').textContent='Elijan una pose romántica.';
+ }catch{}
 };
+
 $('rejectDate').onclick=async()=>{
  if(inviteId)try{await updateDoc(doc(db,'invites',inviteId),{status:'declined'})}catch{}
  $('dateModal').classList.add('hidden');inviteId=null;
 };
+
 document.querySelectorAll('[data-pose]').forEach(b=>b.onclick=()=>{
  const messages={
   hug:'🤗 Un abrazo cariñoso.',
-  kiss:'💋 Un beso romántico, con consentimiento mutuo.',
-  sit:'🌙 Sentarse juntos junto al lago.',
-  cuddle:'❤️ Acurrucarse juntos.',
-  lie:'🛏️ Acostarse juntos y disfrutar de la tranquilidad.'
+  kiss:'💋 Un beso romántico.',
+  sit:'🌙 Sentados junto al lago.',
+  cuddle:'❤️ Acurrucados.',
+  lie:'🛏️ Descansando juntos.'
  };
- $('dateText').textContent=messages[b.dataset.pose];
  toast(messages[b.dataset.pose]);
 });
+
 $('finishDate').onclick=async()=>{
  if(inviteId)try{await updateDoc(doc(db,'invites',inviteId),{status:'ended'})}catch{}
  romantic=false;inviteId=null;$('dateModal').classList.add('hidden');toast('Momento terminado ❤️');
 };
+
 $('logoutBtn').onclick=async()=>{
  try{if(user)await setDoc(doc(db,'presence',user.uid),{online:false,lastSeen:serverTimestamp()},{merge:true})}catch{}
  await signOut(auth);
